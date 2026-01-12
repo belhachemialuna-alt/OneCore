@@ -5,3 +5,4 @@ adafruit-circuitpython-ads1x15==2.2.21
 adafruit-circuitpython-dht==4.0.3
 requests==2.31.0
 psutil==5.9.8
+packaging>=21.0

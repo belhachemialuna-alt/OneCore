@@ -8,6 +8,7 @@ import io
 import os
 import shutil
 import logging
+from packaging import version
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -36,15 +37,25 @@ PROTECTED_DIRS = [
 
 
 def get_local_version():
-    """Get current installed version"""
+    """
+    Get current installed version.
+    If version.txt is missing, empty, or unreadable,
+    force update by returning 0.0.0
+    """
     if not os.path.exists(VERSION_FILE):
-        return "1.0.0"
+        logger.warning("version.txt missing → forcing update")
+        return "0.0.0"
+
     try:
         with open(VERSION_FILE, "r") as f:
-            return f.read().strip()
+            content = f.read().strip()
+            if not content:
+                logger.warning("version.txt empty → forcing update")
+                return "0.0.0"
+            return content
     except Exception as e:
         logger.error(f"Error reading version file: {e}")
-        return "1.0.0"
+        return "0.0.0"
 
 
 def set_local_version(version):
@@ -92,11 +103,10 @@ def is_update_available():
     """Check if an update is available"""
     try:
         info = check_for_update()
-        current = info["current_version"]
-        latest = info["latest_version"]
-        
-        # Simple version comparison (works for semantic versioning)
-        return latest != current and compare_versions(latest, current) > 0
+        return compare_versions(
+            info["latest_version"],
+            info["current_version"]
+        ) > 0
     except Exception as e:
         logger.error(f"Error checking update availability: {e}")
         return False
@@ -104,28 +114,20 @@ def is_update_available():
 
 def compare_versions(v1, v2):
     """
-    Compare two version strings
-    Returns: 1 if v1 > v2, -1 if v1 < v2, 0 if equal
+    Compare two semantic versions.
+    Returns:
+        1  if v1 > v2
+       -1  if v1 < v2
+        0  if equal or invalid
     """
-    def normalize(v):
-        return [int(x) for x in v.replace('v', '').split('.')]
-    
     try:
-        parts1 = normalize(v1)
-        parts2 = normalize(v2)
-        
-        for i in range(max(len(parts1), len(parts2))):
-            p1 = parts1[i] if i < len(parts1) else 0
-            p2 = parts2[i] if i < len(parts2) else 0
-            
-            if p1 > p2:
-                return 1
-            elif p1 < p2:
-                return -1
-        
-        return 0
+        return (
+            version.parse(v1) > version.parse(v2)
+        ) - (
+            version.parse(v1) < version.parse(v2)
+        )
     except Exception as e:
-        logger.error(f"Error comparing versions: {e}")
+        logger.error(f"Version comparison failed: {e}")
         return 0
 
 
