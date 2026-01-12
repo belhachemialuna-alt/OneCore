@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - BAYYTI-B1</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/analytics.css?v=2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Red Header Bar (Same as index.html) -->
+    <header class="top-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="project-title">Smart Irrigation Analytics <strong>BAYYTI-B1</strong></h1>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <a href="index.html" class="header-icon-btn" title="Back to Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <button class="header-icon-btn" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button class="header-icon-btn" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </button>
+                <button class="header-icon-btn" title="Language">
+                    <i class="fa-solid fa-globe"></i>
+                </button>
+                <button class="header-icon-btn" title="Options">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Support</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fa-solid fa-book"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>Language</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                    <span>Options</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Zone Selection with Map -->
+        <div class="zone-map-section">
+            <div class="zone-selector-card">
+                <div class="zone-selector-header">
+                    <h3><i class="fa-solid fa-map-location-dot"></i> Zone Selection & Map View</h3>
+                    <div class="map-controls">
+                        <button class="map-control-btn" id="zoomInBtn" title="Zoom In">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button class="map-control-btn" id="zoomOutBtn" title="Zoom Out">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <button class="map-control-btn" id="resetViewBtn" title="Reset View">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="zone-map-container">
+                    <div class="zone-map" id="zoneMap">
+                        <canvas id="mapCanvas" width="800" height="400"></canvas>
+                        <div class="zone-markers" id="zoneMarkers"></div>
+                    </div>
+                    <div class="zone-list-sidebar">
+                        <h4>Active Zones</h4>
+                        <div class="zone-list" id="zoneList">
+                            <!-- Zones will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Sidebar - Weather -->
+            <aside class="weather-sidebar">
+                <div class="weather-icon">
+                    <svg viewBox="0 0 200 200" width="120" height="120">
+                        <circle cx="80" cy="80" r="60" fill="#1e5631"/>
+                        <circle cx="120" cy="100" r="50" fill="#2d7a3e"/>
+                        <rect x="125" y="80" width="15" height="40" fill="#4a9f5e" rx="3"/>
+                        <rect x="145" y="70" width="15" height="50" fill="#4a9f5e" rx="3"/>
+                        <rect x="165" y="60" width="15" height="60" fill="#5db36e" rx="3"/>
+                    </svg>
+                </div>
+
+                <div class="temperature">
+                    <span id="currentTemp">12</span>°C
+                </div>
+                <div class="time" id="currentTime">Monday 16:30</div>
+
+                <div class="weather-info">
+                    <div class="weather-item">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4a9f5e" stroke-width="2">
+                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                        </svg>
+                        <span id="weatherCondition">Mostly Cloudy</span>
+                    </div>
+                    <div class="weather-item">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4a9f5e" stroke-width="2">
+                            <line x1="12" y1="2" x2="12" y2="6"/>
+                            <line x1="12" y1="18" x2="12" y2="22"/>
+                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+                            <line x1="2" y1="12" x2="6" y2="12"/>
+                            <line x1="18" y1="12" x2="22" y2="12"/>
+                        </svg>
+                        <span>Rain – <span id="rainPercent">10</span>%</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Content -->
+            <main class="main-content">
+                <!-- Top Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Fields needing irrigation</h3>
+                            <div class="stat-value" id="fieldsNeedingIrrigation">170</div>
+                            <div class="stat-change positive">MoM +10%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Area of doubt</h3>
+                            <div class="stat-value" id="areaOfDoubt">880</div>
+                            <div class="stat-change positive">MoM +20%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Manual override events</h3>
+                            <div class="stat-value" id="manualOverrides">360</div>
+                            <div class="stat-change negative">MoM -10%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Inactive zones</h3>
+                            <div class="stat-value" id="inactiveZones">255</div>
+                            <div class="stat-change positive">MoM +40%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <!-- Suspected Farmland Statistics -->
+                    <div class="chart-card wide">
+                        <h3>Suspected farmland statistics</h3>
+                        <p class="chart-subtitle">AI doubt category statistics</p>
+                        <div class="chart-header">
+                            <span class="issue-badge">2018 Issue 1: 2600</span>
+                        </div>
+                        <canvas id="farmlandStatsChart"></canvas>
+                    </div>
+
+                    <!-- Area of Doubt Donut -->
+                    <div class="chart-card">
+                        <h3>Area of doubt</h3>
+                        <div class="donut-container">
+                            <canvas id="areaDonutChart"></canvas>
+                            <div class="donut-center">
+                                <div class="donut-value" id="donutValue">144,648</div>
+                                <div class="donut-label">County farmland area</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weather Trends and Utilization -->
+                <div class="charts-row">
+                    <div class="chart-card wide">
+                        <div class="chart-header-row">
+                            <h3>Weather Trends</h3>
+                            <span class="time-badge">Last 20 days</span>
+                        </div>
+                        <div class="weather-summary">
+                            <span class="weather-stat">20°C 60mm</span>
+                        </div>
+                        <canvas id="weatherTrendsChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Farmland Utilization</h3>
+                        <div class="utilization-value" id="utilizationPercent">70%</div>
+                        <canvas id="utilizationChart"></canvas>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer with Black/Grey Background -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span><i class="fa-solid fa-copyright"></i> 2024 BAYYTI Smart Irrigation System - Powered by AI</span>
+            <span>Device: <strong id="device-name">BAYYTI-B1</strong></span>
+            <span>Analytics Dashboard | Last Update: <strong id="last-update">--</strong></span>
+        </div>
+    </footer>
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="custom-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-rotate modal-icon"></i>
+                <h3 class="modal-title">System Update</h3>
+            </div>
+            <div class="modal-body" id="updateModalBody">
+                <p>Checking for updates...</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="closeModalBtn">
+                    <i class="fa-solid fa-times"></i>
+                    <span>Close</span>
+                </button>
+                <button class="modal-btn modal-btn-confirm" id="installUpdateBtn" style="display: none;">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Install Update</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reboot Confirmation Modal -->
+    <div id="rebootModal" class="custom-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-power-off modal-icon"></i>
+                <h3 class="modal-title">Reboot System</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to reboot the BAYYTI-B1 system?</p>
+                <p style="color: #FFC107; margin-top: 1rem;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    This will temporarily interrupt irrigation operations.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="rebootModalCancel">
+                    <i class="fa-solid fa-times"></i>
+                    <span>Cancel</span>
+                </button>
+                <button class="modal-btn modal-btn-confirm" id="confirmRebootBtn">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>Reboot Now</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/analytics.js?v=3.0"></script>
+</body>
+</html>

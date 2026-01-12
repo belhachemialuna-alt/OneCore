@@ -1,0 +1,20 @@
+[Unit]
+Description=BAYYTI Smart Irrigation System - Sensor Service
+After=network.target bayyti.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/smart-irrigation/backend
+Environment="PYTHONUNBUFFERED=1"
+Environment="ENABLE_GPIO=true"
+ExecStart=/usr/bin/python3 /home/pi/smart-irrigation/backend/sensor_service.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

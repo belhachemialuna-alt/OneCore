@@ -1,0 +1,38 @@
+{
+  "weather_patterns": {
+    "algeria_casablanca": {
+      "spring": {
+        "avg_temp": 22,
+        "avg_humidity": 65,
+        "rain_probability": 0.3,
+        "typical_conditions": "mild_warm"
+      },
+      "summer": {
+        "avg_temp": 28,
+        "avg_humidity": 55,
+        "rain_probability": 0.1,
+        "typical_conditions": "hot_dry"
+      },
+      "fall": {
+        "avg_temp": 20,
+        "avg_humidity": 70,
+        "rain_probability": 0.4,
+        "typical_conditions": "mild_humid"
+      },
+      "winter": {
+        "avg_temp": 14,
+        "avg_humidity": 75,
+        "rain_probability": 0.6,
+        "typical_conditions": "cool_wet"
+      }
+    }
+  },
+  "current_simulation": {
+    "temperature": 25,
+    "humidity": 60,
+    "rain_probability": 0.2,
+    "wind_speed": 12,
+    "solar_radiation": 850,
+    "last_rain_days_ago": 3
+  }
+}

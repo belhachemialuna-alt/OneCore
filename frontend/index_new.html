@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAYYTI-B1 Smart Irrigation System</title>
+    <link rel="stylesheet" href="css/dashboard.css?v=4.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <script>
+        // Check if setup is complete, redirect to setup if not
+        if (!localStorage.getItem('bayyti_setup_complete')) {
+            window.location.href = 'setup.html';
+        }
+    </script>
+    <!-- Red Header Bar (BleuHive Style) -->
+    <header class="top-header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fa-solid fa-seedling"></i>
+                    <span class="logo-text">BAYYTI</span>
+                    <span class="logo-subtitle">for life</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="project-title">Smart Irrigation Control Project <strong>BAYYTI-B1</strong></h1>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <i class="fa-solid fa-circle-question"></i> Support
+                </button>
+                <button class="header-btn">
+                    <i class="fa-solid fa-book"></i> FAQ
+                </button>
+                <div class="language-selector">
+                    <i class="fa-solid fa-globe"></i> English
+                </div>
+                <button class="sign-in-btn">Sign In</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Real-Time Sensor Data Grid -->
+        <div class="sensor-grid">
+            <div class="sensor-card">
+                <div class="sensor-icon soil">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <div class="sensor-content">
+                    <div class="sensor-label">Soil Moisture</div>
+                    <div class="sensor-value" id="soil-moisture">--</div>
+                    <div class="sensor-unit">%</div>
+                    <div class="sensor-status" id="soil-status">Loading...</div>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon temp">
+                    <i class="fa-solid fa-temperature-half"></i>
+                </div>
+                <div class="sensor-content">
+                    <div class="sensor-label">Temperature</div>
+                    <div class="sensor-value" id="temperature">--</div>
+                    <div class="sensor-unit">°C</div>
+                    <div class="sensor-status" id="temp-status">Loading...</div>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon humidity">
+                    <i class="fa-solid fa-droplet"></i>
+                </div>
+                <div class="sensor-content">
+                    <div class="sensor-label">Humidity</div>
+                    <div class="sensor-value" id="humidity">--</div>
+                    <div class="sensor-unit">%</div>
+                    <div class="sensor-status" id="humidity-status">Loading...</div>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon battery">
+                    <i class="fa-solid fa-battery-three-quarters"></i>
+                </div>
+                <div class="sensor-content">
+                    <div class="sensor-label">Battery Level</div>
+                    <div class="sensor-value" id="battery">--</div>
+                    <div class="sensor-unit">%</div>
+                    <div class="sensor-status" id="battery-status">Loading...</div>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon solar">
+                    <i class="fa-solid fa-solar-panel"></i>
+                </div>
+                <div class="sensor-content">
+                    <div class="sensor-label">Solar Status</div>
+                    <div class="sensor-value" id="solar-status">--</div>
+                    <div class="sensor-unit"></div>
+                    <div class="sensor-status" id="solar-text">Loading...</div>
+                </div>
+            </div>
+
+            <div class="sensor-card">
+                <div class="sensor-icon water">
+                    <i class="fa-solid fa-faucet"></i>
+                </div>
+                <div class="sensor-content">
+                    <div class="sensor-label">Water Flow</div>
+                    <div class="sensor-value" id="flow-rate">--</div>
+                    <div class="sensor-unit">L/min</div>
+                    <div class="sensor-status" id="flow-status">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-section">
+            <div class="control-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-valve"></i> Irrigation Control</h3>
+                    <span class="valve-badge" id="valve-badge">OFF</span>
+                </div>
+                <div class="card-body">
+                    <div class="control-buttons">
+                        <button class="btn btn-success" id="start-irrigation">
+                            <i class="fa-solid fa-play"></i> Start Irrigation
+                        </button>
+                        <button class="btn btn-danger" id="stop-irrigation">
+                            <i class="fa-solid fa-stop"></i> Stop Irrigation
+                        </button>
+                        <button class="btn btn-warning" id="emergency-stop">
+                            <i class="fa-solid fa-circle-exclamation"></i> Emergency Stop
+                        </button>
+                    </div>
+                    <div class="irrigation-info">
+                        <div class="info-item">
+                            <span class="info-label">Duration:</span>
+                            <span class="info-value" id="irrigation-duration">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Water Used:</span>
+                            <span class="info-value" id="water-used">--</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Irrigation:</span>
+                            <span class="info-value" id="last-irrigation">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-brain"></i> AI Recommendation</h3>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-mode">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Auto Mode</span>
+                    </label>
+                </div>
+                <div class="card-body">
+                    <div class="ai-recommendation" id="ai-recommendation">
+                        <div class="recommendation-loading">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Loading AI recommendation...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zones Display -->
+        <div class="zones-section" id="zones-section">
+            <h2><i class="fa-solid fa-layer-group"></i> Irrigation Zones</h2>
+            <div class="zones-grid" id="zones-grid">
+                <!-- Zones will be dynamically loaded -->
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-line"></i> Soil Moisture History (24h)</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="moisture-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-area"></i> Temperature & Humidity (24h)</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="temp-humidity-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="status-section">
+            <div class="status-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-shield-halved"></i> Safety Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <i class="fa-solid fa-circle-check status-ok"></i>
+                            <span>Battery Sufficient</span>
+                        </div>
+                        <div class="status-item">
+                            <i class="fa-solid fa-circle-check status-ok"></i>
+                            <span>No Leaks Detected</span>
+                        </div>
+                        <div class="status-item">
+                            <i class="fa-solid fa-circle-check status-ok"></i>
+                            <span>Temperature Normal</span>
+                        </div>
+                        <div class="status-item">
+                            <i class="fa-solid fa-circle-check status-ok"></i>
+                            <span>Pi Has Authority</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list" id="activity-list">
+                        <!-- Activity items will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span>&copy; 2024 BAYYTI Smart Irrigation System - Powered by AI</span>
+            <span>Device: <strong id="device-name">BAYYTI-B1</strong></span>
+            <span>Last Update: <strong id="last-update">--</strong></span>
+        </div>
+    </footer>
+
+    <script src="js/dashboard.js?v=3.0"></script>
+</body>
+</html>

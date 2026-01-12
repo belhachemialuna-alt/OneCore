@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAYYTI-B1 Setup Wizard</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/setup.css?v=4.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="setup-container">
+        <div class="setup-header">
+            <div class="logo">
+                <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+            </div>
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Welcome</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Network</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">System</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Crop & Soil</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">Schedule</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="setup-content">
+            <!-- Step 1: Welcome -->
+            <div class="setup-step active" id="step-1">
+                <div class="step-icon">
+                    <i class="fa-solid fa-hand-wave"></i>
+                </div>
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-droplet"></i>
+                </div>
+                <h1>Welcome to BAYYTI-B1</h1>
+                <p class="subtitle">Smart Irrigation System with AI Decision Making</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-droplet"></i>
+                        <h3>Water Optimization</h3>
+                        <p>Save up to 40% water with intelligent irrigation</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-solar-panel"></i>
+                        <h3>Solar Powered</h3>
+                        <p>Eco-friendly operation with battery backup</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-brain"></i>
+                        <h3>AI Decisions</h3>
+                        <p>Smart irrigation based on crop and soil needs</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-mobile-screen"></i>
+                        <h3>Remote Control</h3>
+                        <p>Monitor and control from anywhere</p>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-primary btn-large" onclick="nextStep()">
+                        Start Setup
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Network Setup -->
+            <div class="setup-step" id="step-2">
+                <div class="step-icon">
+                    <i class="fa-solid fa-wifi"></i>
+                </div>
+                <h1>Network Configuration</h1>
+                <p class="subtitle">Connect your BAYYTI-B1 to the internet</p>
+
+                <div class="form-section">
+                    <div class="network-options">
+                        <div class="option-card active" onclick="selectNetworkMode('wifi')">
+                            <i class="fa-solid fa-wifi"></i>
+                            <h3>Wi-Fi Connection</h3>
+                            <p>Connect to existing Wi-Fi network</p>
+                        </div>
+                        <div class="option-card" onclick="selectNetworkMode('hotspot')">
+                            <i class="fa-solid fa-tower-broadcast"></i>
+                            <h3>Hotspot Mode</h3>
+                            <p>Offline mode for remote farms</p>
+                        </div>
+                    </div>
+
+                    <div id="wifi-config" class="network-config">
+                        <div class="form-group">
+                            <label>
+                                <i class="fa-solid fa-network-wired"></i>
+                                Wi-Fi Network (SSID)
+                            </label>
+                            <input type="text" id="wifi-ssid" placeholder="Enter network name">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <i class="fa-solid fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="wifi-password" placeholder="Enter password">
+                        </div>
+                        <div class="info-box">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>Device IP will be displayed after connection</span>
+                        </div>
+                    </div>
+
+                    <div id="hotspot-config" class="network-config" style="display: none;">
+                        <div class="info-box success">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Hotspot mode enabled. Connect to: <strong>BAYYTI-B1-XXXX</strong></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Hotspot Password</label>
+                            <input type="text" value="bayyti2024" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Continue
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: System Basics -->
+            <div class="setup-step" id="step-3">
+                <div class="step-icon">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <h1>System Configuration</h1>
+                <p class="subtitle">Configure basic system settings</p>
+
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-location-dot"></i>
+                            Location (Wilaya)
+                        </label>
+                        <select id="wilaya-select">
+                            <option value="">Select your wilaya...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-clock"></i>
+                            Timezone
+                        </label>
+                        <select id="timezone-select">
+                            <option value="Africa/Algiers">Algeria (UTC+1)</option>
+                            <option value="Africa/Casablanca">Morocco (UTC+1)</option>
+                            <option value="Africa/Tunis">Tunisia (UTC+1)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                <i class="fa-solid fa-droplet"></i>
+                                Water Unit
+                            </label>
+                            <select id="water-unit">
+                                <option value="liters">Liters (L)</option>
+                                <option value="gallons">Gallons (gal)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fa-solid fa-clock"></i>
+                                Time Unit
+                            </label>
+                            <select id="time-unit">
+                                <option value="minutes">Minutes</option>
+                                <option value="seconds">Seconds</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-language"></i>
+                            Language
+                        </label>
+                        <select id="language-select">
+                            <option value="en">English</option>
+                            <option value="ar">العربية (Arabic)</option>
+                            <option value="fr">Français (French)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Continue
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Crop & Soil Setup -->
+            <div class="setup-step" id="step-4">
+                <div class="step-icon">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <h1>Crop & Soil Configuration</h1>
+                <p class="subtitle">Configure irrigation zones and crop types</p>
+
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>
+                            <i class="fa-solid fa-layer-group"></i>
+                            Number of Zones
+                        </label>
+                        <div class="zone-selector">
+                            <button class="zone-btn" onclick="selectZones(1)">1</button>
+                            <button class="zone-btn" onclick="selectZones(2)">2</button>
+                            <button class="zone-btn" onclick="selectZones(3)">3</button>
+                            <button class="zone-btn" onclick="selectZones(4)">4</button>
+                            <button class="zone-btn" onclick="selectZones(5)">5</button>
+                            <button class="zone-btn" onclick="selectZones(6)">6</button>
+                            <button class="zone-btn" onclick="selectZones(7)">7</button>
+                            <button class="zone-btn" onclick="selectZones(8)">8</button>
+                        </div>
+                    </div>
+
+                    <div id="zones-config">
+                        <!-- Zones will be dynamically added here -->
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Continue
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Irrigation Schedule -->
+            <div class="setup-step" id="step-5">
+                <div class="step-icon">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <h1>Irrigation Schedule</h1>
+                <p class="subtitle">Set up automatic irrigation schedules</p>
+
+                <div class="form-section">
+                    <div class="info-box">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Create schedules to automate your irrigation. You can add more schedules later from the dashboard.</span>
+                    </div>
+
+                    <div id="schedules-container">
+                        <div class="schedule-setup-card">
+                            <h3><i class="fa-solid fa-clock"></i> Schedule 1</h3>
+                            <div class="form-group">
+                                <label>
+                                    <i class="fa-solid fa-tag"></i>
+                                    Schedule Name
+                                </label>
+                                <input type="text" id="schedule-1-name" placeholder="e.g., Morning Irrigation" value="Morning Irrigation">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>
+                                        <i class="fa-solid fa-clock"></i>
+                                        Start Time
+                                    </label>
+                                    <input type="time" id="schedule-1-time" value="06:00">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <i class="fa-solid fa-hourglass"></i>
+                                        Duration (minutes)
+                                    </label>
+                                    <input type="number" id="schedule-1-duration" value="15" min="1" max="120">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Days of Week</label>
+                                <div class="days-selector">
+                                    <div class="day-label">Su</div>
+                                    <div class="day-label">Mo</div>
+                                    <div class="day-label">Tu</div>
+                                    <div class="day-label">We</div>
+                                    <div class="day-label">Th</div>
+                                    <div class="day-label">Fr</div>
+                                    <div class="day-label">Sa</div>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Sunday">
+                                        <span>Sun</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Monday" checked>
+                                        <span>Mon</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Tuesday" checked>
+                                        <span>Tue</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Wednesday" checked>
+                                        <span>Wed</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Thursday" checked>
+                                        <span>Thu</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Friday" checked>
+                                        <span>Fri</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Saturday" checked>
+                                        <span>Sat</span>
+                                    </label>
+                                    <label class="day-btn">
+                                        <input type="checkbox" value="Sunday" checked>
+                                        <span>Sun</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="addSchedule()" style="margin-top: 1rem;">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Another Schedule
+                    </button>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-success btn-large" onclick="completeSetup()">
+                        <i class="fa-solid fa-check"></i>
+                        Complete Setup
+                    </button>
+                </div>
+            </div>
+
+            <!-- Setup Complete -->
+            <div class="setup-step" id="step-complete" style="display: none;">
+                <div class="step-icon success">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h1>Setup Complete!</h1>
+                <p class="subtitle">Your BAYYTI-B1 is ready to use</p>
+
+                <div class="completion-summary">
+                    <div class="summary-item">
+                        <i class="fa-solid fa-wifi"></i>
+                        <span>Network configured</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="summary-location">Location set</span>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span id="summary-zones">Zones configured</span>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-primary btn-large" onclick="goToDashboard()">
+                        <i class="fa-solid fa-gauge"></i>
+                        Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/setup.js"></script>
+</body>
+</html>
