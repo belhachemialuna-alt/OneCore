@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Controls - BAYYTI-B1</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/emergency.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+</head>
+<body>
+    <!-- Global Loader -->
+    <div class="global-loader" id="globalLoader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Red Header Bar -->
+    <header class="top-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="project-title">Emergency Controls <strong>BAYYTI-B1</strong></h1>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <a href="index.html" class="header-icon-btn" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="header-icon-btn emergency-active" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="sidebar-item" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="sidebar-item active" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="sidebar-item" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Emergency Status Banner -->
+        <div class="emergency-banner" id="emergencyBanner">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div class="banner-content">
+                <h2>Emergency Control Center</h2>
+                <p>All systems operational - Ready for emergency intervention</p>
+            </div>
+        </div>
+
+        <!-- Alerts & Warnings Section -->
+        <section class="alerts-section">
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Active Alerts & Warnings</h2>
+            <div class="alerts-grid" id="alertsGrid">
+                <!-- Alerts will be populated here -->
+            </div>
+        </section>
+
+        <!-- Emergency Valve Control -->
+        <section class="control-section">
+            <h2><i class="fa-solid fa-valve"></i> Emergency Valve Control</h2>
+            <div class="control-grid">
+                <div class="control-card valve-control">
+                    <div class="valve-status" id="valveStatus">
+                        <div class="valve-icon">
+                            <i class="fa-solid fa-valve"></i>
+                        </div>
+                        <div class="valve-info">
+                            <h3>Main Irrigation Valve</h3>
+                            <p class="valve-state" id="valveState">CLOSED</p>
+                            <p class="valve-time">Last action: <span id="lastAction">--</span></p>
+                        </div>
+                    </div>
+                    <div class="valve-actions">
+                        <button class="emergency-btn open-valve" id="openValveBtn">
+                            <i class="fa-solid fa-play"></i>
+                            OPEN VALVE
+                        </button>
+                        <button class="emergency-btn close-valve" id="closeValveBtn">
+                            <i class="fa-solid fa-stop"></i>
+                            CLOSE VALVE
+                        </button>
+                        <button class="emergency-btn emergency-stop" id="emergencyStopBtn">
+                            <i class="fa-solid fa-hand"></i>
+                            EMERGENCY STOP
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-card pressure-monitor">
+                    <h3><i class="fa-solid fa-gauge-high"></i> Pressure Monitor</h3>
+                    <div class="pressure-display">
+                        <div class="pressure-value" id="pressureValue">0.0</div>
+                        <div class="pressure-unit">bar</div>
+                    </div>
+                    <div class="pressure-range">
+                        <span class="range-label">Normal: 2.0 - 3.5 bar</span>
+                    </div>
+                    <canvas id="pressureGauge"></canvas>
+                </div>
+
+                <div class="control-card flow-monitor">
+                    <h3><i class="fa-solid fa-droplet"></i> Flow Rate</h3>
+                    <div class="flow-display">
+                        <div class="flow-value" id="flowValue">0.0</div>
+                        <div class="flow-unit">L/min</div>
+                    </div>
+                    <div class="flow-status" id="flowStatus">
+                        <i class="fa-solid fa-circle"></i>
+                        <span>No Flow</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Valve Operation Timeline Chart -->
+        <section class="chart-section">
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> Valve Operation Timeline</h2>
+            <div class="chart-card">
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-range="1h">1 Hour</button>
+                    <button class="chart-btn" data-range="6h">6 Hours</button>
+                    <button class="chart-btn" data-range="24h">24 Hours</button>
+                    <button class="chart-btn" data-range="7d">7 Days</button>
+                </div>
+                <canvas id="valveTimelineChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Detailed Operation Charts -->
+        <section class="charts-grid">
+            <div class="chart-card">
+                <h3><i class="fa-solid fa-chart-area"></i> Pressure History</h3>
+                <canvas id="pressureHistoryChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3><i class="fa-solid fa-chart-line"></i> Flow Rate History</h3>
+                <canvas id="flowHistoryChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3><i class="fa-solid fa-clock"></i> Daily Operation Summary</h3>
+                <canvas id="dailySummaryChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3><i class="fa-solid fa-chart-pie"></i> Operation Status</h3>
+                <canvas id="statusPieChart"></canvas>
+            </div>
+        </section>
+
+        <!-- System Health -->
+        <section class="health-section">
+            <h2><i class="fa-solid fa-heartbeat"></i> System Health</h2>
+            <div class="health-grid">
+                <div class="health-card" id="healthValve">
+                    <div class="health-icon">
+                        <i class="fa-solid fa-valve"></i>
+                    </div>
+                    <h4>Valve System</h4>
+                    <div class="health-status">Operational</div>
+                    <div class="health-bar">
+                        <div class="health-progress" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="health-card" id="healthPressure">
+                    <div class="health-icon">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <h4>Pressure System</h4>
+                    <div class="health-status">Normal</div>
+                    <div class="health-bar">
+                        <div class="health-progress" style="width: 95%"></div>
+                    </div>
+                </div>
+
+                <div class="health-card" id="healthPower">
+                    <div class="health-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4>Power Supply</h4>
+                    <div class="health-status">Stable</div>
+                    <div class="health-bar">
+                        <div class="health-progress" style="width: 85%"></div>
+                    </div>
+                </div>
+
+                <div class="health-card" id="healthSensors">
+                    <div class="health-icon">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <h4>Sensors</h4>
+                    <div class="health-status">Online</div>
+                    <div class="health-bar">
+                        <div class="health-progress" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Clean Black Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>BAYYTI-B1</h3>
+                <p>Smart Irrigation System • Powered by AI</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="emergency.html">Emergency</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="controls.html">Controls</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="footer-status">
+                <p><strong>v1.0.0</strong> • <span class="status-online">● Online</span></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BAYYTI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Alert Panel -->
+    <div class="alert-panel" id="alertPanel">
+        <div class="alert-panel-header">
+            <h3><i class="fa-solid fa-triangle-exclamation"></i> Alerts & Warnings</h3>
+            <button class="close-panel" onclick="closeAlertPanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="alert-panel-list" id="alertPanelList">
+            <!-- Alerts will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+            <button class="close-panel" onclick="closeNotificationPanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+
+    <script src="js/emergency.js?v=1.0"></script>
+    
+    <!-- Language System -->
+    <script src="js/language.js?v=1.0"></script>
+    
+    <!-- Page Load Handler -->
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,6 +2,8 @@
 const API_BASE = window.location.origin;
 let moistureChart, tempChart;
 let updateInterval;
+let notifications = [];
+let lastValveState = null;
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     setupReturnToSetup();
     setupMobileMenu();
+    setupNotificationSystem();
     
     // Update every 5 seconds
     updateInterval = setInterval(loadSystemData, 5000);
@@ -26,6 +29,9 @@ async function loadSystemData() {
         updateIrrigationStatus(data.irrigation);
         updateZonesDisplay(data.zones);
         updateLastUpdate();
+        
+        // Check valve status for notifications
+        checkValveStatusAndNotify(data.irrigation);
         
         // Load Safety Status (CRITICAL for lithium battery monitoring)
         loadSafetyStatus();
@@ -454,7 +460,265 @@ function setupEventListeners() {
             showNotification('Failed to toggle auto mode', 'error');
         }
     });
+    
+    // Update button
+    document.getElementById('updateBtnMain')?.addEventListener('click', checkForUpdates);
+    
+    // Reboot system button
+    document.getElementById('rebootBtn')?.addEventListener('click', () => {
+        const modal = document.getElementById('rebootModal');
+        if (modal) modal.classList.add('active');
+    });
+    
+    // Reboot modal handlers
+    document.getElementById('rebootModalCancel')?.addEventListener('click', () => {
+        const modal = document.getElementById('rebootModal');
+        if (modal) modal.classList.remove('active');
+    });
+    
+    document.getElementById('confirmRebootBtn')?.addEventListener('click', async () => {
+        const btn = document.getElementById('confirmRebootBtn');
+        if (!btn) return;
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Rebooting...</span>';
+        
+        try {
+            const response = await fetch(`${API_BASE}/api/system/reboot`, {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                showNotification('System rebooting... Please wait 30 seconds', 'warning');
+                setTimeout(() => location.reload(), 30000);
+            } else {
+                showNotification('Failed to reboot system', 'error');
+            }
+        } catch (error) {
+            console.error('Reboot error:', error);
+            showNotification('Failed to reboot: ' + error.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-power-off"></i> <span>Reboot Now</span>';
+            const modal = document.getElementById('rebootModal');
+            if (modal) modal.classList.remove('active');
+        }
+    });
+    
+    // Update modal handlers
+    document.getElementById('updateModalCancel')?.addEventListener('click', () => {
+        const modal = document.getElementById('updateModal');
+        if (modal) modal.style.display = 'none';
+    });
+    
+    document.getElementById('installUpdateBtn')?.addEventListener('click', installUpdate);
 }
+
+// Check for updates
+async function checkForUpdates() {
+    const modal = document.getElementById('updateModal');
+    const modalBody = document.getElementById('updateModalBody');
+    const installBtn = document.getElementById('installUpdateBtn');
+    
+    if (!modal || !modalBody) return;
+    
+    modal.style.display = 'flex';
+    modalBody.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Checking for updates...</p>';
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/system/update/check`);
+        const data = await response.json();
+        
+        if (data.success && data.update_available) {
+            const indicator = document.getElementById('updateIndicator');
+            if (indicator) indicator.classList.add('active');
+            
+            modalBody.innerHTML = `
+                <div class="update-info">
+                    <p><strong>🎉 New version available: ${data.latest_version}</strong></p>
+                    <p>Current version: 1.0.0</p>
+                    <p>Release date: ${new Date(data.release_date).toLocaleDateString()}</p>
+                    <h4 style="margin-top: 1rem; color: #FFFFFF;">Release Notes:</h4>
+                    <div style="max-height: 200px; overflow-y: auto; background: #1a1a1a; padding: 10px; border-radius: 5px;">
+                        ${data.release_notes || 'No release notes provided.'}
+                    </div>
+                </div>
+            `;
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                installBtn.dataset.downloadUrl = data.download_url;
+            }
+        } else {
+            modalBody.innerHTML = '<p>✅ You are running the latest version</p>';
+            if (installBtn) installBtn.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Update check error:', error);
+        modalBody.innerHTML = `
+            <p>⚠️ Unable to check for updates</p>
+            <p style="color: #f44336; font-size: 12px;">${error.message}</p>
+        `;
+        if (installBtn) installBtn.style.display = 'none';
+    }
+}
+
+// Install update
+async function installUpdate() {
+    const installBtn = document.getElementById('installUpdateBtn');
+    const downloadUrl = installBtn?.dataset.downloadUrl;
+    
+    if (!downloadUrl) return;
+    
+    installBtn.disabled = true;
+    installBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Installing...';
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/system/update/install`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({download_url: downloadUrl})
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('✅ Update installed! System will restart in 10 seconds.', 'success');
+            setTimeout(() => location.reload(), 10000);
+        } else {
+            showNotification('❌ Update failed: ' + data.error, 'error');
+        }
+    } catch (error) {
+        showNotification('❌ Update failed: ' + error.message, 'error');
+    } finally {
+        installBtn.disabled = false;
+        installBtn.innerHTML = '<i class="fa-solid fa-download"></i> Install Update';
+    }
+}
+
+// Check for updates quietly on load
+setTimeout(async () => {
+    try {
+        const response = await fetch(`${API_BASE}/api/system/update/check`);
+        const data = await response.json();
+        
+        if (data.success && data.update_available) {
+            const indicator = document.getElementById('updateIndicator');
+            if (indicator) indicator.classList.add('active');
+        }
+    } catch (error) {
+        console.error('Silent update check failed:', error);
+    }
+}, 3000);
+
+// Notification System Functions
+function setupNotificationSystem() {
+    const notificationBtn = document.getElementById('notificationBtn');
+    
+    if (notificationBtn) {
+        notificationBtn.addEventListener('click', toggleNotificationPanel);
+    }
+}
+
+function toggleNotificationPanel() {
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.classList.toggle('active');
+        
+        if (panel.classList.contains('active')) {
+            updateNotificationList();
+        }
+    }
+}
+
+function closeNotificationPanel() {
+    const panel = document.getElementById('notificationPanel');
+    if (panel) panel.classList.remove('active');
+}
+
+function checkValveStatusAndNotify(irrigation) {
+    if (!irrigation) return;
+    
+    const valveOpen = irrigation.valve_open || false;
+    
+    if (lastValveState !== null && lastValveState !== valveOpen) {
+        const notification = {
+            id: Date.now(),
+            type: valveOpen ? 'success' : 'info',
+            icon: valveOpen ? 'fa-droplet' : 'fa-droplet-slash',
+            title: valveOpen ? 'Irrigation Started' : 'Irrigation Stopped',
+            message: valveOpen ? 'Valve opened - watering in progress' : 'Valve closed - irrigation complete',
+            time: new Date().toLocaleTimeString(),
+            timestamp: Date.now()
+        };
+        
+        addNotification(notification);
+    }
+    
+    lastValveState = valveOpen;
+}
+
+function addNotification(notification) {
+    if (!notifications.find(n => n.id === notification.id)) {
+        notifications.unshift(notification);
+        
+        if (notifications.length > 20) {
+            notifications = notifications.slice(0, 20);
+        }
+        
+        updateNotificationBadge();
+    }
+}
+
+function updateNotificationBadge() {
+    const badge = document.getElementById('notificationBadge');
+    if (badge) {
+        const count = notifications.length;
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.classList.toggle('active', count > 0);
+    }
+}
+
+function updateNotificationList() {
+    const list = document.getElementById('notificationList');
+    if (!list) return;
+    
+    if (notifications.length === 0) {
+        list.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #999;">
+                <i class="fa-solid fa-bell-slash" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+        return;
+    }
+    
+    list.innerHTML = notifications.map(n => `
+        <div class="notification-item ${n.type}">
+            <div class="notification-item-header">
+                <i class="fa-solid ${n.icon}"></i>
+                <strong>${n.title}</strong>
+            </div>
+            <p>${n.message}</p>
+            <div class="notification-item-time">${n.time}</div>
+        </div>
+    `).join('');
+}
+
+// Global Loader Functions
+function showLoader() {
+    const loader = document.getElementById('globalLoader');
+    if (loader) loader.classList.add('active');
+}
+
+function hideLoader() {
+    const loader = document.getElementById('globalLoader');
+    if (loader) loader.classList.remove('active');
+}
+
+// Export functions
+window.closeNotificationPanel = closeNotificationPanel;
+window.showLoader = showLoader;
+window.hideLoader = hideLoader;
 
 // Helper functions
 function getSoilStatus(moisture) {

@@ -16,6 +16,10 @@ let zoneMapState = {
     zones: []
 };
 
+// Notification storage
+let notifications = [];
+let lastValveState = null;
+
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
     initializeTime();
@@ -24,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupUpdateButton();
     setupMobileSidebar();
     setupRebootSystem();
+    setupNotificationSystem();
     initializeZoneMap();
     updateLastUpdateTime();
     
@@ -571,6 +576,94 @@ function setupMobileSidebar() {
     }
 }
 
+// Notification System
+function setupNotificationSystem() {
+    const notificationBtn = document.getElementById('notificationBtn');
+    
+    if (notificationBtn) {
+        notificationBtn.addEventListener('click', toggleNotificationPanel);
+    }
+}
+
+function toggleNotificationPanel() {
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.classList.toggle('active');
+        
+        if (panel.classList.contains('active')) {
+            updateNotificationList();
+        }
+    }
+}
+
+function closeNotificationPanel() {
+    const panel = document.getElementById('notificationPanel');
+    if (panel) panel.classList.remove('active');
+}
+
+function addNotification(notification) {
+    if (!notifications.find(n => n.id === notification.id)) {
+        notifications.unshift(notification);
+        
+        if (notifications.length > 20) {
+            notifications = notifications.slice(0, 20);
+        }
+        
+        updateNotificationBadge();
+    }
+}
+
+function updateNotificationBadge() {
+    const badge = document.getElementById('notificationBadge');
+    if (badge) {
+        const count = notifications.length;
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.classList.toggle('active', count > 0);
+    }
+}
+
+function updateNotificationList() {
+    const list = document.getElementById('notificationList');
+    if (!list) return;
+    
+    if (notifications.length === 0) {
+        list.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #999;">
+                <i class="fa-solid fa-bell-slash" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+        return;
+    }
+    
+    list.innerHTML = notifications.map(n => `
+        <div class="notification-item ${n.type}">
+            <div class="notification-item-header">
+                <i class="fa-solid ${n.icon}"></i>
+                <strong>${n.title}</strong>
+            </div>
+            <p>${n.message}</p>
+            <div class="notification-item-time">${n.time}</div>
+        </div>
+    `).join('');
+}
+
+// Global Loader Functions
+function showLoader() {
+    const loader = document.getElementById('globalLoader');
+    if (loader) loader.classList.add('active');
+}
+
+function hideLoader() {
+    const loader = document.getElementById('globalLoader');
+    if (loader) loader.classList.remove('active');
+}
+
+// Export functions
+window.closeNotificationPanel = closeNotificationPanel;
+window.showLoader = showLoader;
+window.hideLoader = hideLoader;
+
 // Reboot System
 function setupRebootSystem() {
     const rebootBtn = document.getElementById('rebootBtn');
@@ -858,7 +951,136 @@ function selectZone(zoneId) {
     }
 }
 
-// Export for debugging
+// Map Toggle Functionality
+function setupMapToggle() {
+    const showMapBtn = document.getElementById('showMapBtn');
+    const toggleMapBtn = document.getElementById('toggleMapBtn');
+    const mapSection = document.getElementById('zoneMapSection');
+    
+    if (showMapBtn) {
+        showMapBtn.addEventListener('click', () => {
+            mapSection.style.display = 'block';
+            showMapBtn.innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Hide Zone Map';
+            // Re-initialize map when shown
+            initializeZoneMap();
+        });
+    }
+    
+    if (toggleMapBtn) {
+        toggleMapBtn.addEventListener('click', () => {
+            if (mapSection.style.display === 'none') {
+                mapSection.style.display = 'block';
+                toggleMapBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+                toggleMapBtn.title = 'Hide Map';
+            } else {
+                mapSection.style.display = 'none';
+                toggleMapBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+                toggleMapBtn.title = 'Show Map';
+                document.getElementById('showMapBtn').innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Show Zone Map';
+            }
+        });
+    }
+}
+
+// PDF Export Functionality
+async function exportChartToPDF(chartId, filename) {
+    try {
+        // Show loading state
+        showLoader();
+        
+        // Get the canvas element
+        const canvas = document.getElementById(chartId);
+        if (!canvas) {
+            throw new Error('Chart not found');
+        }
+        
+        // Get the chart card container
+        const chartCard = canvas.closest('.chart-card');
+        
+        // Use jsPDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('landscape', 'mm', 'a4');
+        
+        // Add title
+        const title = chartCard.querySelector('h3')?.textContent || filename;
+        pdf.setFontSize(18);
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(title, 20, 20);
+        
+        // Add BAYYTI branding
+        pdf.setFontSize(12);
+        pdf.setTextColor(255, 0, 0);
+        pdf.text('BAYYTI-B1 Smart Irrigation System', 20, 30);
+        
+        // Add timestamp
+        pdf.setFontSize(10);
+        pdf.setTextColor(100, 100, 100);
+        const now = new Date();
+        pdf.text(`Generated: ${now.toLocaleString()}`, 20, 38);
+        
+        // Convert canvas to image
+        const imgData = canvas.toDataURL('image/png', 1.0);
+        
+        // Calculate dimensions to fit in PDF (preserve aspect ratio)
+        const imgWidth = 250;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        // Add the chart image
+        pdf.addImage(imgData, 'PNG', 20, 45, imgWidth, imgHeight);
+        
+        // Add footer
+        const pageHeight = pdf.internal.pageSize.height;
+        pdf.setFontSize(8);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text('© 2024 BAYYTI Smart Irrigation System', 20, pageHeight - 10);
+        
+        // Save the PDF
+        pdf.save(`${filename}_${Date.now()}.pdf`);
+        
+        hideLoader();
+        
+        // Show success message
+        showToast('Chart exported successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Export error:', error);
+        hideLoader();
+        showToast('Failed to export chart', 'error');
+    }
+}
+
+// Toast notification
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196F3'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Initialize map toggle on load
+document.addEventListener('DOMContentLoaded', () => {
+    setupMapToggle();
+});
+
+// Export for debugging and global access
 window.dashboardDebug = {
     loadDashboardData,
     checkForUpdates,
@@ -866,3 +1088,5 @@ window.dashboardDebug = {
     zoneMapState,
     selectZone
 };
+
+window.exportChartToPDF = exportChartToPDF;

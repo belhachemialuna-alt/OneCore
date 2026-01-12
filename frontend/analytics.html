@@ -11,8 +11,15 @@
     <link rel="stylesheet" href="css/analytics.css?v=2.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+    <!-- Global Loader -->
+    <div class="global-loader" id="globalLoader">
+        <div class="loader-circle"></div>
+    </div>
+
     <!-- Red Header Bar (Same as index.html) -->
     <header class="top-header">
         <div class="header-container">
@@ -28,6 +35,14 @@
                 <h1 class="project-title">Smart Irrigation Analytics <strong>BAYYTI-B1</strong></h1>
             </div>
             <div class="header-right">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
                 <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
@@ -35,17 +50,20 @@
                 <a href="index.html" class="header-icon-btn" title="Back to Dashboard">
                     <i class="fa-solid fa-gauge"></i>
                 </a>
-                <button class="header-icon-btn" title="Support">
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
-                </button>
+                </a>
                 <button class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
-                </button>
-                <button class="header-icon-btn" title="Language">
-                    <i class="fa-solid fa-globe"></i>
-                </button>
-                <button class="header-icon-btn" title="Options">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
                 <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -90,12 +108,99 @@
     </div>
 
     <div class="container">
+        <!-- Performance Benchmarks -->
+        <div class="benchmarks-section">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-chart-simple"></i> Performance Benchmarks</h2>
+                <button class="show-map-btn" id="showMapBtn">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    Show Zone Map
+                </button>
+            </div>
+            <div class="benchmarks-grid">
+                <div class="benchmark-card water">
+                    <div class="benchmark-icon">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <div class="benchmark-content">
+                        <h3>Water Usage</h3>
+                        <div class="benchmark-value">
+                            <span id="totalWater">1,245</span>
+                            <span class="unit">L</span>
+                        </div>
+                        <div class="benchmark-subtitle">Total dispensed this month</div>
+                        <div class="benchmark-trend positive">
+                            <i class="fa-solid fa-arrow-down"></i>
+                            <span>15% reduction vs last month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card energy">
+                    <div class="benchmark-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="benchmark-content">
+                        <h3>Energy Consumption</h3>
+                        <div class="benchmark-value">
+                            <span id="totalEnergy">87.5</span>
+                            <span class="unit">kWh</span>
+                        </div>
+                        <div class="benchmark-subtitle">Total power used this month</div>
+                        <div class="benchmark-trend positive">
+                            <i class="fa-solid fa-arrow-down"></i>
+                            <span>8% reduction vs last month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card valve">
+                    <div class="benchmark-icon">
+                        <i class="fa-solid fa-valve"></i>
+                    </div>
+                    <div class="benchmark-content">
+                        <h3>Valve Operations</h3>
+                        <div class="benchmark-value">
+                            <span id="totalCycles">342</span>
+                            <span class="unit">cycles</span>
+                        </div>
+                        <div class="benchmark-subtitle">Total valve activations</div>
+                        <div class="benchmark-trend neutral">
+                            <i class="fa-solid fa-minus"></i>
+                            <span>Same as last month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card efficiency">
+                    <div class="benchmark-icon">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <div class="benchmark-content">
+                        <h3>System Efficiency</h3>
+                        <div class="benchmark-value">
+                            <span id="efficiency">94.2</span>
+                            <span class="unit">%</span>
+                        </div>
+                        <div class="benchmark-subtitle">Overall performance rating</div>
+                        <div class="benchmark-trend positive">
+                            <i class="fa-solid fa-arrow-up"></i>
+                            <span>+2.3% improvement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Zone Selection with Map -->
-        <div class="zone-map-section">
+        <div class="zone-map-section" id="zoneMapSection" style="display: none;">
             <div class="zone-selector-card">
                 <div class="zone-selector-header">
                     <h3><i class="fa-solid fa-map-location-dot"></i> Zone Selection & Map View</h3>
                     <div class="map-controls">
+                        <button class="map-control-btn" id="toggleMapBtn" title="Hide Map">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
                         <button class="map-control-btn" id="zoomInBtn" title="Zoom In">
                             <i class="fa-solid fa-plus"></i>
                         </button>
@@ -232,8 +337,15 @@
                 <div class="charts-row">
                     <!-- Suspected Farmland Statistics -->
                     <div class="chart-card wide">
-                        <h3>Suspected farmland statistics</h3>
-                        <p class="chart-subtitle">AI doubt category statistics</p>
+                        <div class="chart-card-header">
+                            <div>
+                                <h3>Suspected farmland statistics</h3>
+                                <p class="chart-subtitle">AI doubt category statistics</p>
+                            </div>
+                            <button class="export-btn" onclick="exportChartToPDF('farmlandStatsChart', 'Farmland_Statistics')" title="Export to PDF">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </button>
+                        </div>
                         <div class="chart-header">
                             <span class="issue-badge">2018 Issue 1: 2600</span>
                         </div>
@@ -242,7 +354,12 @@
 
                     <!-- Area of Doubt Donut -->
                     <div class="chart-card">
-                        <h3>Area of doubt</h3>
+                        <div class="chart-card-header">
+                            <h3>Area of doubt</h3>
+                            <button class="export-btn" onclick="exportChartToPDF('areaDonutChart', 'Area_of_Doubt')" title="Export to PDF">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </button>
+                        </div>
                         <div class="donut-container">
                             <canvas id="areaDonutChart"></canvas>
                             <div class="donut-center">
@@ -256,9 +373,15 @@
                 <!-- Weather Trends and Utilization -->
                 <div class="charts-row">
                     <div class="chart-card wide">
-                        <div class="chart-header-row">
-                            <h3>Weather Trends</h3>
-                            <span class="time-badge">Last 20 days</span>
+                        <div class="chart-card-header">
+                            <div class="chart-header-row">
+                                <h3>Weather Trends</h3>
+                                <span class="time-badge">Last 20 days</span>
+                            </div>
+                            <button class="export-btn" onclick="exportChartToPDF('weatherTrendsChart', 'Weather_Trends')" title="Export to PDF">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                Export PDF
+                            </button>
                         </div>
                         <div class="weather-summary">
                             <span class="weather-stat">20°C 60mm</span>
@@ -267,7 +390,12 @@
                     </div>
 
                     <div class="chart-card">
-                        <h3>Farmland Utilization</h3>
+                        <div class="chart-card-header">
+                            <h3>Farmland Utilization</h3>
+                            <button class="export-btn" onclick="exportChartToPDF('utilizationChart', 'Farmland_Utilization')" title="Export to PDF">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </button>
+                        </div>
                         <div class="utilization-value" id="utilizationPercent">70%</div>
                         <canvas id="utilizationChart"></canvas>
                     </div>
@@ -277,14 +405,42 @@
         </div>
     </div>
 
-    <!-- Footer with Black/Grey Background -->
+    <!-- Clean Black Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <span><i class="fa-solid fa-copyright"></i> 2024 BAYYTI Smart Irrigation System - Powered by AI</span>
-            <span>Device: <strong id="device-name">BAYYTI-B1</strong></span>
-            <span>Analytics Dashboard | Last Update: <strong id="last-update">--</strong></span>
+            <div class="footer-info">
+                <h3>BAYYTI-B1</h3>
+                <p>Smart Irrigation System • Powered by AI</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="emergency.html">Emergency</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="controls.html">Controls</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="footer-status">
+                <p><strong>v1.0.0</strong> • <span class="status-online">● Online</span></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BAYYTI. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+            <button class="close-panel" onclick="closeNotificationPanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
 
     <!-- Update Modal -->
     <div id="updateModal" class="custom-modal">
@@ -339,5 +495,20 @@
     </div>
 
     <script src="js/analytics.js?v=3.0"></script>
+    
+    <!-- Language System -->
+    <script src="js/language.js?v=1.0"></script>
+    
+    <!-- Page Load Handler -->
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500);
+            }
+        });
+    </script>
 </body>
 </html>

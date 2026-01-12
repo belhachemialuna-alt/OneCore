@@ -9,14 +9,7 @@
       "name": "Morning Irrigation",
       "start_time": "06:00",
       "duration": 900,
-      "days_of_week": "Thursday",
-      "enabled": true
-    },
-    {
-      "name": "Schedule 2",
-      "start_time": "18:00",
-      "duration": 900,
-      "days_of_week": "Monday,Tuesday,Wednesday,Thursday,Friday",
+      "days_of_week": "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
       "enabled": true
     }
   ]

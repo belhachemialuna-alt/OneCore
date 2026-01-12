@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Schema - BAYYTI-B1</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/hardware.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Global Loader -->
+    <div class="global-loader" id="globalLoader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Sticky Red Header Bar -->
+    <header class="top-header sticky-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="project-title">Hardware Schema <strong>BAYYTI-B1</strong></h1>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <a href="index.html" class="header-icon-btn" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema" style="background: rgba(255, 255, 255, 0.25);">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="sidebar-item" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="sidebar-item" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="sidebar-item active" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="sidebar-item" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="main-content-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-icon">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div>
+                <h1>Hardware System Schema</h1>
+                <p>Real-time monitoring of all hardware components - Valves, sensors, pipes, and connections</p>
+            </div>
+            <div class="status-summary">
+                <div class="summary-item">
+                    <div class="summary-icon online">●</div>
+                    <span><strong id="onlineCount">0</strong> Online</span>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon offline">●</div>
+                    <span><strong id="offlineCount">0</strong> Offline</span>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon error">●</div>
+                    <span><strong id="errorCount">0</strong> Error</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- System Performance Cards (CPU & RAM) -->
+        <div class="system-performance-section">
+            <h2><i class="fa-solid fa-gauge-high"></i> System Performance</h2>
+            <div class="performance-grid">
+                <!-- CPU Card -->
+                <div class="performance-card cpu-card">
+                    <div class="performance-header">
+                        <div class="performance-icon">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div class="performance-title">
+                            <h3>CPU Usage</h3>
+                            <span class="performance-subtitle" id="cpuCores">1 Core</span>
+                        </div>
+                    </div>
+                    <div class="performance-value">
+                        <span id="cpuUsage">0</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="performance-bar">
+                        <div class="performance-progress" id="cpuProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="performance-footer">
+                        <span class="performance-status" id="cpuStatus">Normal</span>
+                        <span class="performance-freq" id="cpuFreq">0 MHz</span>
+                    </div>
+                </div>
+
+                <!-- RAM Card -->
+                <div class="performance-card ram-card">
+                    <div class="performance-header">
+                        <div class="performance-icon">
+                            <i class="fa-solid fa-memory"></i>
+                        </div>
+                        <div class="performance-title">
+                            <h3>RAM Usage</h3>
+                            <span class="performance-subtitle" id="ramTotal">0 GB Total</span>
+                        </div>
+                    </div>
+                    <div class="performance-value">
+                        <span id="ramUsage">0</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="performance-bar">
+                        <div class="performance-progress" id="ramProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="performance-footer">
+                        <span class="performance-status" id="ramStatus">Normal</span>
+                        <span class="performance-detail" id="ramDetail">0 / 0 GB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-card">
+            <h3><i class="fa-solid fa-info-circle"></i> Status Legend</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="status-dot online">●</div>
+                    <span><strong>Online/OK</strong> - Component functioning normally</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot offline">●</div>
+                    <span><strong>Offline/OFF</strong> - Component inactive or disabled</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot error">●</div>
+                    <span><strong>Error/Fault</strong> - Component malfunction detected</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot warning">●</div>
+                    <span><strong>Warning</strong> - Component needs attention</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hardware Schema SVG -->
+        <div class="schema-container">
+            <h2><i class="fa-solid fa-diagram-project"></i> System Architecture</h2>
+            <div class="schema-wrapper">
+                <svg id="hardware-schema" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Definitions for patterns and gradients -->
+                    <defs>
+                        <!-- Pipe pattern -->
+                        <pattern id="pipePattern" patternUnits="userSpaceOnUse" width="10" height="10">
+                            <rect width="10" height="10" fill="#E0E0E0"/>
+                            <line x1="0" y1="5" x2="10" y2="5" stroke="#BDBDBD" stroke-width="1"/>
+                        </pattern>
+                        
+                        <!-- Water flow gradient -->
+                        <linearGradient id="waterFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#2196F3;stop-opacity:0.3"/>
+                            <stop offset="50%" style="stop-color:#2196F3;stop-opacity:0.6"/>
+                            <stop offset="100%" style="stop-color:#2196F3;stop-opacity:0.3"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Water Source -->
+                    <g id="water-source" class="component">
+                        <rect x="50" y="150" width="100" height="80" rx="10" fill="#2196F3" opacity="0.8"/>
+                        <text x="100" y="185" text-anchor="middle" fill="white" font-size="14" font-weight="bold">WATER</text>
+                        <text x="100" y="205" text-anchor="middle" fill="white" font-size="12">SOURCE</text>
+                        <circle id="source-status" cx="140" cy="160" r="8" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Main Pipe from source -->
+                    <line id="pipe-main" x1="150" y1="190" x2="280" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Pump -->
+                    <g id="pump" class="component">
+                        <circle cx="310" cy="190" r="40" fill="#FF5722" opacity="0.9"/>
+                        <text x="310" y="195" text-anchor="middle" fill="white" font-size="14" font-weight="bold">PUMP</text>
+                        <circle id="pump-status" cx="340" cy="165" r="8" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Pipe to filter -->
+                    <line id="pipe-filter" x1="350" y1="190" x2="480" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Filter -->
+                    <g id="filter" class="component">
+                        <rect x="480" y="160" width="80" height="60" rx="8" fill="#9C27B0" opacity="0.9"/>
+                        <text x="520" y="195" text-anchor="middle" fill="white" font-size="14" font-weight="bold">FILTER</text>
+                        <circle id="filter-status" cx="555" cy="170" r="8" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Pipe to pressure sensor -->
+                    <line id="pipe-pressure" x1="560" y1="190" x2="680" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Pressure Sensor -->
+                    <g id="pressure-sensor" class="component sensor">
+                        <rect x="680" y="170" width="60" height="40" rx="5" fill="#FFC107" opacity="0.9"/>
+                        <text x="710" y="195" text-anchor="middle" fill="#000" font-size="12" font-weight="bold">P-SENS</text>
+                        <circle id="pressure-sensor-status" cx="735" cy="178" r="6" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Pipe to main valve -->
+                    <line id="pipe-main-valve" x1="740" y1="190" x2="840" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Main Control Valve -->
+                    <g id="main-valve" class="component valve">
+                        <rect x="840" y="160" width="80" height="60" rx="8" fill="#DC3545" opacity="0.9"/>
+                        <text x="880" y="185" text-anchor="middle" fill="white" font-size="12" font-weight="bold">MAIN</text>
+                        <text x="880" y="202" text-anchor="middle" fill="white" font-size="12" font-weight="bold">VALVE</text>
+                        <circle id="main-valve-status" cx="915" cy="168" r="8" fill="#757575" class="status-indicator"/>
+                    </g>
+
+                    <!-- Distribution pipes -->
+                    <line id="pipe-dist" x1="920" y1="190" x2="980" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    <line id="pipe-split-1" x1="980" y1="190" x2="980" y2="320" stroke="#424242" stroke-width="6" class="pipe"/>
+                    <line id="pipe-split-2" x1="980" y1="190" x2="980" y2="480" stroke="#424242" stroke-width="6" class="pipe"/>
+
+                    <!-- Zone 1 -->
+                    <g id="zone-1" class="zone">
+                        <!-- Soil Moisture Sensor -->
+                        <g id="soil-sensor-1" class="component sensor">
+                            <rect x="850" y="300" width="60" height="40" rx="5" fill="#795548" opacity="0.9"/>
+                            <text x="880" y="325" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SOIL-1</text>
+                            <circle id="soil-sensor-1-status" cx="905" cy="308" r="6" fill="#4caf50" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-zone-1" x1="980" y1="320" x2="1020" y2="320" stroke="#424242" stroke-width="6" class="pipe"/>
+                        
+                        <!-- Zone 1 Valve -->
+                        <g id="zone-valve-1" class="component valve">
+                            <rect x="1020" y="300" width="70" height="40" rx="6" fill="#FF5722" opacity="0.9"/>
+                            <text x="1055" y="325" text-anchor="middle" fill="white" font-size="11" font-weight="bold">VALVE-1</text>
+                            <circle id="zone-valve-1-status" cx="1085" cy="308" r="7" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-sprinkler-1" x1="1090" y1="320" x2="1140" y2="320" stroke="#424242" stroke-width="4" class="pipe"/>
+                        
+                        <!-- Sprinkler 1 -->
+                        <g id="sprinkler-1" class="component">
+                            <circle cx="1150" cy="320" r="20" fill="#2196F3" opacity="0.8"/>
+                            <text x="1150" y="325" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SP1</text>
+                            <circle id="sprinkler-1-status" cx="1165" cy="308" r="5" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <!-- Zone label -->
+                        <text x="1055" y="280" text-anchor="middle" fill="#FF5722" font-size="16" font-weight="bold">ZONE 1</text>
+                    </g>
+
+                    <!-- Zone 2 -->
+                    <g id="zone-2" class="zone">
+                        <!-- Soil Moisture Sensor -->
+                        <g id="soil-sensor-2" class="component sensor">
+                            <rect x="850" y="400" width="60" height="40" rx="5" fill="#795548" opacity="0.9"/>
+                            <text x="880" y="425" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SOIL-2</text>
+                            <circle id="soil-sensor-2-status" cx="905" cy="408" r="6" fill="#4caf50" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-zone-2" x1="980" y1="400" x2="1020" y2="400" stroke="#424242" stroke-width="6" class="pipe"/>
+                        
+                        <!-- Zone 2 Valve -->
+                        <g id="zone-valve-2" class="component valve">
+                            <rect x="1020" y="380" width="70" height="40" rx="6" fill="#FF5722" opacity="0.9"/>
+                            <text x="1055" y="405" text-anchor="middle" fill="white" font-size="11" font-weight="bold">VALVE-2</text>
+                            <circle id="zone-valve-2-status" cx="1085" cy="388" r="7" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-sprinkler-2" x1="1090" y1="400" x2="1140" y2="400" stroke="#424242" stroke-width="4" class="pipe"/>
+                        
+                        <!-- Sprinkler 2 -->
+                        <g id="sprinkler-2" class="component">
+                            <circle cx="1150" cy="400" r="20" fill="#2196F3" opacity="0.8"/>
+                            <text x="1150" y="405" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SP2</text>
+                            <circle id="sprinkler-2-status" cx="1165" cy="388" r="5" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <!-- Zone label -->
+                        <text x="1055" y="360" text-anchor="middle" fill="#FF5722" font-size="16" font-weight="bold">ZONE 2</text>
+                    </g>
+
+                    <!-- Zone 3 -->
+                    <g id="zone-3" class="zone">
+                        <!-- Soil Moisture Sensor -->
+                        <g id="soil-sensor-3" class="component sensor">
+                            <rect x="850" y="460" width="60" height="40" rx="5" fill="#795548" opacity="0.9"/>
+                            <text x="880" y="485" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SOIL-3</text>
+                            <circle id="soil-sensor-3-status" cx="905" cy="468" r="6" fill="#4caf50" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-zone-3" x1="980" y1="480" x2="1020" y2="480" stroke="#424242" stroke-width="6" class="pipe"/>
+                        
+                        <!-- Zone 3 Valve -->
+                        <g id="zone-valve-3" class="component valve">
+                            <rect x="1020" y="460" width="70" height="40" rx="6" fill="#FF5722" opacity="0.9"/>
+                            <text x="1055" y="485" text-anchor="middle" fill="white" font-size="11" font-weight="bold">VALVE-3</text>
+                            <circle id="zone-valve-3-status" cx="1085" cy="468" r="7" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-sprinkler-3" x1="1090" y1="480" x2="1140" y2="480" stroke="#424242" stroke-width="4" class="pipe"/>
+                        
+                        <!-- Sprinkler 3 -->
+                        <g id="sprinkler-3" class="component">
+                            <circle cx="1150" cy="480" r="20" fill="#2196F3" opacity="0.8"/>
+                            <text x="1150" y="485" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SP3</text>
+                            <circle id="sprinkler-3-status" cx="1165" cy="468" r="5" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <!-- Zone label -->
+                        <text x="1055" y="440" text-anchor="middle" fill="#FF5722" font-size="16" font-weight="bold">ZONE 3</text>
+                    </g>
+
+                    <!-- Control System -->
+                    <g id="control-system" class="component">
+                        <rect x="400" y="600" width="400" height="150" rx="10" fill="#000000" opacity="0.8" stroke="#FF0000" stroke-width="3"/>
+                        <text x="600" y="635" text-anchor="middle" fill="#FF0000" font-size="18" font-weight="bold">BAYYTI-B1 CONTROL SYSTEM</text>
+                        
+                        <!-- Raspberry Pi -->
+                        <rect x="420" y="650" width="140" height="80" rx="5" fill="#4caf50" opacity="0.9"/>
+                        <text x="490" y="680" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Raspberry Pi</text>
+                        <text x="490" y="698" text-anchor="middle" fill="white" font-size="10">Zero W</text>
+                        <circle id="pi-status" cx="545" cy="660" r="6" fill="#4caf50" class="status-indicator"/>
+                        
+                        <!-- Power Supply -->
+                        <rect x="580" y="650" width="100" height="80" rx="5" fill="#FFC107" opacity="0.9"/>
+                        <text x="630" y="680" text-anchor="middle" fill="#000" font-size="12" font-weight="bold">Power</text>
+                        <text x="630" y="698" text-anchor="middle" fill="#000" font-size="10">Supply</text>
+                        <circle id="power-status" cx="670" cy="660" r="6" fill="#4caf50" class="status-indicator"/>
+                        
+                        <!-- Connectivity -->
+                        <rect x="700" y="650" width="80" height="80" rx="5" fill="#2196F3" opacity="0.9"/>
+                        <text x="740" y="680" text-anchor="middle" fill="white" font-size="12" font-weight="bold">WiFi</text>
+                        <text x="740" y="698" text-anchor="middle" fill="white" font-size="10">Network</text>
+                        <circle id="wifi-status" cx="770" cy="660" r="6" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Connections from control to sensors -->
+                    <line x1="490" y1="600" x2="490" y2="220" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="490" y1="220" x2="710" y2="210" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    
+                    <line x1="600" y1="600" x2="600" y2="350" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="600" y1="350" x2="880" y2="340" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="600" y1="420" x2="880" y2="420" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="600" y1="480" x2="880" y2="480" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Component Status List -->
+        <div class="components-section">
+            <h2><i class="fa-solid fa-list-check"></i> Component Status</h2>
+            <div class="components-grid">
+                <!-- Valves -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-valve"></i>
+                        <h3>Valves</h3>
+                    </div>
+                    <div class="component-list" id="valves-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Sensors -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-microchip"></i>
+                        <h3>Sensors</h3>
+                    </div>
+                    <div class="component-list" id="sensors-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- System Components -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-server"></i>
+                        <h3>System</h3>
+                    </div>
+                    <div class="component-list" id="system-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Pipes & Connections -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-pipe"></i>
+                        <h3>Connections</h3>
+                    </div>
+                    <div class="component-list" id="pipes-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto-Start Guide Sidebar -->
+        <div class="guide-sidebar">
+            <div class="guide-card">
+                <div class="guide-header">
+                    <i class="fa-solid fa-rocket"></i>
+                    <h3>Auto-Start Setup</h3>
+                </div>
+                <div class="guide-content">
+                    <p class="guide-intro">Make your app start automatically on boot:</p>
+                    
+                    <div class="guide-step">
+                        <strong>1. Create Service File</strong>
+                        <code>sudo nano /etc/systemd/system/bayyti.service</code>
+                    </div>
+                    
+                    <div class="guide-step">
+                        <strong>2. Paste This Content:</strong>
+                        <pre class="guide-code">[Unit]
+Description=BAYYTI Smart Irrigation System
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/OneCore/backend
+Environment="PATH=/home/pi/OneCore/venv/bin:/usr/bin"
+ExecStart=/home/pi/OneCore/venv/bin/python3 /home/pi/OneCore/backend/api_server.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target</pre>
+                    </div>
+                    
+                    <div class="guide-step">
+                        <strong>3. Enable & Start</strong>
+                        <code>sudo systemctl daemon-reload</code>
+                        <code>sudo systemctl enable bayyti.service</code>
+                        <code>sudo systemctl start bayyti.service</code>
+                    </div>
+                    
+                    <div class="guide-step">
+                        <strong>4. Verify</strong>
+                        <code>sudo systemctl status bayyti.service</code>
+                    </div>
+                    
+                    <div class="guide-commands">
+                        <strong>Quick Commands:</strong>
+                        <code>sudo systemctl restart bayyti.service</code>
+                        <code>sudo journalctl -u bayyti.service -f</code>
+                    </div>
+                    
+                    <div class="guide-footer">
+                        <a href="AUTO_START_GUIDE.md" target="_blank" class="guide-link">
+                            <i class="fa-solid fa-book"></i> Full Guide
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clean Black Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BAYYTI-B1</h4>
+                <p>Smart Irrigation System</p>
+                <p>Powered by AI • Made with ❤️</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Dashboard</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="emergency.html">Emergency</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="controls.html">Controls</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="https://github.com/belhachemialuna-alt/OneCore" target="_blank">GitHub</a>
+                <a href="UPDATE_SYSTEM_README.md" target="_blank">Documentation</a>
+                <a href="#">API Reference</a>
+                <a href="https://github.com/belhachemialuna-alt/OneCore/releases" target="_blank">Release Notes</a>
+            </div>
+            <div class="footer-section">
+                <h4>System Status</h4>
+                <p>Device: <strong id="device-name">BAYYTI-B1</strong></p>
+                <p>Version: <strong id="system-version">1.0.0</strong></p>
+                <p>Status: <span class="status-online">● Online</span></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BAYYTI Smart Irrigation System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/hardware.js?v=1.0"></script>
+    
+    <!-- Language System -->
+    <script src="js/language.js?v=1.0"></script>
+    
+    <!-- Page Load Handler -->
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

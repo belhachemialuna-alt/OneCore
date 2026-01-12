@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - BAYYTI-B1</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Support Page Specific Styles */
+        .support-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .support-card {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .support-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .support-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2.5rem;
+        }
+        
+        .support-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.75rem;
+        }
+        
+        .support-header p {
+            font-size: 1rem;
+            color: #666666;
+        }
+        
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group label i {
+            margin-right: 0.5rem;
+            color: #FF0000;
+        }
+        
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Rubik', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #FF0000;
+            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .success-message {
+            display: none;
+            background: #4caf50;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FF0000;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Loader -->
+    <div class="global-loader" id="globalLoader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <!-- Sticky Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="project-title">Support <strong>BAYYTI-B1</strong></h1>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <a href="index.html" class="header-icon-btn" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support" style="background: rgba(255, 255, 255, 0.25);">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="analytics.html" class="sidebar-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="emergency.html" class="sidebar-item">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                    <span>Emergency</span>
+                </a>
+                <a href="hardware.html" class="sidebar-item">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span>Hardware</span>
+                </a>
+                <a href="controls.html" class="sidebar-item">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Controls</span>
+                </a>
+                <a href="support.html" class="sidebar-item active">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Support</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Support Form Container -->
+    <div class="support-container">
+        <div class="support-card">
+            <div class="support-header">
+                <div class="support-icon">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <h1>Contact Support</h1>
+                <p>Send us a message and we'll get back to you as soon as possible</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <i class="fa-solid fa-check-circle"></i>
+                Message sent successfully! We'll respond within 24 hours.
+            </div>
+
+            <form id="supportForm">
+                <div class="form-group">
+                    <label for="supportEmail">
+                        <i class="fa-solid fa-envelope"></i>
+                        Your Email
+                    </label>
+                    <input 
+                        type="email" 
+                        id="supportEmail" 
+                        name="email" 
+                        class="form-input" 
+                        placeholder="Enter your email address"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="supportMessage">
+                        <i class="fa-solid fa-message"></i>
+                        Your Message
+                    </label>
+                    <textarea 
+                        id="supportMessage" 
+                        name="message" 
+                        class="form-textarea" 
+                        placeholder="Describe your issue or question..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Send Message
+                </button>
+            </form>
+
+            <div style="text-align: center;">
+                <a href="index.html" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simplified Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>BAYYTI-B1</h3>
+                <p>Smart Irrigation System • Powered by AI</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="emergency.html">Emergency</a>
+                <a href="hardware.html">Hardware</a>
+                <a href="controls.html">Controls</a>
+                <a href="support.html">Support</a>
+            </div>
+            <div class="footer-status">
+                <p><strong>v1.0.0</strong> • <span class="status-online">● Online</span></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BAYYTI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Sidebar
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('mobile-sidebar');
+        const closeBtn = document.getElementById('sidebar-close');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        if (menuBtn) menuBtn.addEventListener('click', () => sidebar.classList.add('active'));
+        if (closeBtn) closeBtn.addEventListener('click', () => sidebar.classList.remove('active'));
+        if (overlay) overlay.addEventListener('click', () => sidebar.classList.remove('active'));
+
+        // Support Form Handler
+        const supportForm = document.getElementById('supportForm');
+        const successMessage = document.getElementById('successMessage');
+        
+        supportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                email: document.getElementById('supportEmail').value,
+                message: document.getElementById('supportMessage').value
+            };
+            
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Reset form
+            supportForm.reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 5000);
+            
+            // Log form data (in production, send to server)
+            console.log('Support request:', formData);
+        });
+
+        // Page Load Handler
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500);
+            }
+        });
+    </script>
+    
+    <!-- Language System -->
+    <script src="js/language.js?v=1.0"></script>
+</body>
+</html>

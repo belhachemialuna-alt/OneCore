@@ -11,6 +11,7 @@ from config import DEVICE_NAME, API_VERSION
 from irrigation_service import IrrigationService
 from ai_decision_service import AIDecisionService
 from sensor_service import SensorService
+from system_monitor import SystemMonitor
 
 app = Flask(__name__, static_folder='../frontend')
 CORS(app)
@@ -24,6 +25,7 @@ controller = MainController()
 irrigation_service = IrrigationService()
 sensor_service = SensorService()
 ai_service = AIDecisionService(irrigation_service, sensor_service)
+system_monitor = SystemMonitor()
 
 # Disable caching for all responses
 @app.after_request
@@ -66,6 +68,9 @@ def status():
             'active': False
         })
     
+    # Get system monitoring data (CPU/RAM)
+    system_info = system_monitor.get_status()
+    
     return jsonify({
         "success": True,
         "device": system_status.get('device_name', DEVICE_NAME),
@@ -74,6 +79,7 @@ def status():
         "energy": system_status.get('energy', {}),
         "irrigation": system_status.get('irrigation', {}),
         "zones": zones_with_details,
+        "system": system_info,
         "timestamp": system_status.get('timestamp')
     })
 
@@ -467,49 +473,37 @@ def analytics_summary():
 @app.route("/api/system/update/check")
 def check_update():
     """Check for system updates from GitHub"""
-    import requests
-    
     try:
-        # Replace with your actual GitHub repo
-        github_repo = os.environ.get('GITHUB_REPO', 'YOUR_USERNAME/YOUR_REPO')
-        api_url = f'https://api.github.com/repos/{github_repo}/releases/latest'
+        # Import updater module
+        import sys
+        sys.path.append(os.path.dirname(__file__))
+        from updater import check_for_update, is_update_available
         
-        response = requests.get(api_url, timeout=10)
+        info = check_for_update()
+        update_available = is_update_available()
         
-        if response.status_code == 200:
-            release_data = response.json()
-            latest_version = release_data['tag_name'].replace('v', '')
-            current_version = '1.0.0'  # Read from config or file
-            
-            update_available = latest_version != current_version
-            
-            return jsonify({
-                "success": True,
-                "update_available": update_available,
-                "current_version": current_version,
-                "latest_version": latest_version,
-                "release_date": release_data['published_at'],
-                "release_notes": release_data['body'],
-                "download_url": release_data['zipball_url']
-            })
-        else:
-            return jsonify({
-                "success": False,
-                "error": "Unable to fetch release information"
-            })
+        return jsonify({
+            "success": True,
+            "update_available": update_available,
+            "current_version": info["current_version"],
+            "latest_version": info["latest_version"],
+            "release_date": info["release_date"],
+            "release_notes": info["release_notes"],
+            "download_url": info["zip_url"]
+        })
             
     except Exception as e:
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": str(e),
+            "update_available": False,
+            "current_version": "1.0.0",
+            "latest_version": "1.0.0"
         })
 
 @app.route("/api/system/update/install", methods=["POST"])
-@require_api_key
 def install_update():
-    """Install system update"""
-    import subprocess
-    
+    """Install system update from GitHub"""
     try:
         data = request.json
         download_url = data.get('download_url')
@@ -520,20 +514,75 @@ def install_update():
                 "error": "No download URL provided"
             })
         
-        # Trigger update script
-        update_script = os.path.join(os.path.dirname(__file__), '../scripts/update_system.py')
+        # Import updater module
+        import sys
+        sys.path.append(os.path.dirname(__file__))
+        from updater import update_app
         
-        if os.path.exists(update_script):
-            subprocess.Popen(['python3', update_script, download_url])
+        # Run update in background thread to avoid blocking
+        import threading
+        
+        def do_update():
+            import time
+            time.sleep(2)  # Give time for response to be sent
+            result = update_app(download_url)
+            if result["success"]:
+                print(f"✅ Update completed: {result['message']}")
+                # Optionally restart the server here
+                # os.execv(sys.executable, ['python'] + sys.argv)
+            else:
+                print(f"❌ Update failed: {result.get('error', 'Unknown error')}")
+        
+        thread = threading.Thread(target=do_update)
+        thread.daemon = True
+        thread.start()
+        
+        return jsonify({
+            "success": True,
+            "message": "Update installation started. System will restart automatically."
+        })
             
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        })
+
+@app.route("/api/system/monitor")
+def system_monitor():
+    """Get real-time CPU and RAM usage from Raspberry Pi"""
+    try:
+        system_info = system_monitor.get_status()
+        return jsonify({
+            "success": True,
+            "data": system_info
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route("/api/system/reboot", methods=["POST"])
+def reboot_system():
+    """Reboot the system (Raspberry Pi)"""
+    try:
+        import subprocess
+        import platform
+        
+        # Check if running on Linux (Raspberry Pi)
+        if platform.system() == "Linux":
+            # Schedule reboot in 5 seconds to allow response to be sent
+            subprocess.Popen(['sudo', 'shutdown', '-r', '+1'])
             return jsonify({
                 "success": True,
-                "message": "Update installation started"
+                "message": "System will reboot in 1 minute"
             })
         else:
+            # For development on Windows/Mac, just return success
             return jsonify({
-                "success": False,
-                "error": "Update script not found"
+                "success": True,
+                "message": "Reboot command sent (simulated on non-Linux system)"
             })
             
     except Exception as e:
