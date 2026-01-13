@@ -102,6 +102,13 @@ body {
     50% { opacity: 0.5; }
 }
 
+.header-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -110,6 +117,9 @@ body {
 
 .page {
     display: none;
+    padding: 2rem;
+    margin-top: 3rem;
+    border-top: 2px solid var(--primary-red);
 }
 
 .page.active {
@@ -658,8 +668,10 @@ body {
     border-top: 2px solid var(--primary-red);
 }
 
-.footer-content {
-    max-width: 1400px;
+.footer.main-content {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;

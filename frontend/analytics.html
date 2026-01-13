@@ -10,14 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/analytics.css?v=2.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <!-- Global Loader -->
     <div class="global-loader" id="globalLoader">
-        <div class="loader-circle"></div>
+        <div class="loader-content">
+            <i class="fa-solid fa-spinner loader-icon"></i>
+            <div class="loader-text">Loading...</div>
+        </div>
     </div>
 
     <!-- Red Header Bar (Same as index.html) -->
@@ -33,6 +38,12 @@
             </div>
             <div class="header-center">
                 <h1 class="project-title">Smart Irrigation Analytics <strong>BAYYTI-B1</strong></h1>
+                <div class="header-datetime" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
             </div>
             <div class="header-right">
                 <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
@@ -50,6 +61,9 @@
                 <a href="index.html" class="header-icon-btn" title="Back to Dashboard">
                     <i class="fa-solid fa-gauge"></i>
                 </a>
+                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
                 <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
@@ -59,12 +73,18 @@
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
+                <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
+                    <i class="fa-solid fa-brain"></i>
+                </a>
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
                 </a>
                 <button class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
                 </button>
+                <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
                 <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
                 </button>
@@ -77,37 +97,51 @@
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
         <div class="sidebar-content">
             <div class="sidebar-header">
-                <h3>Menu</h3>
                 <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
                     <i class="fa-solid fa-times"></i>
                 </button>
             </div>
             <nav class="sidebar-nav">
-                <a href="index.html" class="sidebar-item">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
                     <i class="fa-solid fa-gauge"></i>
-                    <span>Dashboard</span>
                 </a>
-                <a href="#" class="sidebar-item">
+                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
+                <a href="analytics.html" class="sidebar-item active" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="sidebar-item" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="sidebar-item" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="ai.html" class="sidebar-item" title="AI Model Testing">
+                    <i class="fa-solid fa-brain"></i>
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
-                    <span>Support</span>
                 </a>
-                <a href="#" class="sidebar-item">
-                    <i class="fa-solid fa-book"></i>
-                    <span>FAQ</span>
-                </a>
-                <a href="#" class="sidebar-item">
-                    <i class="fa-solid fa-globe"></i>
-                    <span>Language</span>
-                </a>
-                <a href="#" class="sidebar-item">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                    <span>Options</span>
-                </a>
+                <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
             </nav>
         </div>
     </div>
 
     <div class="container">
+        <!-- Page Title -->
+        <div class="page-title-section">
+            <div class="page-title-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <h1 class="page-title">Performance Benchmarks</h1>
+        </div>
+
         <!-- Performance Benchmarks -->
         <div class="benchmarks-section">
             <div class="section-header">
@@ -118,75 +152,47 @@
                 </button>
             </div>
             <div class="benchmarks-grid">
-                <div class="benchmark-card water">
+                <div class="benchmark-card">
                     <div class="benchmark-icon">
-                        <i class="fa-solid fa-droplet"></i>
+                        <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="benchmark-content">
-                        <h3>Water Usage</h3>
-                        <div class="benchmark-value">
-                            <span id="totalWater">1,245</span>
-                            <span class="unit">L</span>
-                        </div>
-                        <div class="benchmark-subtitle">Total dispensed this month</div>
-                        <div class="benchmark-trend positive">
-                            <i class="fa-solid fa-arrow-down"></i>
-                            <span>15% reduction vs last month</span>
-                        </div>
+                        <div class="benchmark-label">Suspicious user</div>
+                        <div class="benchmark-value" id="suspiciousUsers">170</div>
+                        <div class="benchmark-trend positive">MoM +10%</div>
                     </div>
                 </div>
 
-                <div class="benchmark-card energy">
+                <div class="benchmark-card">
                     <div class="benchmark-icon">
-                        <i class="fa-solid fa-bolt"></i>
+                        <i class="fa-solid fa-circle-question"></i>
                     </div>
                     <div class="benchmark-content">
-                        <h3>Energy Consumption</h3>
-                        <div class="benchmark-value">
-                            <span id="totalEnergy">87.5</span>
-                            <span class="unit">kWh</span>
-                        </div>
-                        <div class="benchmark-subtitle">Total power used this month</div>
-                        <div class="benchmark-trend positive">
-                            <i class="fa-solid fa-arrow-down"></i>
-                            <span>8% reduction vs last month</span>
-                        </div>
+                        <div class="benchmark-label">Area of doubt</div>
+                        <div class="benchmark-value" id="areaOfDoubt">880</div>
+                        <div class="benchmark-trend positive">MoM +20%</div>
                     </div>
                 </div>
 
-                <div class="benchmark-card valve">
+                <div class="benchmark-card">
                     <div class="benchmark-icon">
-                        <i class="fa-solid fa-valve"></i>
+                        <i class="fa-solid fa-lock"></i>
                     </div>
                     <div class="benchmark-content">
-                        <h3>Valve Operations</h3>
-                        <div class="benchmark-value">
-                            <span id="totalCycles">342</span>
-                            <span class="unit">cycles</span>
-                        </div>
-                        <div class="benchmark-subtitle">Total valve activations</div>
-                        <div class="benchmark-trend neutral">
-                            <i class="fa-solid fa-minus"></i>
-                            <span>Same as last month</span>
-                        </div>
+                        <div class="benchmark-label">Poor manager</div>
+                        <div class="benchmark-value" id="poorManager">360</div>
+                        <div class="benchmark-trend negative">MoM -10%</div>
                     </div>
                 </div>
 
-                <div class="benchmark-card efficiency">
+                <div class="benchmark-card">
                     <div class="benchmark-icon">
-                        <i class="fa-solid fa-gauge-high"></i>
+                        <i class="fa-solid fa-ban"></i>
                     </div>
                     <div class="benchmark-content">
-                        <h3>System Efficiency</h3>
-                        <div class="benchmark-value">
-                            <span id="efficiency">94.2</span>
-                            <span class="unit">%</span>
-                        </div>
-                        <div class="benchmark-subtitle">Overall performance rating</div>
-                        <div class="benchmark-trend positive">
-                            <i class="fa-solid fa-arrow-up"></i>
-                            <span>+2.3% improvement</span>
-                        </div>
+                        <div class="benchmark-label">Not started</div>
+                        <div class="benchmark-value" id="notStarted">255</div>
+                        <div class="benchmark-trend positive">MoM +40%</div>
                     </div>
                 </div>
             </div>
@@ -214,8 +220,7 @@
                 </div>
                 <div class="zone-map-container">
                     <div class="zone-map" id="zoneMap">
-                        <canvas id="mapCanvas" width="800" height="400"></canvas>
-                        <div class="zone-markers" id="zoneMarkers"></div>
+                        <div id="realMap" style="width: 100%; height: 400px; border-radius: 8px;"></div>
                     </div>
                     <div class="zone-list-sidebar">
                         <h4>Active Zones</h4>

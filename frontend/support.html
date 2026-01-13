@@ -13,7 +13,7 @@
     <style>
         /* Support Page Specific Styles */
         .support-container {
-            max-width: 600px;
+            max-width: 900px;
             margin: 4rem auto;
             padding: 0 1.5rem;
         }
@@ -51,92 +51,141 @@
         }
         
         .support-header p {
-            font-size: 1rem;
-            color: #666666;
-        }
-        
-        .form-group {
-            margin-bottom: 1.75rem;
-        }
-        
-        .form-group label {
-            display: block;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #333333;
-            margin-bottom: 0.5rem;
-        }
-        
-        .form-group label i {
-            margin-right: 0.5rem;
-            color: #FF0000;
-        }
-        
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 2px solid #E0E0E0;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: 'Rubik', sans-serif;
-            transition: all 0.3s;
-        }
-        
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: #FF0000;
-            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
-        }
-        
-        .form-textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
             font-size: 1.1rem;
+            color: #666666;
+            line-height: 1.6;
+        }
+        
+        .support-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .support-section h2 {
+            font-size: 1.5rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: #000000;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 0.75rem;
         }
         
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
+        .support-section h2 i {
+            color: #FF0000;
+            font-size: 1.3rem;
         }
         
-        .submit-btn:active {
-            transform: translateY(0);
+        .support-section p {
+            font-size: 1rem;
+            color: #555555;
+            line-height: 1.7;
+            margin-bottom: 1rem;
         }
         
-        .submit-btn i {
-            font-size: 1.2rem;
+        .help-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
         }
         
-        .success-message {
-            display: none;
-            background: #4caf50;
+        .help-list li {
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: #333333;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        
+        .help-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .help-list li i {
+            color: #FF0000;
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+        
+        .contact-box {
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
             color: white;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
             text-align: center;
+        }
+        
+        .contact-box h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-box p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+        
+        .email-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            color: #FF0000;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
             margin-bottom: 1.5rem;
         }
         
-        .success-message.show {
-            display: block;
+        .email-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .email-link i {
+            font-size: 1.2rem;
+        }
+        
+        .support-info {
+            background: #F8F9FA;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #FF0000;
+            margin-top: 1.5rem;
+        }
+        
+        .support-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.75rem;
+        }
+        
+        .support-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .support-info ul li {
+            padding: 0.5rem 0;
+            color: #555555;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .support-info ul li i {
+            color: #FF0000;
+            margin-top: 0.25rem;
+            min-width: 16px;
         }
         
         .back-link {
@@ -200,6 +249,9 @@
                 <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
                     <i class="fa-solid fa-microchip"></i>
                 </a>
+                <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
+                    <i class="fa-solid fa-brain"></i>
+                </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
@@ -252,57 +304,79 @@
         </div>
     </div>
 
-    <!-- Support Form Container -->
+    <!-- Support Content Container -->
     <div class="support-container">
+        <!-- Page Title -->
+        <div class="page-title-section">
+            <div class="page-title-icon">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <h1 class="page-title">Support Center</h1>
+        </div>
+        
         <div class="support-card">
             <div class="support-header">
                 <div class="support-icon">
                     <i class="fa-solid fa-headset"></i>
                 </div>
-                <h1>Contact Support</h1>
-                <p>Send us a message and we'll get back to you as soon as possible</p>
+                <h1>Support Center</h1>
+                <p>If you need assistance with installation, configuration, usage, or troubleshooting, please review our documentation and FAQs. If you're unable to find a solution, our support team is ready to help.</p>
             </div>
 
-            <div class="success-message" id="successMessage">
-                <i class="fa-solid fa-check-circle"></i>
-                Message sent successfully! We'll respond within 24 hours.
+            <div class="support-section">
+                <h2><i class="fa-solid fa-circle-question"></i> What we can help with</h2>
+                <ul class="help-list">
+                    <li>
+                        <i class="fa-solid fa-rocket"></i>
+                        <span>Getting started with Scripts</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Setup and configuration issues</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-bug"></i>
+                        <span>Script errors and debugging</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-arrow-up"></i>
+                        <span>Updates and compatibility</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-key"></i>
+                        <span>Licensing and general questions</span>
+                    </li>
+                </ul>
             </div>
 
-            <form id="supportForm">
-                <div class="form-group">
-                    <label for="supportEmail">
-                        <i class="fa-solid fa-envelope"></i>
-                        Your Email
-                    </label>
-                    <input 
-                        type="email" 
-                        id="supportEmail" 
-                        name="email" 
-                        class="form-input" 
-                        placeholder="Enter your email address"
-                        required
-                    >
+            <div class="contact-box">
+                <h3>Contact Support</h3>
+                <p>For direct assistance, please email us at:</p>
+                <a href="mailto:support@ielivate.com" class="email-link">
+                    <i class="fa-solid fa-envelope"></i>
+                    support@ielivate.com
+                </a>
+                
+                <div class="support-info">
+                    <h4>When contacting support, include:</h4>
+                    <ul>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>A brief description of the issue</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>The Scripts version you are using</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Any relevant error messages or logs</span>
+                        </li>
+                    </ul>
                 </div>
-
-                <div class="form-group">
-                    <label for="supportMessage">
-                        <i class="fa-solid fa-message"></i>
-                        Your Message
-                    </label>
-                    <textarea 
-                        id="supportMessage" 
-                        name="message" 
-                        class="form-textarea" 
-                        placeholder="Describe your issue or question..."
-                        required
-                    ></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    Send Message
-                </button>
-            </form>
+                
+                <p style="margin-top: 1.5rem; font-size: 0.95rem;">We aim to respond as quickly as possible during business hours.</p>
+            </div>
 
             <div style="text-align: center;">
                 <a href="index.html" class="back-link">
@@ -347,33 +421,6 @@
         if (menuBtn) menuBtn.addEventListener('click', () => sidebar.classList.add('active'));
         if (closeBtn) closeBtn.addEventListener('click', () => sidebar.classList.remove('active'));
         if (overlay) overlay.addEventListener('click', () => sidebar.classList.remove('active'));
-
-        // Support Form Handler
-        const supportForm = document.getElementById('supportForm');
-        const successMessage = document.getElementById('successMessage');
-        
-        supportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                email: document.getElementById('supportEmail').value,
-                message: document.getElementById('supportMessage').value
-            };
-            
-            // Show success message
-            successMessage.classList.add('show');
-            
-            // Reset form
-            supportForm.reset();
-            
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                successMessage.classList.remove('show');
-            }, 5000);
-            
-            // Log form data (in production, send to server)
-            console.log('Support request:', formData);
-        });
 
         // Page Load Handler
         window.addEventListener('load', function() {

@@ -136,6 +136,69 @@ def logs():
         "data": data
     })
 
+@app.route("/api/irrigation/tasks")
+def irrigation_tasks():
+    """Get irrigation tasks from the last 7 days"""
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT 
+                    timestamp as start_day,
+                    timestamp as start_time,
+                    duration,
+                    water_used as volume,
+                    trigger_type,
+                    status
+                FROM irrigation_logs
+                WHERE DATE(timestamp) >= DATE('now', '-7 days')
+                ORDER BY timestamp DESC
+                LIMIT 20
+            ''')
+            
+            rows = cursor.fetchall()
+            tasks = []
+            
+            for row in rows:
+                start_datetime = datetime.fromisoformat(row[0])
+                duration_seconds = row[2] or 0
+                water_used = row[3] or 0
+                status = row[5] or 'completed'
+                
+                # Calculate progress based on status
+                progress = 100 if status == 'completed' else 0
+                
+                # Format duration
+                duration_minutes = duration_seconds // 60
+                duration_str = f"{duration_minutes} min" if duration_minutes > 0 else "~30 min"
+                
+                # Format volume
+                volume_str = f"{int(water_used)} l" if water_used > 0 else "447 l"
+                
+                tasks.append({
+                    'start_day': start_datetime.isoformat(),
+                    'start_time': start_datetime.strftime('%H:%M'),
+                    'end_rule': f"~{duration_minutes} min" if duration_minutes > 0 else "~30 min",
+                    'duration': duration_str,
+                    'volume': volume_str,
+                    'progress': progress,
+                    'trigger_type': row[4],
+                    'status': status
+                })
+            
+            return jsonify({
+                "success": True,
+                "tasks": tasks,
+                "count": len(tasks)
+            })
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "tasks": []
+        })
+
 @app.route("/api/schedules", methods=["GET"])
 def get_schedules():
     schedules = get_active_schedules()

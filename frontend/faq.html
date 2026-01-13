@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - BAYYTI-B1</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=4.0">
+    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Global Loader -->
+    <div class="global-loader" id="globalLoader">
+        <div class="loader-content">
+            <i class="fa-solid fa-spinner loader-icon"></i>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="project-title">FAQ <strong>BAYYTI-B1</strong></h1>
+                <div class="header-datetime" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="index.html" class="header-icon-btn" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
+                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
+                <a href="analytics.html" class="sidebar-item" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="sidebar-item active" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="faq-container">
+        <div class="faq-header">
+            <div class="faq-header-icon">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h1>Frequently Asked Questions</h1>
+            <p>Find answers to common questions about BAYYTI-B1 Smart Irrigation System</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="faq-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="faq-search-input" placeholder="Search for questions...">
+        </div>
+
+        <!-- FAQ Categories -->
+        <div class="faq-categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="general">General</button>
+            <button class="category-btn" data-category="setup">Setup</button>
+            <button class="category-btn" data-category="operation">Operation</button>
+            <button class="category-btn" data-category="troubleshooting">Troubleshooting</button>
+            <button class="category-btn" data-category="maintenance">Maintenance</button>
+        </div>
+
+        <!-- FAQ Items -->
+        <div class="faq-list" id="faq-list">
+            <!-- General Questions -->
+            <div class="faq-item" data-category="general">
+                <div class="faq-question">
+                    <h3>What is BAYYTI-B1?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>BAYYTI-B1 is an advanced smart irrigation system powered by AI technology. It optimizes water usage, reduces waste, and boosts crop yields through intelligent automation and real-time monitoring.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="general">
+                <div class="faq-question">
+                    <h3>What are the main features?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Key features include:</p>
+                    <ul>
+                        <li>Real-time soil moisture monitoring</li>
+                        <li>AI-powered irrigation recommendations</li>
+                        <li>Automated scheduling</li>
+                        <li>Weather integration</li>
+                        <li>Remote control via web interface</li>
+                        <li>Water usage analytics</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Setup Questions -->
+            <div class="faq-item" data-category="setup">
+                <div class="faq-question">
+                    <h3>How do I set up the system?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Setup is simple:</p>
+                    <ol>
+                        <li>Connect the hardware components (sensors, valves, controller)</li>
+                        <li>Power on the system</li>
+                        <li>Access the web interface at http://localhost:5000</li>
+                        <li>Follow the setup wizard to configure your zones and preferences</li>
+                        <li>Calibrate sensors and test valves</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="setup">
+                <div class="faq-question">
+                    <h3>What sensors are required?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The system supports multiple sensor types:</p>
+                    <ul>
+                        <li>Soil moisture sensors (required)</li>
+                        <li>Temperature sensors (recommended)</li>
+                        <li>Humidity sensors (optional)</li>
+                        <li>pH sensors (optional)</li>
+                        <li>Light sensors (optional)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Operation Questions -->
+            <div class="faq-item" data-category="operation">
+                <div class="faq-question">
+                    <h3>How do I create an irrigation schedule?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To create a schedule:</p>
+                    <ol>
+                        <li>Navigate to the Space Dashboard</li>
+                        <li>Click the "+" icon on the Irrigation Tasks Calendar</li>
+                        <li>Enter schedule name, start time, and duration</li>
+                        <li>Select days of the week</li>
+                        <li>Set soil moisture threshold</li>
+                        <li>Click "Save Schedule"</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="operation">
+                <div class="faq-question">
+                    <h3>Can I manually control the valves?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! You can manually control valves from the Dashboard or Space page. Use the "Open Valve" and "Close Valve" buttons in the Irrigation Control section. Manual control overrides scheduled operations.</p>
+                </div>
+            </div>
+
+            <!-- Troubleshooting Questions -->
+            <div class="faq-item" data-category="troubleshooting">
+                <div class="faq-question">
+                    <h3>Why are my sensors showing incorrect readings?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Common causes and solutions:</p>
+                    <ul>
+                        <li><strong>Calibration:</strong> Recalibrate sensors from the Hardware page</li>
+                        <li><strong>Placement:</strong> Ensure sensors are properly inserted in soil</li>
+                        <li><strong>Connections:</strong> Check wiring and connections</li>
+                        <li><strong>Interference:</strong> Move sensors away from metal objects</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="troubleshooting">
+                <div class="faq-question">
+                    <h3>The valve won't open/close. What should I do?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Troubleshooting steps:</p>
+                    <ol>
+                        <li>Check power supply to the valve</li>
+                        <li>Verify valve wiring connections</li>
+                        <li>Test valve manually (if possible)</li>
+                        <li>Check for blockages or debris</li>
+                        <li>Review system logs for error messages</li>
+                        <li>Use Emergency Stop if needed, then restart</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Maintenance Questions -->
+            <div class="faq-item" data-category="maintenance">
+                <div class="faq-question">
+                    <h3>How often should I maintain the system?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Recommended maintenance schedule:</p>
+                    <ul>
+                        <li><strong>Weekly:</strong> Check sensor readings and system status</li>
+                        <li><strong>Monthly:</strong> Clean sensors, inspect valves and connections</li>
+                        <li><strong>Quarterly:</strong> Recalibrate sensors, update software</li>
+                        <li><strong>Annually:</strong> Full system inspection and professional service</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="maintenance">
+                <div class="faq-question">
+                    <h3>How do I update the system software?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Software updates are easy:</p>
+                    <ol>
+                        <li>Click the update icon in the header</li>
+                        <li>System will check for available updates</li>
+                        <li>Review update details and changelog</li>
+                        <li>Click "Install Update"</li>
+                        <li>System will restart automatically</li>
+                    </ol>
+                    <p><strong>Note:</strong> Always backup your configuration before updating.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="faq-support">
+            <h2>Still have questions?</h2>
+            <p>Our support team is here to help you</p>
+            <a href="support.html" class="support-btn">
+                <i class="fa-solid fa-headset"></i>
+                Contact Support
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-description">
+                <h3>Elevate One</h3>
+                <p>Experience efficient and sustainable farming with Elevate One. Our cutting-edge irrigation technology optimizes water usage, reduces waste, and boosts crop yields.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Elevate One. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/dashboard.js"></script>
+    <script src="js/faq.js"></script>
+</body>
+</html>

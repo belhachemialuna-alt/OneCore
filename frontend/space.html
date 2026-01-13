@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAYYTI-B1 Smart Irrigation System</title>
+    <title>Space Dashboard - BAYYTI-B1</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css?v=4.0">
-    <link rel="stylesheet" href="css/irrigation-sidebar.css">
+    <link rel="stylesheet" href="css/space.css">
+    <link rel="stylesheet" href="css/system-performance.css">
+    <link rel="stylesheet" href="css/schedule-modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -29,7 +31,8 @@
             window.location.href = 'setup.html';
         }
     </script>
-    <!-- Red Header Bar (BleuHive Style) -->
+
+    <!-- Red Header Bar -->
     <header class="top-header">
         <div class="header-container">
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
@@ -41,7 +44,7 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Smart Irrigation Control Project <strong>BAYYTI-B1</strong></h1>
+                <h1 class="project-title">Space Dashboard <strong>BAYYTI-B1</strong></h1>
                 <div class="header-datetime" id="header-datetime">
                     <i class="fa-solid fa-clock"></i>
                     <span id="header-time">--:--</span>
@@ -62,8 +65,8 @@
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
                 </button>
-                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
-                    <i class="fa-solid fa-rocket"></i>
+                <a href="index.html" class="header-icon-btn" title="Classic Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
                 </a>
                 <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
                     <i class="fa-solid fa-chart-line"></i>
@@ -106,10 +109,10 @@
                 </button>
             </div>
             <nav class="sidebar-nav">
-                <a href="index.html" class="sidebar-item active" title="Dashboard">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
                     <i class="fa-solid fa-gauge"></i>
                 </a>
-                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                <a href="space.html" class="sidebar-item active" title="Space Dashboard">
                     <i class="fa-solid fa-rocket"></i>
                 </a>
                 <a href="analytics.html" class="sidebar-item" title="Analytics">
@@ -137,74 +140,111 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
+    <!-- Main Content with Sidebar Layout -->
+    <div class="space-layout-container">
         <!-- Irrigation Timer Sidebar -->
-        <aside class="irrigation-sidebar">
-            <div class="irrigation-header">
+        <aside class="irrigation-sidebar-space">
+            <div class="irrigation-header-space">
                 <i class="fa-solid fa-droplet"></i>
                 <h3>Irrigation Time</h3>
             </div>
             
-            <div class="circular-progress-container">
-                <svg class="circular-progress" viewBox="0 0 200 200">
-                    <circle class="progress-bg" cx="100" cy="100" r="85"></circle>
-                    <circle class="progress-bar" cx="100" cy="100" r="85" id="irrigation-progress-circle"></circle>
+            <div class="circular-progress-container-space">
+                <svg class="circular-progress-space" viewBox="0 0 200 200">
+                    <circle class="progress-bg-space" cx="100" cy="100" r="85"></circle>
+                    <circle class="progress-bar-space" cx="100" cy="100" r="85" id="irrigation-progress-circle-space"></circle>
                 </svg>
-                <div class="progress-content">
-                    <div class="progress-value" id="irrigation-minutes">0</div>
-                    <div class="progress-label">Minutes</div>
-                    <div class="progress-sublabel">Today</div>
+                <div class="progress-content-space">
+                    <div class="progress-value-space" id="irrigation-minutes-space">0</div>
+                    <div class="progress-label-space">Minutes</div>
+                    <div class="progress-sublabel-space">Today</div>
                 </div>
             </div>
             
-            <div class="irrigation-divider"></div>
+            <div class="irrigation-divider-space"></div>
             
-            <div class="irrigation-stats">
-                <div class="stat-item">
-                    <div class="stat-icon">
+            <div class="irrigation-stats-space">
+                <div class="stat-item-space">
+                    <div class="stat-icon-space">
                         <i class="fa-solid fa-valve"></i>
                     </div>
-                    <div class="stat-info">
-                        <div class="stat-label">Valve Opens</div>
-                        <div class="stat-value" id="valve-open-count">0</div>
+                    <div class="stat-info-space">
+                        <div class="stat-label-space">Valve Opens</div>
+                        <div class="stat-value-space" id="valve-open-count-space">0</div>
                     </div>
                 </div>
                 
-                <div class="stat-item">
-                    <div class="stat-icon">
+                <div class="stat-item-space">
+                    <div class="stat-icon-space">
                         <i class="fa-solid fa-clock"></i>
                     </div>
-                    <div class="stat-info">
-                        <div class="stat-label">Avg Duration</div>
-                        <div class="stat-value" id="avg-duration">0 min</div>
+                    <div class="stat-info-space">
+                        <div class="stat-label-space">Avg Duration</div>
+                        <div class="stat-value-space" id="avg-duration-space">0 min</div>
                     </div>
                 </div>
                 
-                <div class="stat-item">
-                    <div class="stat-icon">
+                <div class="stat-item-space">
+                    <div class="stat-icon-space">
                         <i class="fa-solid fa-water"></i>
                     </div>
-                    <div class="stat-info">
-                        <div class="stat-label">Water Used</div>
-                        <div class="stat-value" id="water-used-today">0 L</div>
+                    <div class="stat-info-space">
+                        <div class="stat-label-space">Water Used</div>
+                        <div class="stat-value-space" id="water-used-today-space">0 L</div>
                     </div>
                 </div>
             </div>
             
-            <div class="irrigation-status" id="irrigation-status">
-                <div class="status-indicator status-idle"></div>
+            <div class="irrigation-status-space" id="irrigation-status-space">
+                <div class="status-indicator-space status-idle"></div>
                 <span>Idle</span>
             </div>
         </aside>
-        
-        <div class="main-content-wrapper">
+
+        <div class="space-main-content">
         <!-- Page Title -->
         <div class="page-title-section">
             <div class="page-title-icon">
-                <i class="fa-solid fa-gauge-high"></i>
+                <i class="fa-solid fa-rocket"></i>
             </div>
-            <h1 class="page-title">Dashboard</h1>
+            <h1 class="page-title">Space Dashboard</h1>
+            <p class="page-subtitle">Optimized Full-Width Layout</p>
+        </div>
+
+        <!-- Irrigation Tasks Card with Real-Time Calendar -->
+        <div class="tasks-calendar-card">
+            <div class="tasks-calendar-header">
+                <div class="tasks-calendar-icon" id="tasks-toggle-card">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <div class="tasks-calendar-info">
+                    <h3>Irrigation Tasks Calendar</h3>
+                    <div class="tasks-calendar-datetime">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="tasks-current-time">--:--:--</span>
+                        <span class="datetime-separator">•</span>
+                        <span id="tasks-current-date">--- --, ----</span>
+                    </div>
+                </div>
+                <div class="tasks-calendar-actions">
+                    <button class="tasks-action-btn" id="add-schedule-btn" title="Add New Schedule">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button class="tasks-action-btn" id="update-schedule-btn" title="Update Schedules">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="tasks-calendar-stats">
+                <div class="tasks-stat-item">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span><strong id="tasks-count">0</strong> Tasks Scheduled</span>
+                </div>
+                <div class="tasks-stat-item">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span>Auto-refresh: <strong id="refresh-countdown">30s</strong></span>
+                </div>
+            </div>
         </div>
         
         <!-- Real-Time Sensor Data Grid -->
@@ -224,43 +264,43 @@
             <div class="sensor-card">
                 <div class="sensor-icon temp">
                     <i class="fa-solid fa-temperature-half"></i>
-                    </div>
+                </div>
                 <div class="sensor-content">
                     <div class="sensor-label">Temperature</div>
                     <div class="sensor-value" id="temperature">--</div>
                     <div class="sensor-unit">°C</div>
                     <div class="sensor-status" id="temp-status">Loading...</div>
                 </div>
-                    </div>
+            </div>
 
             <div class="sensor-card">
                 <div class="sensor-icon humidity">
                     <i class="fa-solid fa-droplet"></i>
-                    </div>
+                </div>
                 <div class="sensor-content">
                     <div class="sensor-label">Humidity</div>
                     <div class="sensor-value" id="humidity">--</div>
                     <div class="sensor-unit">%</div>
                     <div class="sensor-status" id="humidity-status">Loading...</div>
                 </div>
-                    </div>
+            </div>
 
             <div class="sensor-card">
                 <div class="sensor-icon battery">
                     <i class="fa-solid fa-battery-three-quarters"></i>
-                    </div>
+                </div>
                 <div class="sensor-content">
                     <div class="sensor-label">Battery Level</div>
                     <div class="sensor-value" id="battery">--</div>
                     <div class="sensor-unit">%</div>
                     <div class="sensor-status" id="battery-status">Loading...</div>
                 </div>
-                    </div>
+            </div>
 
             <div class="sensor-card">
                 <div class="sensor-icon solar">
                     <i class="fa-solid fa-solar-panel"></i>
-                    </div>
+                </div>
                 <div class="sensor-content">
                     <div class="sensor-label">Solar Status</div>
                     <div class="sensor-value" id="solar-status">--</div>
@@ -272,18 +312,18 @@
             <div class="sensor-card">
                 <div class="sensor-icon water">
                     <i class="fa-solid fa-faucet"></i>
-                    </div>
+                </div>
                 <div class="sensor-content">
                     <div class="sensor-label">Water Flow</div>
                     <div class="sensor-value" id="flow-rate">--</div>
                     <div class="sensor-unit">L/min</div>
                     <div class="sensor-status" id="flow-status">Loading...</div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Control Panel -->
-        <div class="control-section">
+        <div class="control-section-space">
             <div class="control-card">
                 <div class="card-header">
                     <h3><i class="fa-solid fa-valve"></i> Irrigation Control</h3>
@@ -305,7 +345,7 @@
                         <div class="info-item">
                             <span class="info-label">Duration:</span>
                             <span class="info-value" id="irrigation-duration">--</span>
-                            </div>
+                        </div>
                         <div class="info-item">
                             <span class="info-label">Water Used:</span>
                             <span class="info-value" id="water-used">--</span>
@@ -343,100 +383,97 @@
             <div class="zones-grid" id="zones-grid">
                 <!-- Zones will be dynamically loaded -->
             </div>
-                    </div>
+        </div>
 
-        <!-- Charts Section -->
-        <div class="charts-section">
-            <!-- Statistics Overview Cards -->
-            <div class="stats-overview">
-                <div class="stat-card temp-stat">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-temperature-half"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-label">Temperature Avg</div>
-                        <div class="stat-value" id="temp-avg">--</div>
-                        <div class="stat-unit">°C</div>
-                        <div class="stat-trend" id="temp-trend">--</div>
-                    </div>
+        <!-- Statistics Overview Cards -->
+        <div class="stats-overview">
+            <div class="stat-card temp-stat">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-temperature-half"></i>
                 </div>
-                
-                <div class="stat-card humidity-stat">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-droplet"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-label">Humidity Avg</div>
-                        <div class="stat-value" id="humidity-avg">--</div>
-                        <div class="stat-unit">%</div>
-                        <div class="stat-trend" id="humidity-trend">--</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card irrigation-stat">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-faucet"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-label">Irrigation Time</div>
-                        <div class="stat-value" id="irrigation-total">--</div>
-                        <div class="stat-unit">min</div>
-                        <div class="stat-trend" id="irrigation-trend">--</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card moisture-stat">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-seedling"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-label">Soil Moisture Avg</div>
-                        <div class="stat-value" id="moisture-avg">--</div>
-                        <div class="stat-unit">%</div>
-                        <div class="stat-trend" id="moisture-trend">--</div>
-                    </div>
+                <div class="stat-content">
+                    <div class="stat-label">Temperature Avg</div>
+                    <div class="stat-value" id="temp-avg">--</div>
+                    <div class="stat-unit">°C</div>
+                    <div class="stat-trend" id="temp-trend">--</div>
                 </div>
             </div>
             
-            <!-- Main Chart: Combined Temperature, Humidity & Irrigation -->
-            <div class="chart-card chart-main">
-                <div class="card-header">
-                    <h3><i class="fa-solid fa-chart-mixed"></i> Real-Time Environmental Data (24h)</h3>
-                    <div class="chart-controls">
-                        <button class="chart-btn active" data-range="24h">24h</button>
-                        <button class="chart-btn" data-range="7d">7d</button>
-                        <button class="chart-btn" data-range="30d">30d</button>
-                    </div>
+            <div class="stat-card humidity-stat">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-droplet"></i>
                 </div>
-                <div class="card-body">
-                    <canvas id="combined-chart"></canvas>
+                <div class="stat-content">
+                    <div class="stat-label">Humidity Avg</div>
+                    <div class="stat-value" id="humidity-avg">--</div>
+                    <div class="stat-unit">%</div>
+                    <div class="stat-trend" id="humidity-trend">--</div>
                 </div>
             </div>
             
-            <!-- Secondary Charts Grid -->
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="card-header">
-                        <h3><i class="fa-solid fa-chart-line"></i> Temperature Trends</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="temp-chart"></canvas>
-                    </div>
+            <div class="stat-card irrigation-stat">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-faucet"></i>
                 </div>
-                
-                <div class="chart-card">
-                    <div class="card-header">
-                        <h3><i class="fa-solid fa-chart-area"></i> Humidity & Irrigation</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="humidity-irrigation-chart"></canvas>
-                    </div>
+                <div class="stat-content">
+                    <div class="stat-label">Irrigation Time</div>
+                    <div class="stat-value" id="irrigation-total">--</div>
+                    <div class="stat-unit">min</div>
+                    <div class="stat-trend" id="irrigation-trend">--</div>
+                </div>
+            </div>
+            
+            <div class="stat-card moisture-stat">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Soil Moisture Avg</div>
+                    <div class="stat-value" id="moisture-avg">--</div>
+                    <div class="stat-unit">%</div>
+                    <div class="stat-trend" id="moisture-trend">--</div>
                 </div>
             </div>
         </div>
 
-        <!-- System Status -->
-        <div class="status-section">
+        <!-- Main Chart: Combined Temperature, Humidity & Irrigation -->
+        <div class="chart-card chart-main">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-chart-mixed"></i> Real-Time Environmental Data (24h)</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-range="24h">24h</button>
+                    <button class="chart-btn" data-range="7d">7d</button>
+                    <button class="chart-btn" data-range="30d">30d</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="combined-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Secondary Charts Grid -->
+        <div class="charts-grid-space">
+            <div class="chart-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-line"></i> Temperature Trends</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="temp-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-chart-area"></i> Humidity & Irrigation</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="humidity-irrigation-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status & Activity -->
+        <div class="status-activity-grid">
             <div class="status-card">
                 <div class="card-header">
                     <h3><i class="fa-solid fa-shield-halved"></i> Safety Status</h3>
@@ -446,7 +483,7 @@
                         <div class="status-item">
                             <i class="fa-solid fa-spinner fa-spin"></i>
                             <span>Loading Safety Status...</span>
-                    </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -461,62 +498,143 @@
                     </div>
                 </div>
             </div>
+
+            <div class="status-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-calendar-days"></i> Irrigation Schedule</h3>
+                </div>
+                <div class="card-body">
+                    <div class="schedule-table-container">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Start day</th>
+                                    <th>Start time</th>
+                                    <th>Duration</th>
+                                    <th>Volume</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-table-body">
+                                <tr>
+                                    <td colspan="5" class="schedule-loading">
+                                        <i class="fa-solid fa-spinner fa-spin"></i>
+                                        <span>Loading schedule...</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <!-- Irrigation Schedule Sidebar -->
-        <aside class="schedule-sidebar">
-            <div class="schedule-header">
+    </div>
+    
+    <!-- Schedule Modal -->
+    <div class="schedule-modal" id="schedule-modal">
+        <div class="schedule-modal-overlay" id="schedule-modal-overlay"></div>
+        <div class="schedule-modal-content">
+            <div class="schedule-modal-header">
+                <h3><i class="fa-solid fa-calendar-plus"></i> Add New Irrigation Schedule</h3>
+                <button class="schedule-modal-close" id="schedule-modal-close">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="schedule-modal-body">
+                <div class="schedule-form-group">
+                    <label>Schedule Name</label>
+                    <input type="text" id="schedule-name" placeholder="e.g., Morning Irrigation" class="schedule-input">
+                </div>
+                
+                <div class="schedule-form-row">
+                    <div class="schedule-form-group">
+                        <label>Start Time</label>
+                        <input type="time" id="schedule-start-time" class="schedule-input">
+                    </div>
+                    <div class="schedule-form-group">
+                        <label>Duration (minutes)</label>
+                        <input type="number" id="schedule-duration" placeholder="30" min="1" max="120" class="schedule-input">
+                    </div>
+                </div>
+                
+                <div class="schedule-form-group">
+                    <label>Days of Week</label>
+                    <div class="schedule-days">
+                        <button class="day-btn" data-day="Monday">Mon</button>
+                        <button class="day-btn" data-day="Tuesday">Tue</button>
+                        <button class="day-btn" data-day="Wednesday">Wed</button>
+                        <button class="day-btn" data-day="Thursday">Thu</button>
+                        <button class="day-btn" data-day="Friday">Fri</button>
+                        <button class="day-btn" data-day="Saturday">Sat</button>
+                        <button class="day-btn" data-day="Sunday">Sun</button>
+                    </div>
+                </div>
+                
+                <div class="schedule-form-group">
+                    <label>Soil Moisture Threshold (%)</label>
+                    <input type="number" id="schedule-threshold" placeholder="30" min="0" max="100" class="schedule-input">
+                </div>
+            </div>
+            <div class="schedule-modal-footer">
+                <button class="schedule-btn schedule-btn-cancel" id="schedule-cancel-btn">Cancel</button>
+                <button class="schedule-btn schedule-btn-save" id="schedule-save-btn">
+                    <i class="fa-solid fa-check"></i> Save Schedule
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Irrigation Tasks Sidebar -->
+    <aside class="irrigation-tasks-sidebar" id="irrigation-tasks-sidebar">
+        <div class="tasks-sidebar-header">
+            <div class="tasks-header-title">
                 <i class="fa-solid fa-calendar-days"></i>
                 <h3>Irrigation Tasks</h3>
-                <span class="schedule-badge" id="schedule-badge">Last 7 days</span>
             </div>
-            
-            <div class="schedule-table-container">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Start day</th>
-                            <th>Start time</th>
-                            <th>Duration</th>
-                            <th>Volume</th>
-                            <th>Progress</th>
-                        </tr>
-                    </thead>
-                    <tbody id="schedule-table-body">
-                        <tr>
-                            <td colspan="5" class="schedule-loading">
-                                <i class="fa-solid fa-spinner fa-spin"></i>
-                                <span>Loading schedule...</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </aside>
+            <button class="tasks-close-btn" id="tasks-close-btn" aria-label="Close Tasks">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="tasks-sidebar-subtitle">
+            <i class="fa-solid fa-clock"></i>
+            <span>Realtime - last 7 days</span>
+        </div>
+        
+        <div class="tasks-table-container">
+            <table class="tasks-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Duration</th>
+                        <th>Volume</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tasks-table-body">
+                    <tr>
+                        <td colspan="6" class="tasks-loading">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <span>Loading tasks...</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </aside>
     </div>
 
     <!-- Clean Black Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-info">
-                <h3>BAYYTI-B1</h3>
-                <p>Smart Irrigation System • Powered by AI</p>
-            </div>
-            <div class="footer-links">
-                <a href="index.html">Dashboard</a>
-                <a href="analytics.html">Analytics</a>
-                <a href="emergency.html">Emergency</a>
-                <a href="hardware.html">Hardware</a>
-                <a href="controls.html">Controls</a>
-                <a href="ai.html">AI Testing</a>
-                <a href="support.html">Support</a>
-            </div>
-            <div class="footer-status">
-                <p><strong>v1.0.0</strong> • <span class="status-online">● Online</span></p>
+            <div class="footer-description">
+                <h3>Elevate One</h3>
+                <p>Experience efficient and sustainable farming with Elevate One. Our cutting-edge irrigation technology optimizes water usage, reduces waste, and boosts crop yields.</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 BAYYTI. All rights reserved.</p>
+            <p>&copy; 2026 Elevate One. All rights reserved.</p>
         </div>
     </footer>
 
@@ -533,7 +651,7 @@
         </div>
     </div>
 
-    <!-- Custom Modal/Popup -->
+    <!-- Modals -->
     <div id="custom-modal" class="custom-modal">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -557,7 +675,6 @@
         </div>
     </div>
 
-    <!-- Update Modal -->
     <div id="updateModal" class="custom-modal" style="display: none;">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -581,7 +698,6 @@
         </div>
     </div>
 
-    <!-- Reboot Confirmation Modal -->
     <div id="rebootModal" class="custom-modal">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -610,131 +726,9 @@
     </div>
 
     <script src="js/dashboard.js?v=4.0"></script>
-    <script>
-        // Update System Integration
-        const API_BASE = 'http://localhost:5000/api';
-        const CURRENT_VERSION = '1.0.0';
-
-        function setupUpdateSystem() {
-            const updateBtn = document.getElementById('updateBtnMain');
-            const modal = document.getElementById('updateModal');
-            const cancelBtn = document.getElementById('updateModalCancel');
-            const installBtn = document.getElementById('installUpdateBtn');
-
-            if (!updateBtn) return;
-
-            updateBtn.addEventListener('click', checkForUpdates);
-            if (cancelBtn) cancelBtn.addEventListener('click', () => modal.style.display = 'none');
-            if (installBtn) installBtn.addEventListener('click', installUpdate);
-
-            // Auto-check on page load
-            setTimeout(checkForUpdatesQuiet, 3000);
-        }
-
-        async function checkForUpdatesQuiet() {
-            try {
-                const response = await fetch(`${API_BASE}/system/update/check`);
-                const data = await response.json();
-                
-                if (data.success && data.update_available) {
-                    const statusEl = document.getElementById('updateStatusMain');
-                    if (statusEl) {
-                        statusEl.textContent = '•';
-                        statusEl.style.color = '#f44336';
-                    }
-                    const updateBtn = document.getElementById('updateBtnMain');
-                    if (updateBtn) updateBtn.style.background = 'rgba(244, 67, 54, 0.1)';
-                }
-            } catch (error) {
-                console.error('Update check failed:', error);
-            }
-        }
-
-        async function checkForUpdates() {
-            const modal = document.getElementById('updateModal');
-            const modalBody = document.getElementById('updateModalBody');
-            const installBtn = document.getElementById('installUpdateBtn');
-            
-            modal.style.display = 'flex';
-            modalBody.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Checking for updates...</p>';
-            
-            try {
-                const response = await fetch(`${API_BASE}/system/update/check`);
-                const data = await response.json();
-                
-                if (data.success && data.update_available) {
-                    modalBody.innerHTML = `
-                        <div class="update-info">
-                            <p><strong>🎉 New version available: ${data.latest_version}</strong></p>
-                            <p>Current version: ${CURRENT_VERSION}</p>
-                            <p>Release date: ${new Date(data.release_date).toLocaleDateString()}</p>
-                            <h4>Release Notes:</h4>
-                            <div style="max-height: 200px; overflow-y: auto; background: #f5f5f5; padding: 10px; border-radius: 5px;">
-                                ${data.release_notes || 'No release notes provided.'}
-                            </div>
-                        </div>
-                    `;
-                    installBtn.style.display = 'block';
-                    installBtn.dataset.downloadUrl = data.download_url;
-                } else {
-                    modalBody.innerHTML = `
-                        <p>✅ You are running the latest version (${CURRENT_VERSION})</p>
-                    `;
-                    installBtn.style.display = 'none';
-                }
-            } catch (error) {
-                modalBody.innerHTML = `
-                    <p>⚠️ Unable to check for updates</p>
-                    <p style="color: #f44336; font-size: 12px;">${error.message}</p>
-                `;
-                installBtn.style.display = 'none';
-            }
-        }
-
-        async function installUpdate() {
-            const installBtn = document.getElementById('installUpdateBtn');
-            const downloadUrl = installBtn.dataset.downloadUrl;
-            
-            if (!downloadUrl) return;
-            
-            installBtn.disabled = true;
-            installBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Installing...';
-            
-            try {
-                const response = await fetch(`${API_BASE}/system/update/install`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({download_url: downloadUrl})
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    alert('✅ Update installed successfully! The system will restart in 10 seconds.');
-                    setTimeout(() => location.reload(), 10000);
-                } else {
-                    alert('❌ Update installation failed: ' + data.error);
-                }
-            } catch (error) {
-                alert('❌ Update installation failed: ' + error.message);
-            } finally {
-                installBtn.disabled = false;
-                installBtn.innerHTML = '<i class="fa-solid fa-download"></i> Install Update';
-            }
-        }
-
-        // Initialize update system when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupUpdateSystem);
-        } else {
-            setupUpdateSystem();
-        }
-    </script>
-    
-    <!-- Language System -->
+    <script src="js/space.js"></script>
     <script src="js/language.js?v=1.0"></script>
     
-    <!-- Page Load Handler -->
     <script>
         // Show loader on page load
         window.addEventListener('load', function() {

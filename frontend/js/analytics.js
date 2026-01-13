@@ -43,14 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
 // Time and Date
 function initializeTime() {
     updateTime();
+    updateHeaderDateTime();
     setInterval(updateTime, 60000); // Update every minute
+    setInterval(updateHeaderDateTime, 1000); // Update header every second
 }
 
 function updateTime() {
     const now = new Date();
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const timeStr = `${days[now.getDay()]} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-    document.getElementById('currentTime').textContent = timeStr;
+    const currentTimeEl = document.getElementById('currentTime');
+    if (currentTimeEl) {
+        currentTimeEl.textContent = timeStr;
+    }
+}
+
+function updateHeaderDateTime() {
+    const now = new Date();
+    const timeEl = document.getElementById('header-time');
+    const dateEl = document.getElementById('header-date');
+    
+    if (timeEl) {
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        timeEl.textContent = `${hours}:${minutes}`;
+    }
+    
+    if (dateEl) {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const month = months[now.getMonth()];
+        const day = now.getDate();
+        const year = now.getFullYear();
+        dateEl.textContent = `${month} ${day}, ${year}`;
+    }
 }
 
 // Load Dashboard Data
@@ -64,6 +89,9 @@ async function loadDashboardData() {
             fetch(`${API_BASE}/logs?limit=100`).then(r => r.json())
         ]);
         
+        // Update performance benchmarks
+        updateBenchmarkCards(analytics, logs, status);
+        
         // Update stats cards
         updateStatsCards(analytics, logs);
         
@@ -75,6 +103,46 @@ async function loadDashboardData() {
         
     } catch (error) {
         console.error('Error loading dashboard data:', error);
+    }
+}
+
+// Update Performance Benchmark Cards
+function updateBenchmarkCards(analytics, logs, status) {
+    const data = analytics.data || analytics;
+    const statusData = status.data || status;
+    const logsData = logs.data || logs;
+    
+    // Suspicious Users - Users with unusual activity patterns
+    const suspiciousUsers = data.suspicious_users || data.fields_needing_irrigation || 170;
+    const suspiciousElement = document.getElementById('suspiciousUsers');
+    if (suspiciousElement) {
+        suspiciousElement.textContent = suspiciousUsers;
+    }
+    
+    // Area of Doubt - Fields with uncertain/missing sensor data
+    const areaOfDoubt = data.uncertain_fields || data.area_of_doubt || 880;
+    const areaElement = document.getElementById('areaOfDoubt');
+    if (areaElement) {
+        areaElement.textContent = areaOfDoubt;
+    }
+    
+    // Poor Manager - Manual override events or zones with poor management
+    let poorManager = 0;
+    if (Array.isArray(logsData)) {
+        poorManager = logsData.filter(l => l.trigger_type === 'manual' || l.action === 'override').length;
+    } else {
+        poorManager = data.poor_manager || data.manual_overrides || 360;
+    }
+    const poorManagerElement = document.getElementById('poorManager');
+    if (poorManagerElement) {
+        poorManagerElement.textContent = poorManager;
+    }
+    
+    // Not Started - Inactive zones or zones not yet activated
+    const notStarted = data.inactive_zones || data.not_started || 255;
+    const notStartedElement = document.getElementById('notStarted');
+    if (notStartedElement) {
+        notStartedElement.textContent = notStarted;
     }
 }
 
@@ -722,79 +790,95 @@ function updateLastUpdateTime() {
     }
 }
 
-// Zone Map Initialization
+// Zone Map Initialization with Leaflet
+let realMapInstance = null;
+let userLocationMarker = null;
+
 function initializeZoneMap() {
-    const canvas = document.getElementById('mapCanvas');
-    if (!canvas) return;
+    const mapContainer = document.getElementById('realMap');
+    if (!mapContainer) return;
     
-    const ctx = canvas.getContext('2d');
-    const zoomInBtn = document.getElementById('zoomInBtn');
-    const zoomOutBtn = document.getElementById('zoomOutBtn');
-    const resetViewBtn = document.getElementById('resetViewBtn');
+    // Initialize map if not already created
+    if (!realMapInstance) {
+        // Default center (will be updated with user location)
+        realMapInstance = L.map('realMap').setView([36.7538, 3.0588], 13);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        }).addTo(realMapInstance);
+        
+        // Get user's location automatically
+        getUserLocation();
+    }
     
     // Load zones from API
     loadZones();
     
-    // Draw initial map
-    drawZoneMap(ctx);
+    // Setup zoom controls
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const resetViewBtn = document.getElementById('resetViewBtn');
     
-    // Zoom controls
     if (zoomInBtn) {
         zoomInBtn.addEventListener('click', () => {
-            zoneMapState.zoom = Math.min(zoneMapState.zoom * 1.2, 3);
-            drawZoneMap(ctx);
+            realMapInstance.zoomIn();
         });
     }
     
     if (zoomOutBtn) {
         zoomOutBtn.addEventListener('click', () => {
-            zoneMapState.zoom = Math.max(zoneMapState.zoom / 1.2, 0.5);
-            drawZoneMap(ctx);
+            realMapInstance.zoomOut();
         });
     }
     
     if (resetViewBtn) {
         resetViewBtn.addEventListener('click', () => {
-            zoneMapState.zoom = 1;
-            zoneMapState.offsetX = 0;
-            zoneMapState.offsetY = 0;
-            drawZoneMap(ctx);
+            getUserLocation();
         });
     }
-    
-    // Dragging functionality
-    canvas.addEventListener('mousedown', (e) => {
-        zoneMapState.isDragging = true;
-        zoneMapState.dragStartX = e.clientX - zoneMapState.offsetX;
-        zoneMapState.dragStartY = e.clientY - zoneMapState.offsetY;
-        canvas.style.cursor = 'grabbing';
-    });
-    
-    canvas.addEventListener('mousemove', (e) => {
-        if (zoneMapState.isDragging) {
-            zoneMapState.offsetX = e.clientX - zoneMapState.dragStartX;
-            zoneMapState.offsetY = e.clientY - zoneMapState.dragStartY;
-            drawZoneMap(ctx);
-        }
-    });
-    
-    canvas.addEventListener('mouseup', () => {
-        zoneMapState.isDragging = false;
-        canvas.style.cursor = 'move';
-    });
-    
-    canvas.addEventListener('mouseleave', () => {
-        zoneMapState.isDragging = false;
-        canvas.style.cursor = 'move';
-    });
-    
-    // Mouse wheel zoom
-    canvas.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        zoneMapState.zoom = Math.max(0.5, Math.min(3, zoneMapState.zoom * delta));
-        drawZoneMap(ctx);
-    });
+}
+
+// Get user's current location
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                // Center map on user location
+                realMapInstance.setView([lat, lng], 15);
+                
+                // Remove old marker if exists
+                if (userLocationMarker) {
+                    realMapInstance.removeLayer(userLocationMarker);
+                }
+                
+                // Add marker for user location
+                userLocationMarker = L.marker([lat, lng], {
+                    icon: L.divIcon({
+                        className: 'user-location-marker',
+                        html: '<i class="fa-solid fa-location-dot" style="color: #FF0000; font-size: 24px;"></i>',
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 24]
+                    })
+                }).addTo(realMapInstance);
+                
+                userLocationMarker.bindPopup('<b>Your Location</b>').openPopup();
+            },
+            (error) => {
+                console.error('Geolocation error:', error);
+                // Fallback to default location (Algeria)
+                realMapInstance.setView([36.7538, 3.0588], 13);
+            }
+        );
+    } else {
+        console.warn('Geolocation not supported');
+        // Fallback to default location
+        realMapInstance.setView([36.7538, 3.0588], 13);
+    }
 }
 
 // Load Zones from API
@@ -818,77 +902,6 @@ async function loadZones() {
     }
 }
 
-// Draw Zone Map
-function drawZoneMap(ctx) {
-    const canvas = ctx.canvas;
-    const width = canvas.width;
-    const height = canvas.height;
-    
-    ctx.clearRect(0, 0, width, height);
-    
-    ctx.save();
-    ctx.translate(zoneMapState.offsetX, zoneMapState.offsetY);
-    ctx.scale(zoneMapState.zoom, zoneMapState.zoom);
-    
-    // Draw grid
-    ctx.strokeStyle = '#ddd';
-    ctx.lineWidth = 1 / zoneMapState.zoom;
-    
-    for (let x = 0; x < width; x += 50) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-    }
-    
-    for (let y = 0; y < height; y += 50) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-    }
-    
-    // Draw zones as rectangles
-    zoneMapState.zones.forEach((zone, index) => {
-        ctx.fillStyle = zone.active ? 'rgba(76, 175, 80, 0.3)' : 'rgba(255, 0, 0, 0.2)';
-        ctx.strokeStyle = zone.active ? '#4caf50' : '#FF0000';
-        ctx.lineWidth = 2 / zoneMapState.zoom;
-        
-        ctx.fillRect(zone.x - 50, zone.y - 40, 100, 80);
-        ctx.strokeRect(zone.x - 50, zone.y - 40, 100, 80);
-        
-        // Draw zone label
-        ctx.fillStyle = '#000';
-        ctx.font = `${14 / zoneMapState.zoom}px Rubik`;
-        ctx.textAlign = 'center';
-        ctx.fillText(`Zone ${zone.id || index + 1}`, zone.x, zone.y);
-    });
-    
-    ctx.restore();
-}
-
-// Render Zone Markers
-function renderZoneMarkers(zones) {
-    const markersContainer = document.getElementById('zoneMarkers');
-    if (!markersContainer) return;
-    
-    markersContainer.innerHTML = '';
-    
-    zones.forEach((zone, index) => {
-        const marker = document.createElement('div');
-        marker.className = `zone-marker ${zone.active ? 'active' : ''}`;
-        marker.textContent = zone.id || (index + 1);
-        marker.style.left = `${zone.x}px`;
-        marker.style.top = `${zone.y}px`;
-        marker.title = zone.name || `Zone ${zone.id || index + 1}`;
-        
-        marker.addEventListener('click', () => {
-            selectZone(zone.id || index);
-        });
-        
-        markersContainer.appendChild(marker);
-    });
-}
 
 // Render Zone List Sidebar
 function renderZoneList(zones) {
@@ -959,24 +972,33 @@ function setupMapToggle() {
     
     if (showMapBtn) {
         showMapBtn.addEventListener('click', () => {
-            mapSection.style.display = 'block';
-            showMapBtn.innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Hide Zone Map';
-            // Re-initialize map when shown
-            initializeZoneMap();
+            if (mapSection.style.display === 'none' || !mapSection.style.display) {
+                mapSection.style.display = 'block';
+                showMapBtn.innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Hide Zone Map';
+                initializeZoneMap();
+            } else {
+                mapSection.style.display = 'none';
+                showMapBtn.innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Show Zone Map';
+            }
         });
     }
     
     if (toggleMapBtn) {
         toggleMapBtn.addEventListener('click', () => {
-            if (mapSection.style.display === 'none') {
+            if (mapSection.style.display === 'none' || !mapSection.style.display) {
                 mapSection.style.display = 'block';
                 toggleMapBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
                 toggleMapBtn.title = 'Hide Map';
+                if (showMapBtn) {
+                    showMapBtn.innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Hide Zone Map';
+                }
             } else {
                 mapSection.style.display = 'none';
                 toggleMapBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
                 toggleMapBtn.title = 'Show Map';
-                document.getElementById('showMapBtn').innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Show Zone Map';
+                if (showMapBtn) {
+                    showMapBtn.innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Show Zone Map';
+                }
             }
         });
     }

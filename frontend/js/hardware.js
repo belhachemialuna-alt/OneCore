@@ -79,6 +79,38 @@ async function loadHardwareStatus() {
 
 // Update hardware state from API data
 function updateHardwareState(data) {
+    // Water source - check if system is running
+    hardwareState.system.waterSource = {
+        id: 'water-source',
+        name: 'Water Source',
+        status: data.system ? 'online' : 'offline',
+        description: data.system ? 'Connected' : 'Disconnected'
+    };
+    
+    // Pump - check if valve is open (pump should be running)
+    hardwareState.system.pump = {
+        id: 'pump',
+        name: 'Water Pump',
+        status: data.irrigation?.valve_open ? 'online' : 'offline',
+        description: data.irrigation?.valve_open ? 'Running' : 'Standby'
+    };
+    
+    // Filter - always online if system is running
+    hardwareState.system.filter = {
+        id: 'filter',
+        name: 'Water Filter',
+        status: data.system ? 'online' : 'offline',
+        description: data.system ? 'Operational' : 'Offline'
+    };
+    
+    // Pressure sensor - check if sensors are working
+    hardwareState.sensors.pressure = {
+        id: 'pressure-sensor',
+        name: 'Pressure Sensor',
+        status: data.sensors?.pressure !== undefined ? 'online' : 'offline',
+        description: data.sensors?.pressure !== undefined ? `${data.sensors.pressure} PSI` : 'No Data'
+    };
+    
     // Main valve status
     hardwareState.valves.main = {
         id: 'main-valve',
@@ -87,18 +119,44 @@ function updateHardwareState(data) {
         description: data.irrigation?.valve_open ? 'Open - Active' : 'Closed - Inactive'
     };
     
-    // Zone valves (simulate from zones data)
-    if (data.zones && Array.isArray(data.zones)) {
-        data.zones.forEach((zone, index) => {
+    // Soil moisture sensors for each zone
+    if (data.sensors) {
+        ['soil_moisture', 'soil_moisture_2', 'soil_moisture_3'].forEach((sensor, index) => {
             const zoneNum = index + 1;
-            hardwareState.valves[`zone-${zoneNum}`] = {
-                id: `zone-valve-${zoneNum}`,
-                name: `Zone ${zoneNum} Valve`,
-                status: zone.active ? 'online' : 'offline',
-                description: zone.active ? 'Active' : 'Inactive'
+            const value = data.sensors[sensor];
+            hardwareState.sensors[`soil-${zoneNum}`] = {
+                id: `soil-sensor-${zoneNum}`,
+                name: `Soil Sensor ${zoneNum}`,
+                status: value !== undefined && value !== null ? 'online' : 'offline',
+                description: value !== undefined ? `${value}%` : 'No Data'
             };
         });
-    } else {
+    }
+    
+    // Zone valves (simulate from zones data or create default)
+    for (let i = 1; i <= 3; i++) {
+        const isActive = data.irrigation?.valve_open && i === 1; // Assume zone 1 is active when valve is open
+        hardwareState.valves[`zone-${i}`] = {
+            id: `zone-valve-${i}`,
+            name: `Zone ${i} Valve`,
+            status: isActive ? 'online' : 'offline',
+            description: isActive ? 'Active' : 'Inactive'
+        };
+    }
+    
+    // Raspberry Pi GPIO status
+    hardwareState.system.gpio = {
+        id: 'raspberry-pi',
+        name: 'Raspberry Pi GPIO',
+        status: data.system ? 'online' : 'offline',
+        description: data.system ? 'GPIO Pins Active' : 'Offline'
+    };
+    
+    // Pipes - check water flow
+    hardwareState.pipes.main = {
+        status: data.irrigation?.valve_open ? 'flowing' : 'idle'
+    };
+} else {
         // Default 3 zones
         for (let i = 1; i <= 3; i++) {
             hardwareState.valves[`zone-${i}`] = {

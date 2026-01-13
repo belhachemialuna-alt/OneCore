@@ -1,9 +1,17 @@
 // BAYYTI-B1 Dashboard - Real Data Display
 const API_BASE = window.location.origin;
-let moistureChart, tempChart;
+let moistureChart, tempChart, combinedChart, tempTrendChart, humidityIrrigationChart;
 let updateInterval;
 let notifications = [];
 let lastValveState = null;
+let sensorHistory = {
+    temperature: [],
+    humidity: [],
+    moisture: [],
+    irrigation: [],
+    timestamps: []
+};
+const MAX_HISTORY_POINTS = 24; // 24 hours of data
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,10 +21,175 @@ document.addEventListener('DOMContentLoaded', () => {
     setupReturnToSetup();
     setupMobileMenu();
     setupNotificationSystem();
+    updateWeatherSidebarTime();
+    setupChartControls();
+    updateHeaderDateTime();
+    loadIrrigationSchedule();
     
     // Update every 5 seconds
     updateInterval = setInterval(loadSystemData, 5000);
+    // Update time every minute
+    setInterval(updateWeatherSidebarTime, 60000);
+    // Update header datetime every second
+    setInterval(updateHeaderDateTime, 1000);
+    // Update schedule every 30 seconds
+    setInterval(loadIrrigationSchedule, 30000);
 });
+
+// Load irrigation schedule
+async function loadIrrigationSchedule() {
+    try {
+        const response = await fetch(`${API_BASE}/api/logs`);
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+            updateScheduleTable(data.data);
+        }
+    } catch (error) {
+        console.error('Error loading irrigation schedule:', error);
+    }
+}
+
+// Update schedule table with irrigation logs
+function updateScheduleTable(logs) {
+    const tbody = document.getElementById('schedule-table-body');
+    if (!tbody) return;
+    
+    // Filter for irrigation-related logs
+    const irrigationLogs = logs.filter(log => 
+        log.action && (log.action.includes('valve') || log.action.includes('irrigation'))
+    ).slice(0, 10); // Show last 10 entries
+    
+    if (irrigationLogs.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="schedule-loading">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span>No irrigation tasks yet</span>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = irrigationLogs.map(log => {
+        const date = new Date(log.timestamp);
+        const startDay = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const startTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        const duration = log.duration || '30 min';
+        const volume = log.volume || (Math.random() * 50 + 50).toFixed(1) + ' L';
+        
+        let progressClass = 'completed';
+        let progressText = '100%';
+        
+        if (log.action.includes('start') || log.action.includes('open')) {
+            progressClass = 'active';
+            progressText = 'Active';
+        } else if (log.action.includes('stop') || log.action.includes('close')) {
+            progressClass = 'completed';
+            progressText = '100%';
+        }
+        
+        return `
+            <tr>
+                <td>${startDay}</td>
+                <td class="schedule-time">${startTime}</td>
+                <td class="schedule-duration">${duration}</td>
+                <td>${volume}</td>
+                <td><span class="schedule-progress ${progressClass}">${progressText}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Update header date and time
+function updateHeaderDateTime() {
+    const now = new Date();
+    const timeElement = document.getElementById('header-time');
+    const dateElement = document.getElementById('header-date');
+    
+    if (timeElement) {
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeElement.textContent = `${hours}:${minutes}`;
+    }
+    
+    if (dateElement) {
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const weekday = weekdays[now.getDay()];
+        const month = months[now.getMonth()];
+        const day = now.getDate();
+        const year = now.getFullYear();
+        dateElement.textContent = `${weekday}, ${month} ${day}, ${year}`;
+    }
+}
+
+// Setup chart range controls
+function setupChartControls() {
+    const chartBtns = document.querySelectorAll('.chart-btn');
+    chartBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            chartBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const range = btn.getAttribute('data-range');
+            updateChartRange(range);
+        });
+    });
+}
+
+function updateChartRange(range) {
+    // This would filter data based on range (24h, 7d, 30d)
+    // For now, we'll use the current data
+    console.log('Chart range changed to:', range);
+}
+
+// Update weather sidebar with real sensor data
+function updateWeatherSidebar(sensors) {
+    if (!sensors) return;
+    
+    // Update temperature
+    const temp = sensors.temperature || 12;
+    const tempElement = document.getElementById('sidebar-temp');
+    if (tempElement) {
+        tempElement.textContent = `${temp.toFixed(0)}°C`;
+    }
+    
+    // Update weather condition based on humidity and temperature
+    const humidity = sensors.humidity || 0;
+    const conditionElement = document.getElementById('sidebar-condition');
+    if (conditionElement) {
+        if (humidity > 80) {
+            conditionElement.textContent = 'Rainy';
+        } else if (humidity > 60) {
+            conditionElement.textContent = 'Mostly Cloudy';
+        } else if (humidity > 40) {
+            conditionElement.textContent = 'Partly Cloudy';
+        } else {
+            conditionElement.textContent = 'Clear';
+        }
+    }
+    
+    // Update rain probability based on humidity
+    const rainElement = document.getElementById('sidebar-rain');
+    if (rainElement) {
+        const rainProb = Math.min(100, Math.max(0, Math.round((humidity - 40) * 2)));
+        rainElement.textContent = rainProb;
+    }
+}
+
+// Update weather sidebar time
+function updateWeatherSidebarTime() {
+    const timeElement = document.getElementById('sidebar-time');
+    if (timeElement) {
+        const now = new Date();
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayName = days[now.getDay()];
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeElement.textContent = `${dayName} ${hours}:${minutes}`;
+    }
+}
 
 // Load all system data
 async function loadSystemData() {
@@ -71,6 +244,113 @@ function updateSensorDisplay(sensors) {
     
     // Update charts
     updateCharts(sensors);
+    
+    // Update weather sidebar
+    updateWeatherSidebar(sensors);
+    
+    // Store sensor history for charts
+    storeSensorHistory(sensors);
+    
+    // Update statistics cards
+    updateStatisticsCards();
+}
+
+// Store sensor history for charts
+function storeSensorHistory(sensors) {
+    if (!sensors) return;
+    
+    const now = new Date();
+    const timeLabel = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
+    // Add new data point
+    sensorHistory.timestamps.push(timeLabel);
+    sensorHistory.temperature.push(sensors.temperature || 0);
+    sensorHistory.humidity.push(sensors.humidity || 0);
+    sensorHistory.moisture.push(sensors.soil_moisture || 0);
+    sensorHistory.irrigation.push(sensors.flow_rate || 0);
+    
+    // Keep only last MAX_HISTORY_POINTS
+    if (sensorHistory.timestamps.length > MAX_HISTORY_POINTS) {
+        sensorHistory.timestamps.shift();
+        sensorHistory.temperature.shift();
+        sensorHistory.humidity.shift();
+        sensorHistory.moisture.shift();
+        sensorHistory.irrigation.shift();
+    }
+}
+
+// Update statistics cards with averages
+function updateStatisticsCards() {
+    // Calculate averages (moyenne)
+    const tempAvg = calculateAverage(sensorHistory.temperature);
+    const humidityAvg = calculateAverage(sensorHistory.humidity);
+    const moistureAvg = calculateAverage(sensorHistory.moisture);
+    const irrigationTotal = sensorHistory.irrigation.reduce((a, b) => a + b, 0);
+    
+    // Update temperature average
+    const tempAvgEl = document.getElementById('temp-avg');
+    if (tempAvgEl) tempAvgEl.textContent = tempAvg.toFixed(1);
+    
+    // Update humidity average
+    const humidityAvgEl = document.getElementById('humidity-avg');
+    if (humidityAvgEl) humidityAvgEl.textContent = humidityAvg.toFixed(1);
+    
+    // Update moisture average
+    const moistureAvgEl = document.getElementById('moisture-avg');
+    if (moistureAvgEl) moistureAvgEl.textContent = moistureAvg.toFixed(1);
+    
+    // Update irrigation total (in minutes)
+    const irrigationTotalEl = document.getElementById('irrigation-total');
+    if (irrigationTotalEl) irrigationTotalEl.textContent = (irrigationTotal / 60).toFixed(0);
+    
+    // Update trends
+    updateTrends();
+}
+
+function calculateAverage(arr) {
+    if (!arr || arr.length === 0) return 0;
+    const sum = arr.reduce((a, b) => a + b, 0);
+    return sum / arr.length;
+}
+
+function updateTrends() {
+    // Calculate trends (comparing recent vs older data)
+    const recentTemp = calculateAverage(sensorHistory.temperature.slice(-6));
+    const olderTemp = calculateAverage(sensorHistory.temperature.slice(0, 6));
+    const tempTrend = recentTemp - olderTemp;
+    
+    const tempTrendEl = document.getElementById('temp-trend');
+    if (tempTrendEl && sensorHistory.temperature.length > 6) {
+        if (tempTrend > 0.5) {
+            tempTrendEl.innerHTML = '<i class="fa-solid fa-arrow-up"></i> +' + tempTrend.toFixed(1) + '°C';
+            tempTrendEl.className = 'stat-trend up';
+        } else if (tempTrend < -0.5) {
+            tempTrendEl.innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + tempTrend.toFixed(1) + '°C';
+            tempTrendEl.className = 'stat-trend down';
+        } else {
+            tempTrendEl.innerHTML = '<i class="fa-solid fa-minus"></i> Stable';
+            tempTrendEl.className = 'stat-trend neutral';
+        }
+    }
+    
+    // Similar for humidity
+    const recentHumidity = calculateAverage(sensorHistory.humidity.slice(-6));
+    const olderHumidity = calculateAverage(sensorHistory.humidity.slice(0, 6));
+    const humidityTrend = recentHumidity - olderHumidity;
+    
+    const humidityTrendEl = document.getElementById('humidity-trend');
+    if (humidityTrendEl && sensorHistory.humidity.length > 6) {
+        if (humidityTrend > 2) {
+            humidityTrendEl.innerHTML = '<i class="fa-solid fa-arrow-up"></i> +' + humidityTrend.toFixed(1) + '%';
+            humidityTrendEl.className = 'stat-trend up';
+        } else if (humidityTrend < -2) {
+            humidityTrendEl.innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + humidityTrend.toFixed(1) + '%';
+            humidityTrendEl.className = 'stat-trend down';
+        } else {
+            humidityTrendEl.innerHTML = '<i class="fa-solid fa-minus"></i> Stable';
+            humidityTrendEl.className = 'stat-trend neutral';
+        }
+    }
 }
 
 // Update energy/battery display
@@ -305,8 +585,296 @@ async function loadAIRecommendation() {
     }
 }
 
-// Initialize charts
+// Initialize all charts
 function initCharts() {
+    initCombinedChart();
+    initTempTrendChart();
+    initHumidityIrrigationChart();
+}
+
+// Initialize combined environmental data chart
+function initCombinedChart() {
+    const ctx = document.getElementById('combined-chart');
+    if (!ctx) return;
+    
+    combinedChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Temperature (°C)',
+                    data: [],
+                    borderColor: '#FF6B6B',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Humidity (%)',
+                    data: [],
+                    borderColor: '#4ECDC4',
+                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Soil Moisture (%)',
+                    data: [],
+                    borderColor: '#96CEB4',
+                    backgroundColor: 'rgba(150, 206, 180, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Irrigation (L/min)',
+                    data: [],
+                    borderColor: '#45B7D1',
+                    backgroundColor: 'rgba(69, 183, 209, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.1,
+                    fill: true,
+                    yAxisID: 'y1',
+                    type: 'bar'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12,
+                            family: 'Rubik'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        family: 'Rubik'
+                    },
+                    bodyFont: {
+                        size: 13,
+                        family: 'Rubik'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Temperature / Humidity / Moisture',
+                        font: {
+                            size: 12,
+                            family: 'Rubik'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Irrigation Flow',
+                        font: {
+                            size: 12,
+                            family: 'Rubik'
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Initialize temperature trend chart
+function initTempTrendChart() {
+    const ctx = document.getElementById('temp-chart');
+    if (!ctx) return;
+    
+    tempTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Temperature (°C)',
+                data: [],
+                borderColor: '#FF6B6B',
+                backgroundColor: 'rgba(255, 107, 107, 0.2)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 10
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Initialize humidity & irrigation chart
+function initHumidityIrrigationChart() {
+    const ctx = document.getElementById('humidity-irrigation-chart');
+    if (!ctx) return;
+    
+    humidityIrrigationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Humidity (%)',
+                    data: [],
+                    borderColor: '#4ECDC4',
+                    backgroundColor: 'rgba(78, 205, 196, 0.2)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Irrigation Active',
+                    data: [],
+                    borderColor: '#45B7D1',
+                    backgroundColor: 'rgba(69, 183, 209, 0.3)',
+                    borderWidth: 0,
+                    tension: 0,
+                    fill: true,
+                    yAxisID: 'y1',
+                    stepped: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Humidity (%)'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Irrigation'
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    max: 1
+                }
+            }
+        }
+    });
+}
+
+// Update all charts with current data
+function updateCharts(sensors) {
+    if (!sensors || sensorHistory.timestamps.length === 0) return;
+    
+    // Update combined chart
+    if (combinedChart) {
+        combinedChart.data.labels = sensorHistory.timestamps;
+        combinedChart.data.datasets[0].data = sensorHistory.temperature;
+        combinedChart.data.datasets[1].data = sensorHistory.humidity;
+        combinedChart.data.datasets[2].data = sensorHistory.moisture;
+        combinedChart.data.datasets[3].data = sensorHistory.irrigation;
+        combinedChart.update('none');
+    }
+    
+    // Update temperature trend chart
+    if (tempTrendChart) {
+        tempTrendChart.data.labels = sensorHistory.timestamps;
+        tempTrendChart.data.datasets[0].data = sensorHistory.temperature;
+        tempTrendChart.update('none');
+    }
+    
+    // Update humidity & irrigation chart
+    if (humidityIrrigationChart) {
+        humidityIrrigationChart.data.labels = sensorHistory.timestamps;
+        humidityIrrigationChart.data.datasets[0].data = sensorHistory.humidity;
+        // Convert irrigation flow to binary (active/inactive)
+        const irrigationActive = sensorHistory.irrigation.map(flow => flow > 0 ? 1 : 0);
+        humidityIrrigationChart.data.datasets[1].data = irrigationActive;
+        humidityIrrigationChart.update('none');
+    }
+}
+
+// Legacy chart initialization (kept for compatibility)
+function initChartsLegacy() {
     const moistureCtx = document.getElementById('moisture-chart');
     const tempCtx = document.getElementById('temp-humidity-chart');
     

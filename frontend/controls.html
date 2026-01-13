@@ -59,6 +59,9 @@
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls" style="background: rgba(255, 255, 255, 0.25);">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
+                <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
+                    <i class="fa-solid fa-brain"></i>
+                </a>
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
                 </a>
@@ -106,14 +109,22 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <!-- Page Title -->
+        <div class="page-title-section">
+            <div class="page-title-icon">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+            <h1 class="page-title">User & System Controls</h1>
+        </div>
+        
         <!-- Page Header -->
         <div class="page-header">
             <div class="header-icon">
                 <i class="fa-solid fa-sliders"></i>
             </div>
             <div>
-                <h1>User & System Controls</h1>
-                <p>Manage users, configure system settings, and customize your BAYYTI-B1 experience</p>
+                <h1 data-i18n="controls-page-title">User & System Controls</h1>
+                <p data-i18n="controls-page-desc">Manage users, configure system settings, and customize your BAYYTI-B1 experience</p>
             </div>
         </div>
 
@@ -121,30 +132,30 @@
         <div class="control-tabs">
             <button class="tab-btn active" data-tab="user">
                 <i class="fa-solid fa-user"></i>
-                User Management
+                <span data-i18n="tab-user">User Management</span>
             </button>
             <button class="tab-btn" data-tab="system">
                 <i class="fa-solid fa-cog"></i>
-                System Settings
+                <span data-i18n="tab-system">System Settings</span>
             </button>
             <button class="tab-btn" data-tab="network">
                 <i class="fa-solid fa-wifi"></i>
-                Network
+                <span data-i18n="tab-network">Network</span>
             </button>
             <button class="tab-btn" data-tab="irrigation">
                 <i class="fa-solid fa-droplet"></i>
-                Irrigation
+                <span data-i18n="tab-irrigation">Irrigation</span>
             </button>
             <button class="tab-btn" data-tab="security">
                 <i class="fa-solid fa-shield-halved"></i>
-                Security
+                <span data-i18n="tab-security">Security</span>
             </button>
         </div>
 
         <!-- User Management Tab -->
         <div class="tab-content active" id="tab-user">
             <section class="control-section">
-                <h2><i class="fa-solid fa-user"></i> User Account</h2>
+                <h2><i class="fa-solid fa-user"></i> <span data-i18n="user-account">User Account</span></h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-header">
@@ -152,30 +163,30 @@
                                 <i class="fa-solid fa-user-circle"></i>
                             </div>
                             <div>
-                                <h3>Profile Information</h3>
-                                <p>Update your personal information</p>
+                                <h3 data-i18n="profile-info">Profile Information</h3>
+                                <p data-i18n="profile-desc">Update your personal information</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="form-group">
-                                <label>Full Name</label>
+                                <label data-i18n="full-name">Full Name</label>
                                 <input type="text" id="userName" value="Administrator" placeholder="Enter your name">
                             </div>
                             <div class="form-group">
-                                <label>Email Address</label>
+                                <label data-i18n="email-address">Email Address</label>
                                 <input type="email" id="userEmail" value="admin@bayyti.com" placeholder="Enter your email">
                             </div>
                             <div class="form-group">
-                                <label>Role</label>
+                                <label data-i18n="role">Role</label>
                                 <select id="userRole">
-                                    <option value="admin" selected>Administrator</option>
-                                    <option value="operator">Operator</option>
-                                    <option value="viewer">Viewer</option>
+                                    <option value="admin" selected data-i18n="administrator">Administrator</option>
+                                    <option value="operator" data-i18n="operator">Operator</option>
+                                    <option value="viewer" data-i18n="viewer">Viewer</option>
                                 </select>
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-save"></i>
-                                Save Changes
+                                <span data-i18n="save-changes">Save Changes</span>
                             </button>
                         </div>
                     </div>
@@ -186,26 +197,26 @@
                                 <i class="fa-solid fa-key"></i>
                             </div>
                             <div>
-                                <h3>Change Password</h3>
-                                <p>Update your account password</p>
+                                <h3 data-i18n="change-password">Change Password</h3>
+                                <p data-i18n="change-password-desc">Update your account password</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="form-group">
-                                <label>Current Password</label>
+                                <label data-i18n="current-password">Current Password</label>
                                 <input type="password" id="currentPassword" placeholder="Enter current password">
                             </div>
                             <div class="form-group">
-                                <label>New Password</label>
+                                <label data-i18n="new-password">New Password</label>
                                 <input type="password" id="newPassword" placeholder="Enter new password">
                             </div>
                             <div class="form-group">
-                                <label>Confirm Password</label>
+                                <label data-i18n="confirm-password">Confirm Password</label>
                                 <input type="password" id="confirmPassword" placeholder="Confirm new password">
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-lock"></i>
-                                Update Password
+                                <span data-i18n="update-password">Update Password</span>
                             </button>
                         </div>
                     </div>
@@ -213,23 +224,23 @@
             </section>
 
             <section class="control-section">
-                <h2><i class="fa-solid fa-users"></i> User Access Control</h2>
+                <h2><i class="fa-solid fa-users"></i> <span data-i18n="user-access-control">User Access Control</span></h2>
                 <div class="users-table">
                     <div class="table-header">
                         <button class="btn-primary">
                             <i class="fa-solid fa-user-plus"></i>
-                            Add New User
+                            <span data-i18n="add-new-user">Add New User</span>
                         </button>
                     </div>
                     <table>
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Last Login</th>
-                                <th>Actions</th>
+                                <th data-i18n="user">User</th>
+                                <th data-i18n="email">Email</th>
+                                <th data-i18n="role">Role</th>
+                                <th data-i18n="status">Status</th>
+                                <th data-i18n="last-login">Last Login</th>
+                                <th data-i18n="actions">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
@@ -237,13 +248,13 @@
                                 <td>
                                     <div class="user-info">
                                         <div class="user-avatar">A</div>
-                                        <span>Administrator</span>
+                                        <span data-i18n="administrator">Administrator</span>
                                     </div>
                                 </td>
                                 <td>admin@bayyti.com</td>
-                                <td><span class="badge badge-admin">Admin</span></td>
-                                <td><span class="status-active">● Active</span></td>
-                                <td>Just now</td>
+                                <td><span class="badge badge-admin" data-i18n="administrator">Admin</span></td>
+                                <td><span class="status-active">● <span data-i18n="active">Active</span></span></td>
+                                <td data-i18n="just-now">Just now</td>
                                 <td>
                                     <button class="btn-icon" title="Edit">
                                         <i class="fa-solid fa-pen"></i>
@@ -262,7 +273,7 @@
         <!-- System Settings Tab -->
         <div class="tab-content" id="tab-system">
             <section class="control-section">
-                <h2><i class="fa-solid fa-cog"></i> General Settings</h2>
+                <h2><i class="fa-solid fa-cog"></i> <span data-i18n="general-settings">General Settings</span></h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-header">
@@ -270,25 +281,25 @@
                                 <i class="fa-solid fa-microchip"></i>
                             </div>
                             <div>
-                                <h3>Device Information</h3>
-                                <p>System hardware and software details</p>
+                                <h3 data-i18n="device-info">Device Information</h3>
+                                <p data-i18n="device-info-desc">System hardware and software details</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="info-row">
-                                <span>Device Name:</span>
+                                <span data-i18n="device-name">Device Name:</span>
                                 <strong id="deviceName">BAYYTI-B1</strong>
                             </div>
                             <div class="info-row">
-                                <span>Hardware:</span>
+                                <span data-i18n="hardware">Hardware:</span>
                                 <strong>Raspberry Pi Zero W</strong>
                             </div>
                             <div class="info-row">
-                                <span>Software Version:</span>
+                                <span data-i18n="software-version">Software Version:</span>
                                 <strong id="softwareVersion">1.0.0</strong>
                             </div>
                             <div class="info-row">
-                                <span>Uptime:</span>
+                                <span data-i18n="uptime">Uptime:</span>
                                 <strong id="systemUptime">2 days, 14 hours</strong>
                             </div>
                         </div>
@@ -300,13 +311,13 @@
                                 <i class="fa-solid fa-clock"></i>
                             </div>
                             <div>
-                                <h3>Date & Time</h3>
-                                <p>Configure system date and time</p>
+                                <h3 data-i18n="date-time">Date & Time</h3>
+                                <p data-i18n="date-time-desc">Configure system date and time</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="form-group">
-                                <label>Timezone</label>
+                                <label data-i18n="timezone">Timezone</label>
                                 <select id="timezone">
                                     <option value="UTC">UTC (GMT+0)</option>
                                     <option value="Africa/Casablanca" selected>Casablanca (GMT+1)</option>
@@ -315,7 +326,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Time Format</label>
+                                <label data-i18n="time-format">Time Format</label>
                                 <select id="timeFormat">
                                     <option value="24h" selected>24-hour</option>
                                     <option value="12h">12-hour (AM/PM)</option>
@@ -323,7 +334,7 @@
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-save"></i>
-                                Apply Settings
+                                <span data-i18n="apply-settings">Apply Settings</span>
                             </button>
                         </div>
                     </div>
@@ -331,13 +342,13 @@
             </section>
 
             <section class="control-section">
-                <h2><i class="fa-solid fa-palette"></i> Display & Preferences</h2>
+                <h2><i class="fa-solid fa-palette"></i> <span data-i18n="display-preferences">Display & Preferences</span></h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-row">
                             <div>
-                                <h4>Dark Mode</h4>
-                                <p>Switch to dark theme (Coming Soon)</p>
+                                <h4 data-i18n="dark-mode">Dark Mode</h4>
+                                <p data-i18n="dark-mode-desc">Switch to dark theme (Coming Soon)</p>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="darkMode" disabled>
@@ -349,8 +360,8 @@
                     <div class="setting-card">
                         <div class="setting-row">
                             <div>
-                                <h4>Auto-Refresh Data</h4>
-                                <p>Automatically update dashboard every 5 seconds</p>
+                                <h4 data-i18n="auto-refresh">Auto-Refresh Data</h4>
+                                <p data-i18n="auto-refresh-desc">Automatically update dashboard every 5 seconds</p>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="autoRefresh" checked>
@@ -362,8 +373,8 @@
                     <div class="setting-card">
                         <div class="setting-row">
                             <div>
-                                <h4>Sound Notifications</h4>
-                                <p>Play sound for alerts and warnings</p>
+                                <h4 data-i18n="sound-notifications">Sound Notifications</h4>
+                                <p data-i18n="sound-notifications-desc">Play sound for alerts and warnings</p>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="soundNotifications">
@@ -375,8 +386,8 @@
                     <div class="setting-card">
                         <div class="setting-row">
                             <div>
-                                <h4>Email Notifications</h4>
-                                <p>Receive alerts via email</p>
+                                <h4 data-i18n="email-notifications">Email Notifications</h4>
+                                <p data-i18n="email-notifications-desc">Receive alerts via email</p>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="emailNotifications">
@@ -391,7 +402,7 @@
         <!-- Network Tab -->
         <div class="tab-content" id="tab-network">
             <section class="control-section">
-                <h2><i class="fa-solid fa-wifi"></i> Network Configuration</h2>
+                <h2><i class="fa-solid fa-wifi"></i> <span data-i18n="network-config">Network Configuration</span></h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-header">
@@ -399,30 +410,30 @@
                                 <i class="fa-solid fa-network-wired"></i>
                             </div>
                             <div>
-                                <h3>WiFi Settings</h3>
-                                <p>Configure wireless network connection</p>
+                                <h3 data-i18n="wifi-settings">WiFi Settings</h3>
+                                <p data-i18n="wifi-settings-desc">Configure wireless network connection</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="info-row">
-                                <span>Status:</span>
-                                <strong class="status-active">● Connected</strong>
+                                <span data-i18n="status">Status:</span>
+                                <strong class="status-active">● <span data-i18n="connected">Connected</span></strong>
                             </div>
                             <div class="info-row">
-                                <span>SSID:</span>
+                                <span data-i18n="ssid">SSID:</span>
                                 <strong id="wifiSSID">BAYYTI-Network</strong>
                             </div>
                             <div class="info-row">
-                                <span>IP Address:</span>
+                                <span data-i18n="ip-address">IP Address:</span>
                                 <strong id="ipAddress">192.168.1.100</strong>
                             </div>
                             <div class="info-row">
-                                <span>Signal Strength:</span>
+                                <span data-i18n="signal-strength">Signal Strength:</span>
                                 <strong>●●●●○ Good</strong>
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-wifi"></i>
-                                Change Network
+                                <span data-i18n="change-network">Change Network</span>
                             </button>
                         </div>
                     </div>
@@ -433,22 +444,22 @@
                                 <i class="fa-solid fa-server"></i>
                             </div>
                             <div>
-                                <h3>API Configuration</h3>
-                                <p>API server and port settings</p>
+                                <h3 data-i18n="api-config">API Configuration</h3>
+                                <p data-i18n="api-config-desc">API server and port settings</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="form-group">
-                                <label>API Server</label>
+                                <label data-i18n="api-server">API Server</label>
                                 <input type="text" id="apiServer" value="localhost" placeholder="localhost">
                             </div>
                             <div class="form-group">
-                                <label>API Port</label>
+                                <label data-i18n="api-port">API Port</label>
                                 <input type="number" id="apiPort" value="5000" placeholder="5000">
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-save"></i>
-                                Save Configuration
+                                <span data-i18n="save-config">Save Configuration</span>
                             </button>
                         </div>
                     </div>
@@ -459,7 +470,7 @@
         <!-- Irrigation Tab -->
         <div class="tab-content" id="tab-irrigation">
             <section class="control-section">
-                <h2><i class="fa-solid fa-droplet"></i> Irrigation Configuration</h2>
+                <h2><i class="fa-solid fa-droplet"></i> <span data-i18n="irrigation-config">Irrigation Configuration</span></h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-header">
@@ -467,22 +478,22 @@
                                 <i class="fa-solid fa-gauge-high"></i>
                             </div>
                             <div>
-                                <h3>Pressure Limits</h3>
-                                <p>Set safe operating pressure range</p>
+                                <h3 data-i18n="pressure-limits">Pressure Limits</h3>
+                                <p data-i18n="pressure-limits-desc">Set safe operating pressure range</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="form-group">
-                                <label>Minimum Pressure (bar)</label>
+                                <label data-i18n="min-pressure">Minimum Pressure (bar)</label>
                                 <input type="number" id="minPressure" value="2.0" step="0.1" min="0">
                             </div>
                             <div class="form-group">
-                                <label>Maximum Pressure (bar)</label>
+                                <label data-i18n="max-pressure">Maximum Pressure (bar)</label>
                                 <input type="number" id="maxPressure" value="3.5" step="0.1" min="0">
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-save"></i>
-                                Update Limits
+                                <span data-i18n="update-limits">Update Limits</span>
                             </button>
                         </div>
                     </div>
@@ -493,22 +504,22 @@
                                 <i class="fa-solid fa-clock"></i>
                             </div>
                             <div>
-                                <h3>Schedule Settings</h3>
-                                <p>Configure automatic irrigation timing</p>
+                                <h3 data-i18n="schedule-settings">Schedule Settings</h3>
+                                <p data-i18n="schedule-settings-desc">Configure automatic irrigation timing</p>
                             </div>
                         </div>
                         <div class="setting-content">
                             <div class="form-group">
-                                <label>Default Duration (minutes)</label>
+                                <label data-i18n="default-duration">Default Duration (minutes)</label>
                                 <input type="number" id="duration" value="30" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Interval Between Cycles (hours)</label>
+                                <label data-i18n="interval-cycles">Interval Between Cycles (hours)</label>
                                 <input type="number" id="interval" value="8" min="1">
                             </div>
                             <button class="btn-primary">
                                 <i class="fa-solid fa-save"></i>
-                                Save Schedule
+                                <span data-i18n="save-schedule">Save Schedule</span>
                             </button>
                         </div>
                     </div>
@@ -519,13 +530,13 @@
         <!-- Security Tab -->
         <div class="tab-content" id="tab-security">
             <section class="control-section">
-                <h2><i class="fa-solid fa-shield-halved"></i> Security Settings</h2>
+                <h2><i class="fa-solid fa-shield-halved"></i> <span data-i18n="security-settings">Security Settings</span></h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <div class="setting-row">
                             <div>
-                                <h4>Two-Factor Authentication</h4>
-                                <p>Add an extra layer of security (Coming Soon)</p>
+                                <h4 data-i18n="two-factor">Two-Factor Authentication</h4>
+                                <p data-i18n="two-factor-desc">Add an extra layer of security (Coming Soon)</p>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="twoFactor" disabled>
@@ -537,8 +548,8 @@
                     <div class="setting-card">
                         <div class="setting-row">
                             <div>
-                                <h4>Session Timeout</h4>
-                                <p>Auto-logout after 30 minutes of inactivity</p>
+                                <h4 data-i18n="session-timeout">Session Timeout</h4>
+                                <p data-i18n="session-timeout-desc">Auto-logout after 30 minutes of inactivity</p>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="sessionTimeout" checked>
@@ -553,8 +564,8 @@
                                 <i class="fa-solid fa-history"></i>
                             </div>
                             <div>
-                                <h3>Activity Log</h3>
-                                <p>View recent system activities</p>
+                                <h3 data-i18n="activity-log">Activity Log</h3>
+                                <p data-i18n="activity-log-desc">View recent system activities</p>
                             </div>
                         </div>
                         <div class="setting-content">
@@ -562,25 +573,25 @@
                                 <div class="activity-item">
                                     <i class="fa-solid fa-user-check"></i>
                                     <div>
-                                        <strong>User Login</strong>
-                                        <span>Administrator logged in</span>
-                                        <time>Just now</time>
+                                        <strong data-i18n="user-login">User Login</strong>
+                                        <span><span data-i18n="administrator">Administrator</span> <span data-i18n="logged-in">logged in</span></span>
+                                        <time data-i18n="just-now">Just now</time>
                                     </div>
                                 </div>
                                 <div class="activity-item">
                                     <i class="fa-solid fa-cog"></i>
                                     <div>
-                                        <strong>Settings Changed</strong>
-                                        <span>Network configuration updated</span>
-                                        <time>2 hours ago</time>
+                                        <strong data-i18n="settings-changed">Settings Changed</strong>
+                                        <span data-i18n="network-updated">Network configuration updated</span>
+                                        <time>2 <span data-i18n="hours-ago">hours ago</span></time>
                                     </div>
                                 </div>
                                 <div class="activity-item">
                                     <i class="fa-solid fa-droplet"></i>
                                     <div>
-                                        <strong>Irrigation Started</strong>
-                                        <span>Zone 1 irrigation activated</span>
-                                        <time>4 hours ago</time>
+                                        <strong data-i18n="irrigation-started">Irrigation Started</strong>
+                                        <span data-i18n="zone-activated">Zone 1 irrigation activated</span>
+                                        <time>4 <span data-i18n="hours-ago">hours ago</span></time>
                                     </div>
                                 </div>
                             </div>
@@ -592,26 +603,26 @@
 
         <!-- Danger Zone -->
         <section class="control-section danger-zone">
-            <h2><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</h2>
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="danger-zone">Danger Zone</span></h2>
             <div class="danger-actions">
                 <div class="danger-card">
                     <div>
-                        <h3>Reset System Settings</h3>
-                        <p>Restore all settings to factory defaults (keeps user data)</p>
+                        <h3 data-i18n="reset-settings">Reset System Settings</h3>
+                        <p data-i18n="reset-settings-desc">Restore all settings to factory defaults (keeps user data)</p>
                     </div>
                     <button class="btn-danger">
                         <i class="fa-solid fa-rotate-left"></i>
-                        Reset Settings
+                        <span data-i18n="btn-reset-settings">Reset Settings</span>
                     </button>
                 </div>
                 <div class="danger-card">
                     <div>
-                        <h3>Factory Reset</h3>
-                        <p>Erase all data and restore to factory state (CANNOT BE UNDONE)</p>
+                        <h3 data-i18n="factory-reset">Factory Reset</h3>
+                        <p data-i18n="factory-reset-desc">Erase all data and restore to factory state (CANNOT BE UNDONE)</p>
                     </div>
                     <button class="btn-danger">
                         <i class="fa-solid fa-bomb"></i>
-                        Factory Reset
+                        <span data-i18n="btn-factory-reset">Factory Reset</span>
                     </button>
                 </div>
             </div>
