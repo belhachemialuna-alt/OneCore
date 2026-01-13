@@ -338,6 +338,73 @@
     .space-main-content .zones-grid {
         grid-template-columns: 1fr;
     }
+    
+    /* Enhanced mobile card layouts */
+    .sensor-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .sensor-card,
+    .control-card,
+    .chart-card,
+    .status-card {
+        padding: 0.85rem;
+    }
+    
+    .sensor-card h3,
+    .control-card h3,
+    .chart-card h3,
+    .status-card h3 {
+        font-size: 0.9rem;
+    }
+    
+    .sensor-value {
+        font-size: 1.5rem;
+    }
+    
+    /* Better touch targets */
+    .control-btn,
+    .zone-btn {
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Improved chart sizing */
+    .chart-container {
+        height: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sensor-grid {
+        grid-template-columns: 1fr;
+        gap: 0.65rem;
+    }
+    
+    .sensor-card,
+    .control-card,
+    .chart-card,
+    .status-card {
+        padding: 0.75rem;
+    }
+    
+    .sensor-value {
+        font-size: 1.3rem;
+    }
+    
+    .chart-container {
+        height: 200px;
+    }
+    
+    .tasks-calendar-card {
+        padding: 1rem;
+    }
+    
+    .tasks-calendar-info h3 {
+        font-size: 1.1rem;
+    }
 }
 
 /* Enhanced Card Styling for Space - Clean Black Design */

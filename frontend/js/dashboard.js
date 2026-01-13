@@ -1238,13 +1238,21 @@ function setupEventListeners() {
     document.getElementById('installUpdateBtn')?.addEventListener('click', installUpdate);
 }
 
-// Check for updates - Improved with progress states
+// Check for updates - Improved with progress states and manual refresh
 async function checkForUpdates() {
     const modal = document.getElementById('updateModal');
     const modalBody = document.getElementById('updateModalBody');
     const installBtn = document.getElementById('installUpdateBtn');
+    const updateBtn = document.getElementById('updateBtnMain');
+    const updateBtnIcon = updateBtn?.querySelector('i');
     
     if (!modal || !modalBody) return;
+    
+    // Add spinning animation to button
+    if (updateBtnIcon) {
+        updateBtnIcon.classList.add('fa-spin');
+        updateBtn.style.pointerEvents = 'none';
+    }
     
     modal.style.display = 'flex';
     modal.classList.add('fade-in');
@@ -1255,10 +1263,11 @@ async function checkForUpdates() {
             <div class="update-spinner">
                 <i class="fa-solid fa-rotate fa-spin"></i>
             </div>
-            <p class="update-status">Checking for updates...</p>
+            <p class="update-status">Searching for updates...</p>
             <div class="progress-bar-container">
                 <div class="progress-bar" style="width: 30%"></div>
             </div>
+            <p style="color: #666; font-size: 0.85rem; margin-top: 1rem;">Checking GitHub releases...</p>
         </div>
     `;
     
@@ -1267,7 +1276,7 @@ async function checkForUpdates() {
         const data = await response.json();
         
         // Simulate progress for smooth UX
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         if (data.success && data.update_available) {
             const indicator = document.getElementById('updateIndicator');
@@ -1299,6 +1308,9 @@ async function checkForUpdates() {
                             ${data.release_notes || 'No release notes provided.'}
                         </div>
                     </div>
+                    <button class="refresh-check-btn" onclick="checkForUpdates()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: rgba(33, 150, 243, 0.1); border: 1px solid #2196F3; border-radius: 6px; color: #2196F3; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+                        <i class="fa-solid fa-rotate"></i> Check Again
+                    </button>
                 </div>
             `;
             if (installBtn) {
@@ -1314,6 +1326,10 @@ async function checkForUpdates() {
                     <h3 style="color: #4caf50; margin: 1rem 0;">✅ You're Up to Date!</h3>
                     <p style="color: #999;">Running version ${data.current_version || '1.0.0'}</p>
                     <p style="color: #666; margin-top: 1rem; font-size: 0.9rem;">Your system is running the latest version.</p>
+                    <p style="color: #666; font-size: 0.85rem; margin-top: 0.5rem;">Last checked: ${new Date().toLocaleTimeString()}</p>
+                    <button class="refresh-check-btn" onclick="checkForUpdates()" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); border: none; border-radius: 8px; color: white; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3); transition: all 0.3s ease;">
+                        <i class="fa-solid fa-rotate"></i> Refresh & Check Again
+                    </button>
                 </div>
             `;
             if (installBtn) installBtn.style.display = 'none';
@@ -1330,9 +1346,18 @@ async function checkForUpdates() {
                 <p style="color: #666; font-size: 0.85rem; margin-top: 1rem; padding: 0.75rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
                     ${error.message}
                 </p>
+                <button class="refresh-check-btn" onclick="checkForUpdates()" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); border: none; border-radius: 8px; color: white; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);">
+                    <i class="fa-solid fa-rotate"></i> Try Again
+                </button>
             </div>
         `;
         if (installBtn) installBtn.style.display = 'none';
+    } finally {
+        // Remove spinning animation from button
+        if (updateBtnIcon) {
+            updateBtnIcon.classList.remove('fa-spin');
+            updateBtn.style.pointerEvents = 'auto';
+        }
     }
 }
 

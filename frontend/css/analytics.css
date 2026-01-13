@@ -395,7 +395,8 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #E0E0E0;
     gap: 1rem;
 }
 
@@ -405,22 +406,55 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    margin: 0;
     color: #000;
+}
+
+.section-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.benchmarks-link-btn {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    text-decoration: none;
+}
+
+.benchmarks-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(33, 150, 243, 0.4);
+}
+
+.benchmarks-link-btn i {
+    font-size: 1.1rem;
 }
 
 .show-map-btn {
     background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
 }
 
