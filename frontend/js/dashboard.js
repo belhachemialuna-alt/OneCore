@@ -397,19 +397,175 @@ function updateZonesDisplay(zones) {
     const zonesGrid = document.getElementById('zones-grid');
     zonesGrid.innerHTML = '';
     
-    zones.forEach(zone => {
+    zones.forEach((zone, index) => {
         const zoneCard = document.createElement('div');
         zoneCard.className = 'zone-card';
+        
+        // Generate random stats for demo (replace with real data from API)
+        const waterUsed = (Math.random() * 500 + 100).toFixed(1);
+        const irrigationCount = Math.floor(Math.random() * 20 + 5);
+        const efficiency = (Math.random() * 30 + 70).toFixed(1);
+        
         zoneCard.innerHTML = `
-            <h4><i class="fa-solid fa-layer-group"></i> ${zone.name}</h4>
+            <div class="zone-header">
+                <h4><i class="fa-solid fa-layer-group"></i> ${zone.name}</h4>
+                <button class="zone-stats-toggle" onclick="toggleZoneStats(${index})" title="View Statistics">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </button>
+            </div>
             <div class="zone-info">
                 <p><strong>Crop:</strong> ${zone.crop_name || 'Not set'}</p>
                 <p><strong>Soil:</strong> ${zone.soil_name || 'Not set'}</p>
-                <p><strong>Status:</strong> ${zone.active ? 'Active' : 'Idle'}</p>
+                <p><strong>Status:</strong> <span class="zone-status ${zone.active ? 'active' : 'idle'}">${zone.active ? 'Active' : 'Idle'}</span></p>
+            </div>
+            <div class="zone-stats-panel" id="zone-stats-${index}" style="display: none;">
+                <div class="zone-stats-grid">
+                    <div class="zone-stat-card">
+                        <div class="stat-icon water">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Water Used</span>
+                            <span class="stat-value">${waterUsed} L</span>
+                        </div>
+                    </div>
+                    <div class="zone-stat-card">
+                        <div class="stat-icon count">
+                            <i class="fa-solid fa-rotate"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Irrigations</span>
+                            <span class="stat-value">${irrigationCount}</span>
+                        </div>
+                    </div>
+                    <div class="zone-stat-card">
+                        <div class="stat-icon efficiency">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Efficiency</span>
+                            <span class="stat-value">${efficiency}%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-charts">
+                    <div class="zone-chart-container">
+                        <h5><i class="fa-solid fa-chart-line"></i> Water Usage (7 Days)</h5>
+                        <canvas id="zone-water-chart-${index}"></canvas>
+                    </div>
+                    <div class="zone-chart-container">
+                        <h5><i class="fa-solid fa-chart-bar"></i> Irrigation Count (7 Days)</h5>
+                        <canvas id="zone-irrigation-chart-${index}"></canvas>
+                    </div>
+                </div>
             </div>
         `;
         zonesGrid.appendChild(zoneCard);
+        
+        // Initialize charts after DOM is updated
+        setTimeout(() => initializeZoneCharts(index, waterUsed, irrigationCount), 100);
     });
+}
+
+// Toggle zone statistics panel
+function toggleZoneStats(zoneIndex) {
+    const panel = document.getElementById(`zone-stats-${zoneIndex}`);
+    const toggleBtn = event.currentTarget;
+    
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        toggleBtn.classList.add('active');
+        toggleBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+    } else {
+        panel.style.display = 'none';
+        toggleBtn.classList.remove('active');
+        toggleBtn.innerHTML = '<i class="fa-solid fa-chart-simple"></i>';
+    }
+}
+
+// Initialize zone charts
+function initializeZoneCharts(zoneIndex, totalWater, totalIrrigations) {
+    // Generate sample data for 7 days
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const waterData = Array.from({length: 7}, () => Math.random() * 100 + 20);
+    const irrigationData = Array.from({length: 7}, () => Math.floor(Math.random() * 5 + 1));
+    
+    // Water usage chart
+    const waterCtx = document.getElementById(`zone-water-chart-${zoneIndex}`);
+    if (waterCtx) {
+        new Chart(waterCtx, {
+            type: 'line',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'Water (L)',
+                    data: waterData,
+                    borderColor: '#2196F3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#666' },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#666' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Irrigation count chart
+    const irrigationCtx = document.getElementById(`zone-irrigation-chart-${zoneIndex}`);
+    if (irrigationCtx) {
+        new Chart(irrigationCtx, {
+            type: 'bar',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'Count',
+                    data: irrigationData,
+                    backgroundColor: '#4caf50',
+                    borderColor: '#388E3C',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { 
+                            color: '#666',
+                            stepSize: 1
+                        },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#666' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
 }
 
 // Load Safety Status (CRITICAL for lithium battery monitoring)
@@ -1082,7 +1238,7 @@ function setupEventListeners() {
     document.getElementById('installUpdateBtn')?.addEventListener('click', installUpdate);
 }
 
-// Check for updates
+// Check for updates - Improved with progress states
 async function checkForUpdates() {
     const modal = document.getElementById('updateModal');
     const modalBody = document.getElementById('updateModalBody');
@@ -1091,11 +1247,27 @@ async function checkForUpdates() {
     if (!modal || !modalBody) return;
     
     modal.style.display = 'flex';
-    modalBody.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Checking for updates...</p>';
+    modal.classList.add('fade-in');
+    
+    // Show checking state with animated progress
+    modalBody.innerHTML = `
+        <div class="update-progress-container">
+            <div class="update-spinner">
+                <i class="fa-solid fa-rotate fa-spin"></i>
+            </div>
+            <p class="update-status">Checking for updates...</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 30%"></div>
+            </div>
+        </div>
+    `;
     
     try {
         const response = await fetch(`${API_BASE}/api/system/update/check`);
         const data = await response.json();
+        
+        // Simulate progress for smooth UX
+        await new Promise(resolve => setTimeout(resolve, 300));
         
         if (data.success && data.update_available) {
             const indicator = document.getElementById('updateIndicator');
@@ -1103,12 +1275,29 @@ async function checkForUpdates() {
             
             modalBody.innerHTML = `
                 <div class="update-info">
-                    <p><strong>🎉 New version available: ${data.latest_version}</strong></p>
-                    <p>Current version: 1.0.0</p>
-                    <p>Release date: ${new Date(data.release_date).toLocaleDateString()}</p>
-                    <h4 style="margin-top: 1rem; color: #FFFFFF;">Release Notes:</h4>
-                    <div style="max-height: 200px; overflow-y: auto; background: #1a1a1a; padding: 10px; border-radius: 5px;">
-                        ${data.release_notes || 'No release notes provided.'}
+                    <div class="update-success-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 style="color: #4caf50; margin: 1rem 0;">🎉 New Version Available!</h3>
+                    <div class="version-comparison">
+                        <div class="version-box current">
+                            <span class="version-label">Current</span>
+                            <span class="version-number">v${data.current_version || '1.0.0'}</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-right" style="color: #2196F3; font-size: 1.5rem;"></i>
+                        <div class="version-box new">
+                            <span class="version-label">Latest</span>
+                            <span class="version-number">v${data.latest_version}</span>
+                        </div>
+                    </div>
+                    <p style="color: #999; margin: 0.5rem 0;">Released: ${new Date(data.release_date).toLocaleDateString()}</p>
+                    <div class="release-notes-section">
+                        <h4 style="margin: 1.5rem 0 0.75rem 0; color: #FFFFFF; font-size: 1rem;">
+                            <i class="fa-solid fa-file-lines"></i> Release Notes
+                        </h4>
+                        <div class="release-notes-content">
+                            ${data.release_notes || 'No release notes provided.'}
+                        </div>
                     </div>
                 </div>
             `;
@@ -1117,22 +1306,40 @@ async function checkForUpdates() {
                 installBtn.dataset.downloadUrl = data.download_url;
             }
         } else {
-            modalBody.innerHTML = '<p>✅ You are running the latest version</p>';
+            modalBody.innerHTML = `
+                <div class="update-info">
+                    <div class="update-success-icon" style="color: #4caf50;">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 style="color: #4caf50; margin: 1rem 0;">✅ You're Up to Date!</h3>
+                    <p style="color: #999;">Running version ${data.current_version || '1.0.0'}</p>
+                    <p style="color: #666; margin-top: 1rem; font-size: 0.9rem;">Your system is running the latest version.</p>
+                </div>
+            `;
             if (installBtn) installBtn.style.display = 'none';
         }
     } catch (error) {
         console.error('Update check error:', error);
         modalBody.innerHTML = `
-            <p>⚠️ Unable to check for updates</p>
-            <p style="color: #f44336; font-size: 12px;">${error.message}</p>
+            <div class="update-info">
+                <div class="update-error-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 style="color: #f44336; margin: 1rem 0;">⚠️ Connection Error</h3>
+                <p style="color: #999;">Unable to check for updates</p>
+                <p style="color: #666; font-size: 0.85rem; margin-top: 1rem; padding: 0.75rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
+                    ${error.message}
+                </p>
+            </div>
         `;
         if (installBtn) installBtn.style.display = 'none';
     }
 }
 
-// Install update
+// Install update - Improved with detailed progress tracking
 async function installUpdate() {
     const installBtn = document.getElementById('installUpdateBtn');
+    const modalBody = document.getElementById('updateModalBody');
     const downloadUrl = installBtn?.dataset.downloadUrl;
     
     if (!downloadUrl) return;
@@ -1140,7 +1347,65 @@ async function installUpdate() {
     installBtn.disabled = true;
     installBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Installing...';
     
+    // Show installation progress
+    modalBody.innerHTML = `
+        <div class="update-progress-container">
+            <div class="update-spinner installing">
+                <i class="fa-solid fa-download fa-beat"></i>
+            </div>
+            <h3 style="color: #2196F3; margin: 1rem 0;">Installing Update...</h3>
+            <div class="installation-steps">
+                <div class="install-step active">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <span>Downloading update package...</span>
+                </div>
+                <div class="install-step">
+                    <i class="fa-solid fa-circle"></i>
+                    <span>Extracting files...</span>
+                </div>
+                <div class="install-step">
+                    <i class="fa-solid fa-circle"></i>
+                    <span>Applying updates...</span>
+                </div>
+                <div class="install-step">
+                    <i class="fa-solid fa-circle"></i>
+                    <span>Finalizing installation...</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar installing" style="width: 0%"></div>
+            </div>
+            <p class="progress-percentage">0%</p>
+        </div>
+    `;
+    
+    // Simulate progress steps for better UX
+    const progressBar = modalBody.querySelector('.progress-bar');
+    const progressText = modalBody.querySelector('.progress-percentage');
+    const steps = modalBody.querySelectorAll('.install-step');
+    
+    const updateProgress = (percent, stepIndex) => {
+        if (progressBar) progressBar.style.width = percent + '%';
+        if (progressText) progressText.textContent = Math.round(percent) + '%';
+        
+        steps.forEach((step, idx) => {
+            step.classList.remove('active', 'completed');
+            if (idx < stepIndex) {
+                step.classList.add('completed');
+                step.querySelector('i').className = 'fa-solid fa-circle-check';
+            } else if (idx === stepIndex) {
+                step.classList.add('active');
+                step.querySelector('i').className = 'fa-solid fa-circle-notch fa-spin';
+            }
+        });
+    };
+    
     try {
+        // Step 1: Downloading
+        updateProgress(25, 0);
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Make API call
         const response = await fetch(`${API_BASE}/api/system/update/install`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -1150,14 +1415,63 @@ async function installUpdate() {
         const data = await response.json();
         
         if (data.success) {
-            showNotification('✅ Update installed! System will restart in 10 seconds.', 'success');
-            setTimeout(() => location.reload(), 10000);
+            // Step 2: Extracting
+            updateProgress(50, 1);
+            await new Promise(resolve => setTimeout(resolve, 600));
+            
+            // Step 3: Applying
+            updateProgress(75, 2);
+            await new Promise(resolve => setTimeout(resolve, 600));
+            
+            // Step 4: Finalizing
+            updateProgress(100, 3);
+            await new Promise(resolve => setTimeout(resolve, 400));
+            
+            // Show success
+            modalBody.innerHTML = `
+                <div class="update-info">
+                    <div class="update-success-icon" style="color: #4caf50; font-size: 4rem;">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 style="color: #4caf50; margin: 1rem 0;">✅ Update Installed Successfully!</h3>
+                    <p style="color: #999; margin: 1rem 0;">System will restart in <span id="countdown">5</span> seconds...</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar success" style="width: 100%"></div>
+                    </div>
+                </div>
+            `;
+            
+            // Countdown timer
+            let countdown = 5;
+            const countdownEl = document.getElementById('countdown');
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdownEl) countdownEl.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    location.reload();
+                }
+            }, 1000);
+            
+            showNotification('✅ Update installed successfully!', 'success');
         } else {
-            showNotification('❌ Update failed: ' + data.error, 'error');
+            throw new Error(data.error || 'Installation failed');
         }
     } catch (error) {
+        console.error('Update installation error:', error);
+        modalBody.innerHTML = `
+            <div class="update-info">
+                <div class="update-error-icon">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+                <h3 style="color: #f44336; margin: 1rem 0;">❌ Installation Failed</h3>
+                <p style="color: #999;">Unable to install update</p>
+                <p style="color: #666; font-size: 0.85rem; margin-top: 1rem; padding: 0.75rem; background: rgba(244, 67, 54, 0.1); border-radius: 8px;">
+                    ${error.message}
+                </p>
+            </div>
+        `;
         showNotification('❌ Update failed: ' + error.message, 'error');
-    } finally {
         installBtn.disabled = false;
         installBtn.innerHTML = '<i class="fa-solid fa-download"></i> Install Update';
     }

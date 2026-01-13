@@ -979,9 +979,186 @@ body {
 .zone-card {
     background: var(--bg-white);
     padding: 1.25rem;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: var(--shadow-md);
     border-left: 4px solid var(--primary-red);
+    transition: all 0.3s ease;
+}
+
+.zone-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.zone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.zone-header h4 {
+    margin: 0;
+    color: #000;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.zone-stats-toggle {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.zone-stats-toggle:hover {
+    background: #2196F3;
+    border-color: #2196F3;
+    color: white;
+    transform: scale(1.1);
+}
+
+.zone-stats-toggle.active {
+    background: #2196F3;
+    border-color: #2196F3;
+    color: white;
+}
+
+.zone-info p {
+    margin: 0.5rem 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.zone-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.zone-status.active {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+}
+
+.zone-status.idle {
+    background: rgba(158, 158, 158, 0.1);
+    color: #9e9e9e;
+}
+
+.zone-stats-panel {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #f0f0f0;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.zone-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.zone-stat-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid #e0e0e0;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.stat-icon.water {
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196F3;
+}
+
+.stat-icon.count {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+}
+
+.stat-icon.efficiency {
+    background: rgba(255, 152, 0, 0.1);
+    color: #FF9800;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.zone-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.zone-chart-container {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.zone-chart-container h5 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.zone-chart-container canvas {
+    height: 180px !important;
 }
 
 /* Charts Section */
@@ -1718,7 +1895,15 @@ body.rtl .stat-info {
     }
     
     .header-center .project-title {
-        display: none;
+        display: block;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    
+    .header-center .project-title strong {
+        display: block;
+        font-size: 1rem;
+        margin-top: 0.15rem;
     }
     
     .header-center .header-datetime {
@@ -2024,19 +2209,274 @@ body.rtl .stat-info {
     box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
 }
 
+/* Update System Progress Styles */
+.update-progress-container {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.update-spinner {
+    font-size: 3rem;
+    color: #2196F3;
+    margin-bottom: 1rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.update-spinner.installing {
+    color: #FF9800;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.update-status {
+    color: #E0E0E0;
+    font-size: 1.1rem;
+    margin: 1rem 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #2196F3, #1976D2);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    animation: progressShine 2s ease-in-out infinite;
+}
+
+.progress-bar.installing {
+    background: linear-gradient(90deg, #FF9800, #F57C00);
+}
+
+.progress-bar.success {
+    background: linear-gradient(90deg, #4caf50, #388E3C);
+}
+
+@keyframes progressShine {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+.progress-percentage {
+    color: #2196F3;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.update-success-icon,
+.update-error-icon {
+    font-size: 3.5rem;
+    margin: 1rem 0;
+    animation: iconBounce 0.6s ease-out;
+}
+
+.update-success-icon {
+    color: #4caf50;
+}
+
+.update-error-icon {
+    color: #f44336;
+}
+
+@keyframes iconBounce {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.version-comparison {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.version-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 120px;
+}
+
+.version-box.current {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.version-box.new {
+    border-color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.version-label {
+    color: #999;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.version-number {
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.release-notes-section {
+    margin-top: 1.5rem;
+    text-align: left;
+}
+
+.release-notes-content {
+    max-height: 200px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #E0E0E0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.release-notes-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.release-notes-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.release-notes-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.installation-steps {
+    margin: 1.5rem 0;
+    text-align: left;
+}
+
+.install-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.install-step i {
+    font-size: 1.2rem;
+    color: #666;
+    width: 20px;
+    text-align: center;
+}
+
+.install-step span {
+    color: #999;
+    font-size: 0.95rem;
+}
+
+.install-step.active {
+    background: rgba(33, 150, 243, 0.1);
+    border-left-color: #2196F3;
+}
+
+.install-step.active i {
+    color: #2196F3;
+}
+
+.install-step.active span {
+    color: #E0E0E0;
+}
+
+.install-step.completed {
+    background: rgba(76, 175, 80, 0.05);
+    border-left-color: #4caf50;
+}
+
+.install-step.completed i {
+    color: #4caf50;
+}
+
+.install-step.completed span {
+    color: #999;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* Mobile Responsive for Modal */
 @media (max-width: 768px) {
     .modal-content {
-        max-width: 90%;
-        margin: 1rem;
+        max-width: 95%;
+        margin: 0.5rem;
     }
     
     .modal-header {
-        padding: 1.25rem;
+        padding: 1rem;
     }
     
     .modal-title {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
+    }
+    
+    .version-comparison {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .version-comparison i {
+        transform: rotate(90deg);
+    }
+    
+    .version-box {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .update-spinner {
+        font-size: 2.5rem;
+    }
+    
+    .update-success-icon,
+    .update-error-icon {
+        font-size: 2.5rem;
+    }
+    
+    .installation-steps {
+        font-size: 0.9rem;
+    }
+    
+    .install-step {
+        padding: 0.5rem;
     }
     
     .modal-body {

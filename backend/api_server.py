@@ -12,6 +12,7 @@ from irrigation_service import IrrigationService
 from ai_decision_service import AIDecisionService
 from sensor_service import SensorService
 from system_monitor import SystemMonitor
+from system_stats import get_system_stats
 
 app = Flask(__name__, static_folder='../frontend')
 CORS(app)
@@ -45,7 +46,7 @@ def index():
     # Check if setup is completed
     if not controller.system_config.get('setup_completed', False):
         return send_from_directory(app.static_folder, 'setup.html')
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, 'space.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
@@ -611,8 +612,24 @@ def install_update():
             "error": str(e)
         })
 
+@app.route("/api/system")
+def system():
+    """Get real-time system stats (CPU & RAM) for hardware dashboard"""
+    try:
+        stats = get_system_stats()
+        return jsonify(stats)
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "cpu_percent": 0,
+            "mem_total": 0,
+            "mem_used": 0,
+            "mem_percent": 0
+        }), 500
+
 @app.route("/api/system/monitor")
-def system_monitor():
+def system_monitor_route():
     """Get real-time CPU and RAM usage from Raspberry Pi"""
     try:
         system_info = system_monitor.get_status()

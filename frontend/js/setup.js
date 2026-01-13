@@ -293,5 +293,5 @@ async function completeSetup() {
 }
 
 function goToDashboard() {
-    window.location.href = 'index.html';
+    window.location.href = 'space.html';
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Dashboard - BAYYTI-B1</title>
+    <title>Space Dashboard - ElivateOne</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/space.css">
     <link rel="stylesheet" href="css/system-performance.css">
     <link rel="stylesheet" href="css/schedule-modal.css">
+    <link rel="stylesheet" href="css/calendar-modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -44,7 +45,7 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Space Dashboard <strong>BAYYTI-B1</strong></h1>
+                <h1 class="project-title">Space Dashboard <strong>ElivateOne</strong></h1>
                 <div class="header-datetime" id="header-datetime">
                     <i class="fa-solid fa-clock"></i>
                     <span id="header-time">--:--</span>
@@ -64,6 +65,9 @@
                 <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <button class="header-icon-btn drag-toggle-btn" id="dragToggleBtn" title="Enable/Disable Drag & Drop">
+                    <i class="fa-solid fa-grip-vertical"></i>
                 </button>
                 <a href="index.html" class="header-icon-btn" title="Classic Dashboard">
                     <i class="fa-solid fa-gauge"></i>
@@ -86,9 +90,9 @@
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
                 </a>
-                <button class="header-icon-btn" title="FAQ">
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
-                </button>
+                </a>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
                     <i class="fa-solid fa-gear"></i>
                 </a>
@@ -706,7 +710,7 @@
                 <h3 class="modal-title">Reboot System</h3>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to reboot the BAYYTI-B1 system?</p>
+                <p>Are you sure you want to reboot the ElivateOne system?</p>
                 <p style="color: #FFC107; margin-top: 1rem;">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     This will temporarily interrupt irrigation operations.
@@ -725,6 +729,105 @@
         </div>
     </div>
 
+    <!-- Irrigation Tasks Calendar Modal -->
+    <div id="tasksCalendarModal" class="custom-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeTasksCalendar()"></div>
+        <div class="modal-content calendar-modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-calendar-days modal-icon"></i>
+                <h3 class="modal-title">Irrigation Tasks Calendar</h3>
+                <button class="modal-close-btn" onclick="closeTasksCalendar()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body calendar-modal-body">
+                <!-- Calendar View -->
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav-btn" onclick="previousMonth()">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <h3 id="calendar-month-year">January 2026</h3>
+                        <button class="calendar-nav-btn" onclick="nextMonth()">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                        <!-- Calendar days will be generated by JavaScript -->
+                        <div id="calendar-days"></div>
+                    </div>
+                </div>
+                
+                <!-- Task Form -->
+                <div class="task-form-container">
+                    <h4><i class="fa-solid fa-plus-circle"></i> Add/Edit Irrigation Task</h4>
+                    <form id="task-form" onsubmit="saveTask(event)">
+                        <div class="form-group">
+                            <label>Task Name</label>
+                            <input type="text" id="task-name" placeholder="e.g., Water Zone 1" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="task-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" id="task-time" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Zone</label>
+                            <select id="task-zone" required>
+                                <option value="">Select Zone</option>
+                                <option value="zone1">Zone 1</option>
+                                <option value="zone2">Zone 2</option>
+                                <option value="zone3">Zone 3</option>
+                                <option value="zone4">Zone 4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" id="task-duration" min="1" max="120" placeholder="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Repeat</label>
+                            <select id="task-repeat">
+                                <option value="none">No Repeat</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="clearTaskForm()">
+                                <i class="fa-solid fa-eraser"></i> Clear
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-save"></i> Save Task
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Tasks List -->
+                    <div class="tasks-list-container">
+                        <h4><i class="fa-solid fa-list"></i> Scheduled Tasks</h4>
+                        <div id="tasks-list" class="tasks-list">
+                            <!-- Tasks will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/dashboard.js?v=4.0"></script>
     <script src="js/space.js"></script>
     <script src="js/language.js?v=1.0"></script>
@@ -739,6 +842,378 @@
                 }, 500);
             }
         });
+        
+        // Calendar functionality
+        let currentDate = new Date();
+        let selectedDate = null;
+        let tasks = [];
+        
+        // Open calendar modal
+        function openTasksCalendar() {
+            document.getElementById('tasksCalendarModal').style.display = 'flex';
+            renderCalendar();
+            loadTasks();
+        }
+        
+        // Close calendar modal
+        function closeTasksCalendar() {
+            document.getElementById('tasksCalendarModal').style.display = 'none';
+        }
+        
+        // Render calendar
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            document.getElementById('calendar-month-year').textContent = 
+                new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const calendarDays = document.getElementById('calendar-days');
+            calendarDays.innerHTML = '';
+            
+            // Empty cells before first day
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                calendarDays.appendChild(emptyCell);
+            }
+            
+            // Days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const tasksOnDay = tasks.filter(t => t.date === dateStr);
+                
+                if (tasksOnDay.length > 0) {
+                    dayCell.classList.add('has-tasks');
+                    const badge = document.createElement('span');
+                    badge.className = 'task-badge';
+                    badge.textContent = tasksOnDay.length;
+                    dayCell.appendChild(badge);
+                }
+                
+                const today = new Date();
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    dayCell.classList.add('today');
+                }
+                
+                dayCell.onclick = () => selectDate(dateStr, dayCell);
+                calendarDays.appendChild(dayCell);
+            }
+        }
+        
+        function selectDate(dateStr, element) {
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedDate = dateStr;
+            document.getElementById('task-date').value = dateStr;
+        }
+        
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+        
+        function saveTask(event) {
+            event.preventDefault();
+            
+            const task = {
+                id: Date.now(),
+                name: document.getElementById('task-name').value,
+                date: document.getElementById('task-date').value,
+                time: document.getElementById('task-time').value,
+                zone: document.getElementById('task-zone').value,
+                duration: document.getElementById('task-duration').value,
+                repeat: document.getElementById('task-repeat').value
+            };
+            
+            tasks.push(task);
+            localStorage.setItem('irrigation_tasks', JSON.stringify(tasks));
+            
+            clearTaskForm();
+            renderCalendar();
+            loadTasks();
+            
+            showNotification('Task saved successfully!', 'success');
+        }
+        
+        function clearTaskForm() {
+            document.getElementById('task-form').reset();
+        }
+        
+        async function loadTasks() {
+            // Load tasks from localStorage
+            const stored = localStorage.getItem('irrigation_tasks');
+            if (stored) {
+                tasks = JSON.parse(stored);
+            }
+            
+            // Also load schedules from backend/setup
+            try {
+                const response = await fetch('/api/schedules');
+                if (response.ok) {
+                    const schedules = await response.json();
+                    
+                    // Convert schedules to tasks format for calendar display
+                    schedules.forEach(schedule => {
+                        if (schedule.enabled) {
+                            // Create task entries for the next 30 days based on days_of_week
+                            const daysOfWeek = schedule.days_of_week ? schedule.days_of_week.split(',') : [];
+                            const today = new Date();
+                            
+                            for (let i = 0; i < 30; i++) {
+                                const date = new Date(today);
+                                date.setDate(today.getDate() + i);
+                                const dayName = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][date.getDay()];
+                                
+                                if (daysOfWeek.includes(dayName)) {
+                                    const dateStr = date.toISOString().split('T')[0];
+                                    const existingTask = tasks.find(t => 
+                                        t.date === dateStr && 
+                                        t.time === schedule.start_time && 
+                                        t.name === schedule.name
+                                    );
+                                    
+                                    if (!existingTask) {
+                                        tasks.push({
+                                            id: `schedule-${schedule.id}-${dateStr}`,
+                                            name: schedule.name,
+                                            date: dateStr,
+                                            time: schedule.start_time,
+                                            zone: 'Auto',
+                                            duration: Math.floor(schedule.duration / 60),
+                                            repeat: 'weekly',
+                                            fromSchedule: true
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('Could not load schedules from backend:', error);
+            }
+            
+            const tasksList = document.getElementById('tasks-list');
+            tasksList.innerHTML = '';
+            
+            if (tasks.length === 0) {
+                tasksList.innerHTML = '<p class="no-tasks">No tasks scheduled. Create a task or check your irrigation schedules.</p>';
+                return;
+            }
+            
+            tasks.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+            
+            // Show only upcoming tasks (next 30 days)
+            const today = new Date();
+            const futureDate = new Date();
+            futureDate.setDate(today.getDate() + 30);
+            
+            const upcomingTasks = tasks.filter(task => {
+                const taskDate = new Date(task.date);
+                return taskDate >= today && taskDate <= futureDate;
+            });
+            
+            if (upcomingTasks.length === 0) {
+                tasksList.innerHTML = '<p class="no-tasks">No upcoming tasks in the next 30 days</p>';
+                return;
+            }
+            
+            upcomingTasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                const isFromSchedule = task.fromSchedule ? '<span class="schedule-badge">Auto</span>' : '';
+                taskItem.innerHTML = `
+                    <div class="task-info">
+                        <div class="task-name"><i class="fa-solid fa-droplet"></i> ${task.name} ${isFromSchedule}</div>
+                        <div class="task-details">
+                            <span><i class="fa-solid fa-calendar"></i> ${task.date}</span>
+                            <span><i class="fa-solid fa-clock"></i> ${task.time}</span>
+                            <span><i class="fa-solid fa-layer-group"></i> ${task.zone}</span>
+                            <span><i class="fa-solid fa-hourglass"></i> ${task.duration}min</span>
+                        </div>
+                    </div>
+                    ${!task.fromSchedule ? `<button class="task-delete-btn" onclick="deleteTask(${task.id})">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>` : ''}
+                `;
+                tasksList.appendChild(taskItem);
+            });
+        }
+        
+        function deleteTask(taskId) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                localStorage.setItem('irrigation_tasks', JSON.stringify(tasks));
+                renderCalendar();
+                loadTasks();
+                showNotification('Task deleted successfully!', 'success');
+            }
+        }
+        
+        // Bind calendar icon click
+        document.getElementById('tasks-toggle-card')?.addEventListener('click', openTasksCalendar);
+        document.getElementById('add-schedule-btn')?.addEventListener('click', openTasksCalendar);
+        
+        // Drag and Drop Functionality
+        let dragEnabled = false;
+        let draggedElement = null;
+        
+        function toggleDragMode() {
+            dragEnabled = !dragEnabled;
+            const toggleBtn = document.getElementById('dragToggleBtn');
+            const draggableCards = document.querySelectorAll('.sensor-card, .control-card, .chart-card, .status-card, .tasks-calendar-card');
+            
+            if (dragEnabled) {
+                toggleBtn.classList.add('active');
+                toggleBtn.style.background = 'rgba(0, 0, 0, 0.3)';
+                showNotification('Drag & Drop Mode Enabled - Rearrange your dashboard!', 'info');
+                
+                draggableCards.forEach(card => {
+                    card.setAttribute('draggable', 'true');
+                    card.classList.add('draggable-active');
+                    
+                    card.addEventListener('dragstart', handleDragStart);
+                    card.addEventListener('dragend', handleDragEnd);
+                    card.addEventListener('dragover', handleDragOver);
+                    card.addEventListener('drop', handleDrop);
+                    card.addEventListener('dragenter', handleDragEnter);
+                    card.addEventListener('dragleave', handleDragLeave);
+                });
+            } else {
+                toggleBtn.classList.remove('active');
+                toggleBtn.style.background = '';
+                showNotification('Drag & Drop Mode Disabled', 'info');
+                
+                draggableCards.forEach(card => {
+                    card.setAttribute('draggable', 'false');
+                    card.classList.remove('draggable-active', 'drag-over');
+                    
+                    card.removeEventListener('dragstart', handleDragStart);
+                    card.removeEventListener('dragend', handleDragEnd);
+                    card.removeEventListener('dragover', handleDragOver);
+                    card.removeEventListener('drop', handleDrop);
+                    card.removeEventListener('dragenter', handleDragEnter);
+                    card.removeEventListener('dragleave', handleDragLeave);
+                });
+            }
+        }
+        
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+        
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.drag-over').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+        }
+        
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+        
+        function handleDragEnter(e) {
+            if (this !== draggedElement) {
+                this.classList.add('drag-over');
+            }
+        }
+        
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+        
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            
+            if (draggedElement !== this) {
+                const parent = this.parentNode;
+                const draggedIndex = Array.from(parent.children).indexOf(draggedElement);
+                const targetIndex = Array.from(parent.children).indexOf(this);
+                
+                if (draggedIndex < targetIndex) {
+                    parent.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    parent.insertBefore(draggedElement, this);
+                }
+                
+                saveDashboardLayout();
+            }
+            
+            this.classList.remove('drag-over');
+            return false;
+        }
+        
+        function saveDashboardLayout() {
+            const layout = {};
+            
+            // Save sensor grid layout
+            const sensorGrid = document.querySelector('.sensor-grid');
+            if (sensorGrid) {
+                layout.sensorGrid = Array.from(sensorGrid.children).map(card => card.className);
+            }
+            
+            // Save control section layout
+            const controlSection = document.querySelector('.control-section-space');
+            if (controlSection) {
+                layout.controlSection = Array.from(controlSection.children).map(card => card.className);
+            }
+            
+            // Save charts grid layout
+            const chartsGrid = document.querySelector('.charts-grid-space');
+            if (chartsGrid) {
+                layout.chartsGrid = Array.from(chartsGrid.children).map(card => card.className);
+            }
+            
+            // Save status activity grid layout
+            const statusGrid = document.querySelector('.status-activity-grid');
+            if (statusGrid) {
+                layout.statusGrid = Array.from(statusGrid.children).map(card => card.className);
+            }
+            
+            localStorage.setItem('dashboard_layout', JSON.stringify(layout));
+            showNotification('Dashboard layout saved!', 'success');
+        }
+        
+        function loadDashboardLayout() {
+            const savedLayout = localStorage.getItem('dashboard_layout');
+            if (!savedLayout) return;
+            
+            try {
+                const layout = JSON.parse(savedLayout);
+                // Layout restoration logic can be added here if needed
+            } catch (e) {
+                console.error('Error loading dashboard layout:', e);
+            }
+        }
+        
+        // Bind drag toggle button
+        document.getElementById('dragToggleBtn')?.addEventListener('click', toggleDragMode);
+        
+        // Load saved layout on page load
+        loadDashboardLayout();
     </script>
 </body>
 </html>

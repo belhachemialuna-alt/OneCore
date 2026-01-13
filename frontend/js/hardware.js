@@ -11,18 +11,31 @@ let hardwareState = {
 
 let updateInterval;
 
+// Chart instances
+let cpuChart = null;
+let ramChart = null;
+
+// Chart data arrays (store last 60 data points)
+const maxDataPoints = 60;
+let cpuData = [];
+let ramData = [];
+let timeLabels = [];
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupMobileSidebar();
+    initializeCharts();
     loadHardwareStatus();
     loadSystemPerformance();
+    loadSystemStats();
     updateComponentLists();
     
-    // Start real-time monitoring (every 3 seconds)
+    // Start real-time monitoring (every 2 seconds)
     updateInterval = setInterval(() => {
         loadHardwareStatus();
         loadSystemPerformance();
-    }, 3000);
+        loadSystemStats();
+    }, 2000);
 });
 
 // Mobile Sidebar
@@ -156,117 +169,6 @@ function updateHardwareState(data) {
     hardwareState.pipes.main = {
         status: data.irrigation?.valve_open ? 'flowing' : 'idle'
     };
-} else {
-        // Default 3 zones
-        for (let i = 1; i <= 3; i++) {
-            hardwareState.valves[`zone-${i}`] = {
-                id: `zone-valve-${i}`,
-                name: `Zone ${i} Valve`,
-                status: 'offline',
-                description: 'Inactive'
-            };
-        }
-    }
-    
-    // Pressure sensor
-    hardwareState.sensors.pressure = {
-        id: 'pressure-sensor',
-        name: 'Pressure Sensor',
-        status: data.sensors ? 'online' : 'error',
-        description: data.sensors ? 'Monitoring' : 'No Data'
-    };
-    
-    // Soil sensors
-    for (let i = 1; i <= 3; i++) {
-        hardwareState.sensors[`soil-${i}`] = {
-            id: `soil-sensor-${i}`,
-            name: `Soil Moisture Sensor ${i}`,
-            status: data.sensors?.soil_moisture ? 'online' : 'warning',
-            description: data.sensors?.soil_moisture ? `${data.sensors.soil_moisture}%` : 'No Data'
-        };
-    }
-    
-    // Sprinklers status based on zones
-    if (data.zones && Array.isArray(data.zones)) {
-        data.zones.forEach((zone, index) => {
-            const zoneNum = index + 1;
-            hardwareState.system[`sprinkler-${zoneNum}`] = {
-                id: `sprinkler-${zoneNum}`,
-                name: `Sprinkler ${zoneNum}`,
-                status: zone.active ? 'online' : 'offline',
-                description: zone.active ? 'Spraying' : 'Idle'
-            };
-        });
-    } else {
-        for (let i = 1; i <= 3; i++) {
-            hardwareState.system[`sprinkler-${i}`] = {
-                id: `sprinkler-${i}`,
-                name: `Sprinkler ${i}`,
-                status: 'offline',
-                description: 'Idle'
-            };
-        }
-    }
-    
-    // System components
-    hardwareState.system.source = {
-        id: 'source-status',
-        name: 'Water Source',
-        status: 'online',
-        description: 'Connected'
-    };
-    
-    hardwareState.system.pump = {
-        id: 'pump-status',
-        name: 'Water Pump',
-        status: data.irrigation?.valve_open ? 'online' : 'offline',
-        description: data.irrigation?.valve_open ? 'Running' : 'Standby'
-    };
-    
-    hardwareState.system.filter = {
-        id: 'filter-status',
-        name: 'Water Filter',
-        status: 'online',
-        description: 'Clean'
-    };
-    
-    hardwareState.system.pi = {
-        id: 'pi-status',
-        name: 'Raspberry Pi',
-        status: 'online',
-        description: 'Operating'
-    };
-    
-    hardwareState.system.power = {
-        id: 'power-status',
-        name: 'Power Supply',
-        status: data.energy?.battery_percentage > 20 ? 'online' : 'warning',
-        description: `${data.energy?.battery_percentage || 0}%`
-    };
-    
-    hardwareState.system.wifi = {
-        id: 'wifi-status',
-        name: 'WiFi Network',
-        status: 'online',
-        description: 'Connected'
-    };
-    
-    // Pipes status (based on valve status)
-    const mainValveOpen = data.irrigation?.valve_open;
-    hardwareState.pipes = {
-        main: { status: mainValveOpen ? 'online' : 'offline', name: 'Main Supply Line' },
-        distribution: { status: mainValveOpen ? 'online' : 'offline', name: 'Distribution Network' }
-    };
-    
-    if (data.zones && Array.isArray(data.zones)) {
-        data.zones.forEach((zone, index) => {
-            const zoneNum = index + 1;
-            hardwareState.pipes[`zone-${zoneNum}`] = {
-                status: zone.active ? 'online' : 'offline',
-                name: `Zone ${zoneNum} Pipeline`
-            };
-        });
-    }
 }
 
 // Update SVG indicators based on hardware state
@@ -459,6 +361,231 @@ function setAllComponentsOffline() {
     updateSVGIndicators();
     updateComponentLists();
     updateSummaryCounters();
+}
+
+// Initialize Chart.js charts
+function initializeCharts() {
+    // CPU Chart
+    const cpuCtx = document.getElementById('cpuChart');
+    if (cpuCtx) {
+        cpuChart = new Chart(cpuCtx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'CPU Usage (%)',
+                    data: cpuData,
+                    borderColor: '#FF5722',
+                    backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#ffffff',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        display: false
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        callbacks: {
+                            label: function(context) {
+                                return 'CPU: ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // RAM Chart
+    const ramCtx = document.getElementById('ramChart');
+    if (ramCtx) {
+        ramChart = new Chart(ramCtx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'RAM Usage (%)',
+                    data: ramData,
+                    borderColor: '#2196F3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#ffffff',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        display: false
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        callbacks: {
+                            label: function(context) {
+                                return 'RAM: ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Load real system stats from /api/system endpoint
+async function loadSystemStats() {
+    try {
+        const response = await fetch(`${API_BASE}/system`);
+        const data = await response.json();
+        
+        if (data.cpu_percent !== undefined && data.mem_percent !== undefined) {
+            updateSystemStats(data);
+            updateCharts(data);
+        }
+    } catch (error) {
+        console.error('Error loading system stats:', error);
+    }
+}
+
+// Update system stats display
+function updateSystemStats(data) {
+    // CPU Updates
+    const cpuUsage = data.cpu_percent || 0;
+    const cpuCores = data.cpu_cores || 1;
+    const cpuFreq = data.cpu_freq || 0;
+    
+    document.getElementById('cpuUsage').textContent = cpuUsage.toFixed(1);
+    document.getElementById('cpuCores').textContent = `${cpuCores} Core${cpuCores > 1 ? 's' : ''}`;
+    document.getElementById('cpuFreq').textContent = cpuFreq > 0 ? `${cpuFreq} MHz` : 'N/A';
+    document.getElementById('cpuProgress').style.width = `${cpuUsage}%`;
+    
+    // Update CPU status based on usage
+    let cpuStatus = 'Normal';
+    const cpuProgress = document.getElementById('cpuProgress');
+    cpuProgress.className = 'performance-progress';
+    
+    if (cpuUsage >= 90) {
+        cpuStatus = 'Critical';
+        cpuProgress.classList.add('critical');
+    } else if (cpuUsage >= 70) {
+        cpuStatus = 'High';
+        cpuProgress.classList.add('high');
+    } else {
+        cpuProgress.classList.add('normal');
+    }
+    
+    document.getElementById('cpuStatus').textContent = cpuStatus;
+    
+    // RAM Updates
+    const ramUsage = data.mem_percent || 0;
+    const ramTotal = data.mem_total || 0;
+    const ramUsed = data.mem_used || 0;
+    
+    document.getElementById('ramUsage').textContent = ramUsage.toFixed(1);
+    document.getElementById('ramTotal').textContent = `${ramTotal.toFixed(1)} GB Total`;
+    document.getElementById('ramDetail').textContent = `${ramUsed.toFixed(2)} / ${ramTotal.toFixed(2)} GB`;
+    document.getElementById('ramProgress').style.width = `${ramUsage}%`;
+    
+    // Update RAM status based on usage
+    let ramStatus = 'Normal';
+    const ramProgress = document.getElementById('ramProgress');
+    ramProgress.className = 'performance-progress';
+    
+    if (ramUsage >= 90) {
+        ramStatus = 'Critical';
+        ramProgress.classList.add('critical');
+    } else if (ramUsage >= 70) {
+        ramStatus = 'High';
+        ramProgress.classList.add('high');
+    } else {
+        ramProgress.classList.add('normal');
+    }
+    
+    document.getElementById('ramStatus').textContent = ramStatus;
+}
+
+// Update charts with new data
+function updateCharts(data) {
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                    now.getMinutes().toString().padStart(2, '0') + ':' + 
+                    now.getSeconds().toString().padStart(2, '0');
+    
+    // Add new data points
+    cpuData.push(data.cpu_percent || 0);
+    ramData.push(data.mem_percent || 0);
+    timeLabels.push(timeStr);
+    
+    // Keep only last 60 data points
+    if (cpuData.length > maxDataPoints) {
+        cpuData.shift();
+        ramData.shift();
+        timeLabels.shift();
+    }
+    
+    // Update charts
+    if (cpuChart) {
+        cpuChart.update('none');
+    }
+    if (ramChart) {
+        ramChart.update('none');
+    }
 }
 
 // Load System Performance (CPU & RAM)

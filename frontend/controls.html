@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User & System Controls - BAYYTI-B1</title>
+    <title>User & System Controls - ElivateOne</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,8 @@
         <div class="loader-circle"></div>
     </div>
 
-    <!-- Sticky Red Header Bar -->
-    <header class="top-header sticky-header">
+    <!-- Red Header Bar -->
+    <header class="top-header">
         <div class="header-container">
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
                 <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -29,7 +29,13 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">User & System Controls <strong>BAYYTI-B1</strong></h1>
+                <h1 class="project-title">User & System Controls <strong>ElivateOne</strong></h1>
+                <div class="header-datetime" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
             </div>
             <div class="header-right">
                 <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
@@ -44,10 +50,10 @@
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
                 </button>
-                <a href="index.html" class="header-icon-btn" title="Dashboard">
-                    <i class="fa-solid fa-gauge"></i>
+                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
                 </a>
-                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
                 <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
@@ -65,6 +71,12 @@
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
                 </a>
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
                 <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
                 </button>
@@ -77,32 +89,35 @@
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
         <div class="sidebar-content">
             <div class="sidebar-header">
-                <h3>Menu</h3>
                 <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
                     <i class="fa-solid fa-times"></i>
                 </button>
             </div>
             <nav class="sidebar-nav">
-                <a href="index.html" class="sidebar-item">
-                    <i class="fa-solid fa-gauge"></i>
-                    <span>Dashboard</span>
+                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
                 </a>
-                <a href="analytics.html" class="sidebar-item">
+                <a href="analytics.html" class="sidebar-item" title="Analytics">
                     <i class="fa-solid fa-chart-line"></i>
-                    <span>Analytics</span>
                 </a>
-                <a href="emergency.html" class="sidebar-item">
+                <a href="emergency.html" class="sidebar-item" title="Emergency Controls">
                     <i class="fa-solid fa-fire-extinguisher"></i>
-                    <span>Emergency</span>
                 </a>
-                <a href="controls.html" class="sidebar-item active">
+                <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="sidebar-item active" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
-                    <span>Controls</span>
                 </a>
-                <a href="support.html" class="sidebar-item">
+                <a href="ai.html" class="sidebar-item" title="AI Model Testing">
+                    <i class="fa-solid fa-brain"></i>
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
-                    <span>Support</span>
                 </a>
+                <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
             </nav>
         </div>
     </div>
@@ -114,41 +129,30 @@
             <div class="page-title-icon">
                 <i class="fa-solid fa-sliders"></i>
             </div>
-            <h1 class="page-title">User & System Controls</h1>
-        </div>
-        
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="header-icon">
-                <i class="fa-solid fa-sliders"></i>
-            </div>
-            <div>
-                <h1 data-i18n="controls-page-title">User & System Controls</h1>
-                <p data-i18n="controls-page-desc">Manage users, configure system settings, and customize your BAYYTI-B1 experience</p>
-            </div>
+            <h1 class="page-title">Controls</h1>
         </div>
 
-        <!-- Control Tabs -->
-        <div class="control-tabs">
-            <button class="tab-btn active" data-tab="user">
+        <!-- Control Icon Navigation -->
+        <div class="control-icon-nav">
+            <button class="control-icon-btn active" data-tab="user" title="User Management">
                 <i class="fa-solid fa-user"></i>
-                <span data-i18n="tab-user">User Management</span>
+                <span>Users</span>
             </button>
-            <button class="tab-btn" data-tab="system">
+            <button class="control-icon-btn" data-tab="system" title="System Settings">
                 <i class="fa-solid fa-cog"></i>
-                <span data-i18n="tab-system">System Settings</span>
+                <span>System</span>
             </button>
-            <button class="tab-btn" data-tab="network">
+            <button class="control-icon-btn" data-tab="network" title="Network Settings">
                 <i class="fa-solid fa-wifi"></i>
-                <span data-i18n="tab-network">Network</span>
+                <span>Network</span>
             </button>
-            <button class="tab-btn" data-tab="irrigation">
+            <button class="control-icon-btn" data-tab="irrigation" title="Irrigation Settings">
                 <i class="fa-solid fa-droplet"></i>
-                <span data-i18n="tab-irrigation">Irrigation</span>
+                <span>Irrigation</span>
             </button>
-            <button class="tab-btn" data-tab="security">
+            <button class="control-icon-btn" data-tab="security" title="Security Settings">
                 <i class="fa-solid fa-shield-halved"></i>
-                <span data-i18n="tab-security">Security</span>
+                <span>Security</span>
             </button>
         </div>
 
@@ -654,7 +658,7 @@
             </div>
             <div class="footer-section">
                 <h4>System Status</h4>
-                <p>Device: <strong id="device-name">BAYYTI-B1</strong></p>
+                <p>Device: <strong id="device-name">ElivateOne</strong></p>
                 <p>Version: <strong id="system-version">1.0.0</strong></p>
                 <p>Status: <span class="status-online">● Online</span></p>
             </div>
@@ -679,6 +683,49 @@
                 }, 500);
             }
         });
+        
+        // Control Icon Navigation Functionality
+        document.querySelectorAll('.control-icon-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.control-icon-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show target tab content
+                const targetContent = document.getElementById('tab-' + targetTab);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+        
+        // Update Header DateTime
+        function updateHeaderDateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('header-time');
+            const dateElement = document.getElementById('header-date');
+            
+            if (timeElement && dateElement) {
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                timeElement.textContent = `${hours}:${minutes}`;
+                
+                const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                dateElement.textContent = now.toLocaleDateString('en-US', options);
+            }
+        }
+        
+        updateHeaderDateTime();
+        setInterval(updateHeaderDateTime, 60000);
     </script>
 </body>
 </html>

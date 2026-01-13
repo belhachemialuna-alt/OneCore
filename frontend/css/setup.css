@@ -86,16 +86,16 @@ body {
 .step-circle {
     width: 32px;
     height: 32px;
-    border-radius: 2px;
+    border-radius: 50%;
     background: rgba(255,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.4);
+    border: 2px solid rgba(255,255,255,0.5);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.875rem;
     font-weight: 600;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .progress-step.active .step-circle {
@@ -630,8 +630,9 @@ h1 {
 .summary-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
     border-bottom: 1px solid var(--border);
 }
 
@@ -639,9 +640,58 @@ h1 {
     border-bottom: none;
 }
 
-.summary-item i {
+.summary-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.summary-content i {
     font-size: 1.5rem;
     color: #505050;
+}
+
+.summary-content span {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.summary-status {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    animation: statusPop 0.4s ease-out;
+}
+
+.summary-status.success {
+    background: #000000;
+    color: #FFFFFF;
+}
+
+.summary-status.failure {
+    background: #000000;
+    color: #FFFFFF;
+}
+
+@keyframes statusPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .schedule-setup-card {

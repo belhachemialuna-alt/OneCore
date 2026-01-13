@@ -3,49 +3,13 @@
   "setup_completed": true,
   "wilaya": "",
   "timezone": "Africa/Algiers",
-  "zones": [
-    {
-      "id": 1,
-      "name": "Zone 1",
-      "crop_id": 1,
-      "soil_id": 1,
-      "auto_mode": false
-    },
-    {
-      "id": 2,
-      "name": "Zone 2",
-      "crop_id": 1,
-      "soil_id": 1,
-      "auto_mode": false
-    },
-    {
-      "id": 3,
-      "name": "Zone 3",
-      "crop_id": 1,
-      "soil_id": 1,
-      "auto_mode": false
-    },
-    {
-      "id": 4,
-      "name": "Zone 4",
-      "crop_id": 1,
-      "soil_id": 1,
-      "auto_mode": false
-    }
-  ],
+  "zones": [],
   "schedules": [
     {
       "name": "Morning Irrigation",
       "start_time": "06:00",
       "duration": 900,
-      "days_of_week": "Monday,Tuesday,Saturday,Sunday",
-      "enabled": true
-    },
-    {
-      "name": "Schedule 2",
-      "start_time": "18:00",
-      "duration": 900,
-      "days_of_week": "Thursday,Friday",
+      "days_of_week": "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
       "enabled": true
     }
   ]

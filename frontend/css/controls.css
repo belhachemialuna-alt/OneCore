@@ -347,46 +347,69 @@ body.rtl .language-dropdown {
     font-size: 1.1rem;
 }
 
-/* Control Tabs */
-.control-tabs {
+/* Control Icon Navigation */
+.control-icon-nav {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    justify-content: center;
     flex-wrap: wrap;
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: var(--shadow-sm);
 }
 
-.tab-btn {
-    padding: 0.75rem 1.5rem;
-    border: 2px solid var(--border);
-    background: white;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-family: 'Rubik', sans-serif;
+.control-icon-btn {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
 }
 
-.tab-btn:hover {
-    border-color: var(--primary-red);
-    color: var(--primary-red);
-    background: rgba(255, 0, 0, 0.05);
+.control-icon-btn i {
+    font-size: 1.75rem;
+    color: #000000;
+    transition: all 0.3s ease;
 }
 
-.tab-btn.active {
-    background: var(--primary-red);
-    border-color: var(--primary-red);
-    color: white;
+.control-icon-btn span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.3s ease;
 }
 
-/* Tab Content */
+.control-icon-btn:hover {
+    background: #f5f5f5;
+    border-color: #000000;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.control-icon-btn:hover i {
+    transform: scale(1.1);
+}
+
+.control-icon-btn.active {
+    background: #000000;
+    border-color: #000000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.control-icon-btn.active i,
+.control-icon-btn.active span {
+    color: #ffffff;
+}
+
 .tab-content {
     display: none;
 }
@@ -525,12 +548,12 @@ body.rtl .language-dropdown {
     box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
 }
 
-/* Toggle Switch */
+/* Toggle Switch - Professional Black Design */
 .toggle-switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 26px;
+    width: 56px;
+    height: 30px;
     flex-shrink: 0;
 }
 
@@ -547,34 +570,51 @@ body.rtl .language-dropdown {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 26px;
+    background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 30px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .toggle-slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-slider:hover {
+    background: linear-gradient(135deg, #d5d5d5 0%, #c5c5c5 100%);
 }
 
 input:checked + .toggle-slider {
-    background-color: var(--primary-red);
+    background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 input:checked + .toggle-slider:before {
-    transform: translateX(24px);
+    transform: translateX(26px);
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+input:checked + .toggle-slider:hover {
+    background: linear-gradient(135deg, #1a1a1a 0%, #3d3d3d 100%);
 }
 
 input:disabled + .toggle-slider {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+}
+
+input:disabled + .toggle-slider:hover {
+    background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
 }
 
 /* Buttons */

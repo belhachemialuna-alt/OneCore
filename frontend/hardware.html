@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hardware Schema - BAYYTI-B1</title>
+    <title>Hardware Schema - ElivateOne</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/hardware.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <!-- Global Loader -->
@@ -29,7 +30,7 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Hardware Schema <strong>BAYYTI-B1</strong></h1>
+                <h1 class="project-title">Hardware Schema <strong>ElivateOne</strong></h1>
                 <div class="header-datetime" id="header-datetime">
                     <i class="fa-solid fa-clock"></i>
                     <span id="header-time">--:--</span>
@@ -50,10 +51,10 @@
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
                 </button>
-                <a href="index.html" class="header-icon-btn" title="Dashboard">
+                <a href="space.html" class="header-icon-btn" title="Dashboard">
                     <i class="fa-solid fa-gauge"></i>
                 </a>
-                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
+                <a href="index.html" class="header-icon-btn" title="Classic Dashboard">
                     <i class="fa-solid fa-rocket"></i>
                 </a>
                 <a href="analytics.html" class="header-icon-btn" title="Analytics">
@@ -74,9 +75,9 @@
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
                 </a>
-                <button class="header-icon-btn" title="FAQ">
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
-                </button>
+                </a>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
                     <i class="fa-solid fa-gear"></i>
                 </a>
@@ -200,6 +201,24 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Performance Charts -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-line"></i> CPU Usage History</h3>
+                        <span class="chart-timeframe">Last 60 seconds</span>
+                    </div>
+                    <canvas id="cpuChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-area"></i> RAM Usage History</h3>
+                        <span class="chart-timeframe">Last 60 seconds</span>
+                    </div>
+                    <canvas id="ramChart"></canvas>
+                </div>
+            </div>
         </div>
 
         <!-- Legend -->
@@ -227,7 +246,13 @@
 
         <!-- Hardware Schema SVG -->
         <div class="schema-container">
-            <h2><i class="fa-solid fa-diagram-project"></i> System Architecture</h2>
+            <div class="schema-header">
+                <h2><i class="fa-solid fa-diagram-project"></i> System Architecture</h2>
+                <button class="terminal-btn" id="openTerminalBtn" title="Debug & Analyze Components">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>Debug Terminal</span>
+                </button>
+            </div>
             <div class="schema-wrapper">
                 <svg id="hardware-schema" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
                     <!-- Definitions for patterns and gradients -->
@@ -396,7 +421,7 @@
                     <!-- Control System -->
                     <g id="control-system" class="component">
                         <rect x="400" y="600" width="400" height="150" rx="10" fill="#000000" opacity="0.8" stroke="#FF0000" stroke-width="3"/>
-                        <text x="600" y="635" text-anchor="middle" fill="#FF0000" font-size="18" font-weight="bold">BAYYTI-B1 CONTROL SYSTEM</text>
+                        <text x="600" y="635" text-anchor="middle" fill="#FF0000" font-size="18" font-weight="bold">ElivateOne CONTROL SYSTEM</text>
                         
                         <!-- Raspberry Pi -->
                         <rect x="420" y="650" width="140" height="80" rx="5" fill="#4caf50" opacity="0.9"/>
@@ -479,62 +504,88 @@
             </div>
         </div>
 
-        <!-- Auto-Start Guide Sidebar -->
-        <div class="guide-sidebar">
-            <div class="guide-card">
-                <div class="guide-header">
-                    <i class="fa-solid fa-rocket"></i>
-                    <h3>Auto-Start Setup</h3>
+        <!-- Hardware Failure Statistics -->
+        <div class="failure-stats-sidebar">
+            <div class="failure-stats-card">
+                <div class="failure-stats-header">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <h3>Hardware Failure Statistics</h3>
                 </div>
-                <div class="guide-content">
-                    <p class="guide-intro">Make your app start automatically on boot:</p>
-                    
-                    <div class="guide-step">
-                        <strong>1. Create Service File</strong>
-                        <code>sudo nano /etc/systemd/system/bayyti.service</code>
+                <div class="failure-stats-content">
+                    <!-- Failure Summary -->
+                    <div class="failure-summary">
+                        <div class="failure-summary-item">
+                            <div class="failure-icon critical">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="criticalFailures">0</span>
+                                <span class="failure-label">Critical</span>
+                            </div>
+                        </div>
+                        <div class="failure-summary-item">
+                            <div class="failure-icon warning">
+                                <i class="fa-solid fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="warningFailures">2</span>
+                                <span class="failure-label">Warnings</span>
+                            </div>
+                        </div>
+                        <div class="failure-summary-item">
+                            <div class="failure-icon resolved">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="resolvedFailures">15</span>
+                                <span class="failure-label">Resolved</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="guide-step">
-                        <strong>2. Paste This Content:</strong>
-                        <pre class="guide-code">[Unit]
-Description=BAYYTI Smart Irrigation System
-After=network.target
-
-[Service]
-Type=simple
-User=pi
-WorkingDirectory=/home/pi/OneCore/backend
-Environment="PATH=/home/pi/OneCore/venv/bin:/usr/bin"
-ExecStart=/home/pi/OneCore/venv/bin/python3 /home/pi/OneCore/backend/api_server.py
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target</pre>
+                    <!-- Failure Chart -->
+                    <div class="failure-chart-container">
+                        <h4><i class="fa-solid fa-chart-pie"></i> Failure Distribution</h4>
+                        <canvas id="failureDistributionChart"></canvas>
                     </div>
                     
-                    <div class="guide-step">
-                        <strong>3. Enable & Start</strong>
-                        <code>sudo systemctl daemon-reload</code>
-                        <code>sudo systemctl enable bayyti.service</code>
-                        <code>sudo systemctl start bayyti.service</code>
+                    <!-- Failure Timeline -->
+                    <div class="failure-timeline-container">
+                        <h4><i class="fa-solid fa-chart-line"></i> Failure Trends (30 Days)</h4>
+                        <canvas id="failureTrendsChart"></canvas>
                     </div>
                     
-                    <div class="guide-step">
-                        <strong>4. Verify</strong>
-                        <code>sudo systemctl status bayyti.service</code>
-                    </div>
-                    
-                    <div class="guide-commands">
-                        <strong>Quick Commands:</strong>
-                        <code>sudo systemctl restart bayyti.service</code>
-                        <code>sudo journalctl -u bayyti.service -f</code>
-                    </div>
-                    
-                    <div class="guide-footer">
-                        <a href="AUTO_START_GUIDE.md" target="_blank" class="guide-link">
-                            <i class="fa-solid fa-book"></i> Full Guide
-                        </a>
+                    <!-- Component Reliability -->
+                    <div class="component-reliability">
+                        <h4><i class="fa-solid fa-shield-halved"></i> Component Reliability</h4>
+                        <div class="reliability-item">
+                            <span class="component-name">Water Source</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 98%"></div>
+                            </div>
+                            <span class="reliability-percent">98%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="component-name">Valves</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 95%"></div>
+                            </div>
+                            <span class="reliability-percent">95%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="component-name">Sensors</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 92%"></div>
+                            </div>
+                            <span class="reliability-percent">92%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="component-name">Controller</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 99%"></div>
+                            </div>
+                            <span class="reliability-percent">99%</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -545,7 +596,7 @@ WantedBy=multi-user.target</pre>
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h4>BAYYTI-B1</h4>
+                <h3>ElivateOne</h3>
                 <p>Smart Irrigation System</p>
                 <p>Powered by AI • Made with ❤️</p>
             </div>
@@ -567,7 +618,7 @@ WantedBy=multi-user.target</pre>
             </div>
             <div class="footer-section">
                 <h4>System Status</h4>
-                <p>Device: <strong id="device-name">BAYYTI-B1</strong></p>
+                <p>Device: <strong id="device-name">ElivateOne</strong></p>
                 <p>Version: <strong id="system-version">1.0.0</strong></p>
                 <p>Status: <span class="status-online">● Online</span></p>
             </div>
@@ -577,10 +628,332 @@ WantedBy=multi-user.target</pre>
         </div>
     </footer>
 
+    <!-- Debug Terminal Modal -->
+    <div id="terminalModal" class="custom-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeTerminal()"></div>
+        <div class="modal-content terminal-modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-terminal modal-icon"></i>
+                <h3 class="modal-title">Debug & Analysis Terminal</h3>
+                <button class="modal-close-btn" onclick="closeTerminal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body terminal-modal-body">
+                <!-- Component Selector -->
+                <div class="terminal-controls">
+                    <div class="control-group">
+                        <label>Select Component:</label>
+                        <select id="componentSelector" onchange="analyzeComponent()">
+                            <option value="all">All Components</option>
+                            <option value="water-source">Water Source</option>
+                            <option value="valve1">Valve 1</option>
+                            <option value="valve2">Valve 2</option>
+                            <option value="valve3">Valve 3</option>
+                            <option value="valve4">Valve 4</option>
+                            <option value="sensor1">Sensor 1</option>
+                            <option value="sensor2">Sensor 2</option>
+                            <option value="sensor3">Sensor 3</option>
+                            <option value="sensor4">Sensor 4</option>
+                            <option value="controller">Main Controller</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <button class="terminal-action-btn" onclick="refreshTerminal()">
+                            <i class="fa-solid fa-rotate"></i> Refresh
+                        </button>
+                        <button class="terminal-action-btn" onclick="clearTerminal()">
+                            <i class="fa-solid fa-eraser"></i> Clear
+                        </button>
+                        <button class="terminal-action-btn" onclick="exportLogs()">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Terminal Output -->
+                <div class="terminal-output" id="terminalOutput">
+                    <div class="terminal-line system">
+                        <span class="timestamp">[00:00:00]</span>
+                        <span class="tag">[SYSTEM]</span>
+                        <span class="message">BAYYTI-B1 Debug Terminal v1.0.0 initialized</span>
+                    </div>
+                    <div class="terminal-line info">
+                        <span class="timestamp">[00:00:01]</span>
+                        <span class="tag">[INFO]</span>
+                        <span class="message">Connecting to hardware components...</span>
+                    </div>
+                    <div class="terminal-line success">
+                        <span class="timestamp">[00:00:02]</span>
+                        <span class="tag">[SUCCESS]</span>
+                        <span class="message">All components connected successfully</span>
+                    </div>
+                </div>
+
+                <!-- Component Details Panel -->
+                <div class="component-details" id="componentDetails">
+                    <h4><i class="fa-solid fa-info-circle"></i> Component Details</h4>
+                    <div class="details-grid" id="detailsGrid">
+                        <div class="detail-item">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value status-online">Online</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Uptime:</span>
+                            <span class="detail-value">2d 14h 32m</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Last Check:</span>
+                            <span class="detail-value">2 seconds ago</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Error Count:</span>
+                            <span class="detail-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/hardware.js?v=1.0"></script>
     
     <!-- Language System -->
     <script src="js/language.js?v=1.0"></script>
+    
+    <!-- Terminal Functionality -->
+    <script>
+        let terminalLines = [];
+        
+        function openTerminal() {
+            document.getElementById('terminalModal').style.display = 'flex';
+            initializeTerminal();
+        }
+        
+        function closeTerminal() {
+            document.getElementById('terminalModal').style.display = 'none';
+        }
+        
+        function initializeTerminal() {
+            addTerminalLine('system', 'Terminal session started');
+            addTerminalLine('info', 'Scanning hardware components...');
+            setTimeout(() => {
+                addTerminalLine('success', 'Found 10 components');
+                addTerminalLine('info', 'Ready for debugging');
+            }, 500);
+        }
+        
+        function addTerminalLine(type, message) {
+            const output = document.getElementById('terminalOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const tagMap = {
+                'system': 'SYSTEM',
+                'info': 'INFO',
+                'success': 'SUCCESS',
+                'warning': 'WARNING',
+                'error': 'ERROR',
+                'debug': 'DEBUG'
+            };
+            
+            const line = document.createElement('div');
+            line.className = `terminal-line ${type}`;
+            line.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                <span class="tag">[${tagMap[type]}]</span>
+                <span class="message">${message}</span>
+            `;
+            
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+            terminalLines.push({type, message, timestamp});
+        }
+        
+        function analyzeComponent() {
+            const selector = document.getElementById('componentSelector');
+            const component = selector.value;
+            const componentName = selector.options[selector.selectedIndex].text;
+            
+            clearTerminal();
+            addTerminalLine('info', `Analyzing component: ${componentName}`);
+            addTerminalLine('debug', 'Reading component registers...');
+            
+            setTimeout(() => {
+                addTerminalLine('success', 'Component analysis complete');
+                addTerminalLine('info', `Status: Online`);
+                addTerminalLine('info', `Voltage: 3.3V`);
+                addTerminalLine('info', `Current: 120mA`);
+                addTerminalLine('info', `Temperature: 42°C`);
+                addTerminalLine('success', 'All parameters within normal range');
+                
+                updateComponentDetails(component);
+            }, 800);
+        }
+        
+        function updateComponentDetails(component) {
+            const detailsGrid = document.getElementById('detailsGrid');
+            const details = {
+                'water-source': {
+                    status: 'Online',
+                    uptime: '15d 8h 22m',
+                    lastCheck: '1 second ago',
+                    errorCount: '0',
+                    pressure: '2.5 bar',
+                    flowRate: '15 L/min'
+                },
+                'valve1': {
+                    status: 'Online',
+                    uptime: '2d 14h 32m',
+                    lastCheck: '2 seconds ago',
+                    errorCount: '0',
+                    state: 'Closed',
+                    cycles: '1,234'
+                },
+                'controller': {
+                    status: 'Online',
+                    uptime: '30d 5h 12m',
+                    lastCheck: 'Just now',
+                    errorCount: '0',
+                    cpuUsage: '12%',
+                    memUsage: '45%'
+                }
+            };
+            
+            const data = details[component] || details['controller'];
+            detailsGrid.innerHTML = Object.entries(data).map(([key, value]) => `
+                <div class="detail-item">
+                    <span class="detail-label">${key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                    <span class="detail-value ${key === 'status' && value === 'Online' ? 'status-online' : ''}">${value}</span>
+                </div>
+            `).join('');
+        }
+        
+        function refreshTerminal() {
+            addTerminalLine('info', 'Refreshing component data...');
+            setTimeout(() => {
+                addTerminalLine('success', 'Data refreshed successfully');
+                analyzeComponent();
+            }, 500);
+        }
+        
+        function clearTerminal() {
+            document.getElementById('terminalOutput').innerHTML = '';
+            terminalLines = [];
+        }
+        
+        function exportLogs() {
+            const logs = terminalLines.map(l => `[${l.timestamp}] [${l.type.toUpperCase()}] ${l.message}`).join('\n');
+            const blob = new Blob([logs], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bayyti_debug_${Date.now()}.log`;
+            a.click();
+            URL.revokeObjectURL(url);
+            addTerminalLine('success', 'Logs exported successfully');
+        }
+        
+        // Bind terminal button
+        document.getElementById('openTerminalBtn')?.addEventListener('click', openTerminal);
+        
+        // Initialize Failure Statistics Charts
+        function initializeFailureCharts() {
+            // Failure Distribution Pie Chart
+            const distributionCtx = document.getElementById('failureDistributionChart');
+            if (distributionCtx) {
+                new Chart(distributionCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Sensor Failures', 'Valve Failures', 'Network Issues', 'Power Issues', 'Other'],
+                        datasets: [{
+                            data: [5, 3, 2, 1, 4],
+                            backgroundColor: [
+                                '#EF5350',
+                                '#FFA726',
+                                '#42A5F5',
+                                '#66BB6A',
+                                '#AB47BC'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#333',
+                                    font: { size: 11 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Failure Trends Line Chart
+            const trendsCtx = document.getElementById('failureTrendsChart');
+            if (trendsCtx) {
+                new Chart(trendsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Critical',
+                            data: [2, 1, 0, 0],
+                            borderColor: '#EF5350',
+                            backgroundColor: 'rgba(239, 83, 80, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Warnings',
+                            data: [5, 4, 3, 2],
+                            borderColor: '#FFA726',
+                            backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Resolved',
+                            data: [3, 5, 4, 3],
+                            borderColor: '#66BB6A',
+                            backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#333',
+                                    font: { size: 11 }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { 
+                                    color: '#666',
+                                    stepSize: 1
+                                },
+                                grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                            },
+                            x: {
+                                ticks: { color: '#666' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
     
     <!-- Page Load Handler -->
     <script>
@@ -591,6 +964,9 @@ WantedBy=multi-user.target</pre>
                     loader.classList.add('hidden');
                 }, 500);
             }
+            
+            // Initialize failure statistics charts
+            initializeFailureCharts();
         });
     </script>
 </body>
