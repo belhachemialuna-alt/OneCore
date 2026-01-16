@@ -29,7 +29,7 @@
 }
 
 body {
-    font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-weight: 400; /* Regular */
     background: var(--bg-body);
     color: var(--text-dark);
@@ -65,11 +65,9 @@ body {
     max-width: 100%;
     width: 100%;
     margin: 0 auto;
-    padding: 0;
     display: flex;
     align-items: stretch;
     justify-content: space-between;
-    gap: 0;
     height: 48px;
     position: relative;
 }
@@ -85,6 +83,24 @@ body {
     gap: 0;
 }
 
+.header-center {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+}
+
 /* Desktop: Logo with black background, full height */
 @media (min-width: 769px) {
     .logo-setup-container {
@@ -94,7 +110,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 0;
+        margin-left: 0;
         min-width: 120px;
     }
 
@@ -103,7 +119,6 @@ body {
         max-height: 48px;
         width: auto;
         object-fit: contain;
-        padding: 0.25rem 0;
     }
 }
 
@@ -167,7 +182,7 @@ body {
 }
 
 .project-subtitle {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-weight: 300; /* Light */
     font-size: 0.95rem;
     opacity: 0.9;
@@ -726,7 +741,7 @@ body {
 }
 
 .sensor-label {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 0.875rem;
     font-weight: 300; /* Light */
     color: var(--text-light);
@@ -734,7 +749,7 @@ body {
 }
 
 .sensor-value {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 1.75rem;
     font-weight: 700; /* Bold */
     color: var(--text-dark);
@@ -742,7 +757,7 @@ body {
 }
 
 .sensor-unit {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-weight: 300; /* Light */
     font-size: 0.875rem;
     color: var(--text-light);
@@ -751,7 +766,7 @@ body {
 }
 
 .sensor-status {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-weight: 400; /* Regular */
     font-size: 0.875rem;
     color: var(--success);
@@ -790,7 +805,7 @@ body {
 }
 
 .card-header h3 {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 1rem;
     font-weight: 700; /* Bold */
     display: flex;
@@ -827,7 +842,7 @@ body {
 }
 
 .btn {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 12px;
@@ -957,7 +972,7 @@ body {
 }
 
 .zones-section h2 {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-weight: 700; /* Bold */
     font-size: 1.5rem;
     margin-bottom: 1rem;
@@ -1427,89 +1442,77 @@ body {
     overflow-y: auto;
 }
 
-/* Clean Black Footer */
+/* Clean Black Footer - Single Bar */
 .footer {
     background: #000000;
     color: #FFFFFF;
-    padding: 2rem 1.5rem 1rem;
+    padding: 1rem 1.5rem;
     margin-top: auto;
     width: 100%;
+    position: relative;
+    z-index: 1;
+    border-top: 2px solid #FF0000;
 }
 
 .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid #333333;
+    display: none;
 }
 
 .footer-description {
-    max-width: 800px;
-    text-align: center;
+    display: none;
 }
 
 .footer-description h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 1rem 0;
-    color: white;
+    display: none;
 }
 
 .footer-description p {
-    margin: 0;
-    color: #999;
-    line-height: 1.6;
-    font-size: 0.95rem;
+    display: none;
 }
 
 .footer-info h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #FF0000;
+    display: none;
 }
 
 .footer-info p {
-    font-size: 0.875rem;
-    color: #CCCCCC;
+    display: none;
 }
 
 .footer-links {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    display: none;
 }
 
 .footer-links a {
-    color: #CCCCCC;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s;
+    display: none;
 }
 
 .footer-links a:hover {
-    color: #FF0000;
+    display: none;
 }
 
 .footer-status p {
-    font-size: 0.9rem;
-    color: #CCCCCC;
+    display: none;
 }
 
 .footer-status strong {
-    color: #FFFFFF;
+    display: none;
 }
 
 .footer-bottom {
     max-width: 1200px;
     margin: 0 auto;
-    padding-top: 1rem;
+    padding: 0;
     text-align: center;
     color: #999999;
     font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.footer-bottom p {
+    margin: 0;
 }
 
 .status-online {
@@ -1618,7 +1621,7 @@ body {
 }
 
 .loader-text {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 1rem;
     font-weight: 400;
     color: #FFFFFF;
@@ -2605,7 +2608,7 @@ body.rtl .stat-info {
     background: transparent;
     border: none;
     border-left: 4px solid transparent;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
 }
 
 .sidebar-item i {

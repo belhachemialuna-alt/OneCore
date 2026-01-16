@@ -29,7 +29,7 @@
 }
 
 body {
-    font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-weight: 400;
     background: var(--bg-body);
     color: var(--text-dark);
@@ -133,7 +133,7 @@ body {
 }
 
 .project-title {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 1.25rem;
     font-weight: 300;
     margin: 0;
@@ -1267,7 +1267,7 @@ body {
 }
 
 .loader-text {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 1rem;
     font-weight: 400;
     color: #FFFFFF;
@@ -1695,7 +1695,7 @@ body.rtl .language-dropdown {
     background: transparent;
     border: none;
     border-left: 4px solid transparent;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Mulish', sans-serif;
 }
 
 .sidebar-item i {

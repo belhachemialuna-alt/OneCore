@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, send_from_directory, make_response
 from flask_cors import CORS
 import os
+import sys
 import json
 from datetime import datetime
 from database import (init_database, get_recent_sensor_data, get_recent_logs, 
@@ -14,8 +15,22 @@ from sensor_service import SensorService
 from system_monitor import SystemMonitor
 from system_stats import get_system_stats
 
-app = Flask(__name__, static_folder='../frontend')
+# Use absolute path for static folder to avoid path issues
+static_folder_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+app = Flask(__name__, static_folder=static_folder_path)
 CORS(app)
+
+# Debug: Print static folder configuration
+print(f"\n{'='*60}")
+print(f"STATIC FOLDER CONFIGURATION")
+print(f"{'='*60}")
+print(f"Static folder path: {app.static_folder}")
+print(f"Static folder exists: {os.path.exists(app.static_folder)}")
+if os.path.exists(app.static_folder):
+    files = os.listdir(app.static_folder)
+    print(f"Files in static folder: {len(files)} files")
+    print(f"HTML files: {[f for f in files if f.endswith('.html')]}")
+print(f"{'='*60}\n")
 
 init_database()
 
@@ -27,6 +42,15 @@ irrigation_service = IrrigationService()
 sensor_service = SensorService()
 ai_service = AIDecisionService(irrigation_service, sensor_service)
 system_monitor = SystemMonitor()
+
+# Import device identity module for device ID endpoints
+try:
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'device'))
+    from device import identity as device_identity
+    print("✓ Device identity module loaded")
+except Exception as e:
+    print(f"⚠ Device identity module failed to load: {e}")
+    device_identity = None
 
 # Disable caching for all responses
 @app.after_request
@@ -41,16 +65,135 @@ def favicon():
     """Serve favicon with correct MIME type"""
     return send_from_directory(app.static_folder, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+# Device ID Endpoints
+@app.route('/device-id')
+def get_device_id():
+    """Get device ID and registration status"""
+    if device_identity is None:
+        return jsonify({
+            "success": False,
+            "error": "Device identity module not available"
+        }), 500
+    
+    try:
+        device_id = device_identity.get_device_id()
+        is_registered = device_identity.is_registered()
+        identity_data = device_identity.load_identity()
+        
+        return jsonify({
+            "success": True,
+            "deviceId": device_id,
+            "registered": is_registered,
+            "deviceName": identity_data.get('deviceName'),
+            "timestamp": datetime.utcnow().isoformat() + 'Z'
+        })
+    except Exception as e:
+        print(f"ERROR in /device-id: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route('/device-register', methods=['POST'])
+def register_device():
+    """Update device registration information"""
+    if device_identity is None:
+        return jsonify({
+            "success": False,
+            "error": "Device identity module not available"
+        }), 500
+    
+    try:
+        data = request.get_json()
+        api_key = data.get('apiKey')
+        device_name = data.get('deviceName')
+        owner_id = data.get('ownerId')
+        
+        if api_key:
+            device_identity.update_api_key(api_key)
+        if device_name:
+            device_identity.update_device_name(device_name)
+        if owner_id:
+            device_identity.update_owner_id(owner_id)
+        
+        return jsonify({
+            "success": True,
+            "message": "Device registration updated",
+            "registered": device_identity.is_registered()
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route('/device-unregister', methods=['POST'])
+def unregister_device():
+    """Reset device registration"""
+    if device_identity is None:
+        return jsonify({
+            "success": False,
+            "error": "Device identity module not available"
+        }), 500
+    
+    try:
+        device_identity.reset_registration()
+        return jsonify({
+            "success": True,
+            "message": "Device registration reset"
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
 @app.route('/')
 def index():
-    # Check if setup is completed
-    if not controller.system_config.get('setup_completed', False):
-        return send_from_directory(app.static_folder, 'setup.html')
-    return send_from_directory(app.static_folder, 'space.html')
+    try:
+        setup_completed = controller.system_config.get('setup_completed', False)
+        print(f"\n{'='*60}")
+        print(f"REQUEST: / (root)")
+        print(f"Setup completed: {setup_completed}")
+        print(f"Static folder: {app.static_folder}")
+        
+        if not setup_completed:
+            file_to_serve = 'setup.html'
+        else:
+            file_to_serve = 'space.html'
+        
+        file_path = os.path.join(app.static_folder, file_to_serve)
+        print(f"Serving: {file_to_serve}")
+        print(f"Full path: {file_path}")
+        print(f"File exists: {os.path.exists(file_path)}")
+        print(f"{'='*60}\n")
+        
+        return send_from_directory(app.static_folder, file_to_serve)
+    except Exception as e:
+        print(f"ERROR in index(): {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory(app.static_folder, path)
+    try:
+        print(f"\n{'='*60}")
+        print(f"REQUEST: /{path}")
+        print(f"Static folder: {app.static_folder}")
+        file_path = os.path.join(app.static_folder, path)
+        print(f"Full path: {file_path}")
+        print(f"File exists: {os.path.exists(file_path)}")
+        print(f"{'='*60}\n")
+        
+        return send_from_directory(app.static_folder, path)
+    except Exception as e:
+        print(f"ERROR serving {path}: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e), "path": path}), 404
 
 @app.route("/api/status")
 def status():
@@ -795,7 +938,17 @@ def server_error(e):
     }), 500
 
 if __name__ == "__main__":
+    print("=" * 60)
     print(f"Starting {DEVICE_NAME} API Server v{API_VERSION}")
-    print("API Endpoints available at http://localhost:5000/api/")
-    print("Dashboard available at http://localhost:5000/")
+    print("=" * 60)
+    if device_identity:
+        print(f"✓ Device ID: {device_identity.get_device_id()}")
+        print(f"✓ Registered: {device_identity.is_registered()}")
+    print("-" * 60)
+    print("Dashboard:        http://localhost:5000/")
+    print("Device Link:      http://localhost:5000/device-link.html")
+    print("Hardware:         http://localhost:5000/hardware.html")
+    print("API Endpoints:    http://localhost:5000/api/")
+    print("Device ID:        http://localhost:5000/device-id")
+    print("=" * 60)
     app.run(host="0.0.0.0", port=5000, debug=True)

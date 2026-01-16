@@ -23,7 +23,7 @@
 }
 
 body {
-    font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 400;
     background: var(--light-grey);
     color: var(--text-dark);
@@ -227,10 +227,19 @@ body {
 .page-title-section {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
+    gap: 1.5rem;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 3px solid #000000;
+    flex-wrap: wrap;
+}
+
+.page-title-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
 }
 
 .page-title-icon {
@@ -246,11 +255,89 @@ body {
     flex-shrink: 0;
 }
 
+.page-title-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.page-title-info h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    color: #000000;
+}
+
 .page-title {
     font-size: 1.75rem;
     font-weight: 700;
     margin: 0;
     color: #000000;
+}
+
+/* Device ID Container */
+.device-id-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8f9fa;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.device-id-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.device-id-value {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #000000;
+    background: #ffffff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.copy-btn {
+    background: #000000;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.copy-btn:hover {
+    background: #333333;
+    transform: scale(1.05);
+}
+
+.copy-btn:active {
+    transform: scale(0.95);
+}
+
+.copy-btn i {
+    pointer-events: none;
+}
+
+/* Summary Items */
+.summary-items {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .content-grid {

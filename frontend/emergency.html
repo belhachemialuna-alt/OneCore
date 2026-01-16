@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/emergency.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
@@ -15,7 +15,10 @@
 <body>
     <!-- Global Loader -->
     <div class="global-loader" id="globalLoader">
-        <div class="loader-circle"></div>
+        <div class="loader-content">
+            <div class="loader-icon"></div>
+            <div class="loader-text">Loading...</div>
+        </div>
     </div>
 
     <!-- Red Header Bar -->
@@ -26,11 +29,17 @@
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    <img src="logosetup.png" alt="ElivateOne Logo" class="logo-setup-image">
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Emergency Controls <strong>BAYYTI-B1</strong></h1>
+                <h1 class="project-title">Emergency Controls <strong>ElivateOne</strong></h1>
+                <div class="header-datetime" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
             </div>
             <div class="header-right">
                 <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
@@ -51,7 +60,7 @@
                 <a href="analytics.html" class="header-icon-btn" title="Analytics">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
-                <a href="emergency.html" class="header-icon-btn emergency-active" title="Emergency Controls">
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
@@ -65,6 +74,12 @@
                 </a>
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -201,6 +216,9 @@
                     <button class="chart-btn" data-range="6h">6 Hours</button>
                     <button class="chart-btn" data-range="24h">24 Hours</button>
                     <button class="chart-btn" data-range="7d">7 Days</button>
+                    <button class="chart-export-btn" onclick="exportChartToPDF('valveTimelineChart', 'Valve_Operation_Timeline')" title="Export to PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
                 </div>
                 <canvas id="valveTimelineChart"></canvas>
             </div>
@@ -209,22 +227,42 @@
         <!-- Detailed Operation Charts -->
         <section class="charts-grid">
             <div class="chart-card">
-                <h3><i class="fa-solid fa-chart-area"></i> Pressure History</h3>
+                <div class="chart-header-with-export">
+                    <h3><i class="fa-solid fa-chart-area"></i> Pressure History</h3>
+                    <button class="chart-export-btn" onclick="exportChartToPDF('pressureHistoryChart', 'Pressure_History')" title="Export to PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
+                </div>
                 <canvas id="pressureHistoryChart"></canvas>
             </div>
 
             <div class="chart-card">
-                <h3><i class="fa-solid fa-chart-line"></i> Flow Rate History</h3>
+                <div class="chart-header-with-export">
+                    <h3><i class="fa-solid fa-chart-line"></i> Flow Rate History</h3>
+                    <button class="chart-export-btn" onclick="exportChartToPDF('flowHistoryChart', 'Flow_Rate_History')" title="Export to PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
+                </div>
                 <canvas id="flowHistoryChart"></canvas>
             </div>
 
             <div class="chart-card">
-                <h3><i class="fa-solid fa-clock"></i> Daily Operation Summary</h3>
+                <div class="chart-header-with-export">
+                    <h3><i class="fa-solid fa-clock"></i> Daily Operation Summary</h3>
+                    <button class="chart-export-btn" onclick="exportChartToPDF('dailySummaryChart', 'Daily_Operation_Summary')" title="Export to PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
+                </div>
                 <canvas id="dailySummaryChart"></canvas>
             </div>
 
             <div class="chart-card">
-                <h3><i class="fa-solid fa-chart-pie"></i> Operation Status</h3>
+                <div class="chart-header-with-export">
+                    <h3><i class="fa-solid fa-chart-pie"></i> Operation Status</h3>
+                    <button class="chart-export-btn" onclick="exportChartToPDF('statusPieChart', 'Operation_Status')" title="Export to PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
+                </div>
                 <canvas id="statusPieChart"></canvas>
             </div>
         </section>

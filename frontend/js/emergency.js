@@ -1,5 +1,5 @@
-// BAYYTI-B1 Emergency Controls
-const API_BASE = 'http://localhost:5000/api';
+// ElivateOne Emergency Controls
+const API_BASE = window.location.origin + '/api';
 
 // State management
 let alerts = [];
@@ -11,16 +11,25 @@ let alertCheckInterval;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    // Set Chart.js global defaults for white/grey theme
+    Chart.defaults.color = '#212529';
+    Chart.defaults.borderColor = '#E0E0E0';
+    Chart.defaults.backgroundColor = '#FFFFFF';
+    Chart.defaults.plugins.legend.labels.color = '#212529';
+    Chart.defaults.scale.grid.color = 'rgba(0, 0, 0, 0.05)';
+    
     setupMobileSidebar();
     setupAlertSystem();
     setupNotificationSystem();
     setupValveControls();
     initializeCharts();
     loadSystemData();
+    updateHeaderDateTime();
     
     // Start real-time updates
     updateInterval = setInterval(loadSystemData, 5000);
     alertCheckInterval = setInterval(checkForAlerts, 3000);
+    setInterval(updateHeaderDateTime, 1000);
 });
 
 // Mobile Sidebar
@@ -634,8 +643,11 @@ function initValveTimelineChart() {
                     title: {
                         display: true,
                         text: 'Time',
-                        font: { weight: 'bold' }
-                    }
+                        font: { weight: 'bold' },
+                        color: '#212529'
+                    },
+                    ticks: { color: '#212529' },
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
                 },
                 y: {
                     stacked: true,
@@ -644,23 +656,28 @@ function initValveTimelineChart() {
                     ticks: {
                         callback: function(value) {
                             return value === 1 ? 'Active' : '';
-                        }
+                        },
+                        color: '#212529'
                     },
                     title: {
                         display: true,
                         text: 'Valve Status',
-                        font: { weight: 'bold' }
-                    }
+                        font: { weight: 'bold' },
+                        color: '#212529'
+                    },
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
                 }
             },
             plugins: {
                 legend: {
-                    position: 'top'
+                    position: 'top',
+                    labels: { color: '#212529' }
                 },
                 title: {
                     display: true,
                     text: 'Last 24 Hours Valve Operation History',
-                    font: { size: 16, weight: 'bold' }
+                    font: { size: 16, weight: 'bold' },
+                    color: '#212529'
                 },
                 tooltip: {
                     callbacks: {
@@ -998,8 +1015,73 @@ function hideLoader() {
     if (loader) loader.classList.remove('active');
 }
 
+// PDF Export Function
+function exportChartToPDF(chartId, filename) {
+    const canvas = document.getElementById(chartId);
+    if (!canvas) {
+        console.error('Chart not found:', chartId);
+        return;
+    }
+    
+    // Get chart image as data URL
+    const imgData = canvas.toDataURL('image/png', 1.0);
+    
+    // Create a temporary link to download
+    const link = document.createElement('a');
+    link.download = `${filename}_${new Date().toISOString().split('T')[0]}.png`;
+    link.href = imgData;
+    link.click();
+    
+    // Show success notification
+    showNotification('Chart exported successfully!', 'success');
+}
+
+function showNotification(message, type = 'info') {
+    // Simple notification - you can enhance this
+    const notification = document.createElement('div');
+    notification.className = `export-notification ${type}`;
+    notification.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${message}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: ${type === 'success' ? '#4CAF50' : '#2196F3'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Update Header DateTime
+function updateHeaderDateTime() {
+    const now = new Date();
+    const timeEl = document.getElementById('header-time');
+    const dateEl = document.getElementById('header-date');
+    
+    if (timeEl) {
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeEl.textContent = `${hours}:${minutes}`;
+    }
+    
+    if (dateEl) {
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        dateEl.textContent = now.toLocaleDateString('en-US', options);
+    }
+}
+
 // Export functions
 window.closeAlertPanel = closeAlertPanel;
 window.closeNotificationPanel = closeNotificationPanel;
 window.showLoader = showLoader;
 window.hideLoader = hideLoader;
+window.exportChartToPDF = exportChartToPDF;

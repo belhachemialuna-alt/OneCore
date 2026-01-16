@@ -207,7 +207,7 @@ function addSchedule() {
 
 async function completeSetup() {
     const config = {
-        device_name: 'BAYYTI-B1',
+        device_name: 'ElivateOne',
         setup_completed: true,
         wilaya: document.getElementById('wilaya-select').value,
         timezone: document.getElementById('timezone-select').value,
@@ -285,8 +285,8 @@ async function completeSetup() {
     }
     
     // Also save to localStorage as backup
-    localStorage.setItem('bayyti_setup_complete', 'true');
-    localStorage.setItem('bayyti_config', JSON.stringify(config));
+    localStorage.setItem('elivate_setup_complete', 'true');
+    localStorage.setItem('elivate_config', JSON.stringify(config));
     
     document.getElementById('step-5').style.display = 'none';
     document.getElementById('step-complete').style.display = 'block';

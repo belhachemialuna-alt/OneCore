@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Link & Debug - ElivateOne</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Mulish', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge.loading {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-badge i {
+            animation: spin 1s linear infinite;
+        }
+
+        .status-badge.success i,
+        .status-badge.error i {
+            animation: none;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f9fafb;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-family: 'Courier New', monospace;
+            color: #111827;
+            font-size: 0.9rem;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .info-value.success {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .info-value.error {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .device-id-display {
+            background: #1f2937;
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #4b5563;
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+        }
+
+        .debug-log {
+            background: #1f2937;
+            color: #d1d5db;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+
+        .debug-log .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .log-entry .timestamp {
+            color: #9ca3af;
+        }
+
+        .log-entry.info {
+            color: #60a5fa;
+        }
+
+        .log-entry.success {
+            color: #34d399;
+        }
+
+        .log-entry.error {
+            color: #f87171;
+        }
+
+        .log-entry.warning {
+            color: #fbbf24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .connection-test {
+            margin-top: 1rem;
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #f9fafb;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .test-icon.pending {
+            color: #9ca3af;
+        }
+
+        .test-icon.testing {
+            color: #f59e0b;
+        }
+
+        .test-icon.success {
+            color: #10b981;
+        }
+
+        .test-icon.error {
+            color: #ef4444;
+        }
+
+        .test-label {
+            flex: 1;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .test-result {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fa-solid fa-link"></i> Device Link & Debug</h1>
+            <p>Real-time device connection testing and debugging</p>
+        </div>
+
+        <div class="grid">
+            <!-- Device Identity Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-fingerprint"></i>
+                    <h2>Device Identity</h2>
+                </div>
+                <div class="status-badge loading" id="deviceStatus">
+                    <i class="fa-solid fa-spinner"></i>
+                    <span>Checking...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Device ID:</span>
+                    <span class="info-value" id="deviceIdShort">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Registered:</span>
+                    <span class="info-value" id="registeredStatus">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">API Key:</span>
+                    <span class="info-value" id="apiKeyStatus">-</span>
+                </div>
+                <div class="device-id-display" id="deviceIdFull" style="display: none;">
+                    Loading...
+                    <button class="copy-btn" onclick="copyDeviceId()">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cloud Connection Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-cloud"></i>
+                    <h2>Cloud Connection</h2>
+                </div>
+                <div class="status-badge loading" id="cloudStatus">
+                    <i class="fa-solid fa-spinner"></i>
+                    <span>Testing...</span>
+                </div>
+                <div class="connection-test">
+                    <div class="test-item">
+                        <div class="test-icon pending" id="test1Icon">
+                            <i class="fa-solid fa-circle"></i>
+                        </div>
+                        <span class="test-label">Local API (Port 5000)</span>
+                        <span class="test-result" id="test1Result">-</span>
+                    </div>
+                    <div class="test-item">
+                        <div class="test-icon pending" id="test2Icon">
+                            <i class="fa-solid fa-circle"></i>
+                        </div>
+                        <span class="test-label">Next.js API (Port 3000)</span>
+                        <span class="test-result" id="test2Result">-</span>
+                    </div>
+                    <div class="test-item">
+                        <div class="test-icon pending" id="test3Icon">
+                            <i class="fa-solid fa-circle"></i>
+                        </div>
+                        <span class="test-label">Parse Server</span>
+                        <span class="test-result" id="test3Result">-</span>
+                    </div>
+                    <div class="test-item">
+                        <div class="test-icon pending" id="test4Icon">
+                            <i class="fa-solid fa-circle"></i>
+                        </div>
+                        <span class="test-label">Device Registration</span>
+                        <span class="test-result" id="test4Result">-</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Network Configuration Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <h2>Network Configuration</h2>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Environment:</span>
+                    <span class="info-value" id="envMode">cloud</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Device URL:</span>
+                    <span class="info-value" id="deviceUrl">http://localhost:5000</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">VPS URL:</span>
+                    <span class="info-value" id="vpsUrl">http://192.168.1.6:3000</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Raspberry Pi:</span>
+                    <span class="info-value">192.168.137.193:5000</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="runTests()">
+                        <i class="fa-solid fa-rotate"></i>
+                        Re-test Connection
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h2>Quick Actions</h2>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.location.href='hardware.html'">
+                        <i class="fa-solid fa-microchip"></i>
+                        Hardware
+                    </button>
+                    <button class="btn btn-primary" onclick="window.location.href='device-pairing.html'">
+                        <i class="fa-solid fa-link"></i>
+                        Pairing
+                    </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="window.location.href='space.html'">
+                        <i class="fa-solid fa-gauge"></i>
+                        Dashboard
+                    </button>
+                    <button class="btn btn-secondary" onclick="generateNewId()">
+                        <i class="fa-solid fa-refresh"></i>
+                        Reset ID
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Log Card (Full Width) -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-bug"></i>
+                <h2>Debug Log</h2>
+            </div>
+            <div class="debug-log" id="debugLog">
+                <div class="log-entry info">
+                    <span class="timestamp">[00:00:00]</span> Initializing device link system...
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="clearLog()">
+                    <i class="fa-solid fa-trash"></i>
+                    Clear Log
+                </button>
+                <button class="btn btn-secondary" onclick="exportLog()">
+                    <i class="fa-solid fa-download"></i>
+                    Export Log
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const ENVIRONMENT = 'cloud'; // 'local' or 'cloud'
+        const DEVICE_URL = ENVIRONMENT === 'cloud' ? 'http://localhost:5000' : 'http://192.168.137.193:5000';
+        const VPS_URL = ENVIRONMENT === 'cloud' ? 'http://192.168.1.6:3000' : 'http://192.168.1.6:3000';
+
+        let deviceData = null;
+        let testResults = {
+            localApi: false,
+            nextjs: false,
+            parse: false,
+            registration: false
+        };
+
+        // Update UI with config
+        document.getElementById('envMode').textContent = ENVIRONMENT;
+        document.getElementById('deviceUrl').textContent = DEVICE_URL;
+        document.getElementById('vpsUrl').textContent = VPS_URL;
+
+        // Logging function
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Copy Device ID
+        function copyDeviceId() {
+            const deviceId = document.getElementById('deviceIdFull').textContent.trim();
+            navigator.clipboard.writeText(deviceId).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                btn.classList.add('copied');
+                addLog('Device ID copied to clipboard', 'success');
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Clear log
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '';
+            addLog('Log cleared', 'info');
+        }
+
+        // Export log
+        function exportLog() {
+            const log = document.getElementById('debugLog').innerText;
+            const blob = new Blob([log], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `device-link-debug-${Date.now()}.log`;
+            a.click();
+            URL.revokeObjectURL(url);
+            addLog('Log exported successfully', 'success');
+        }
+
+        // Update test icon
+        function updateTestIcon(testNum, status) {
+            const icon = document.getElementById(`test${testNum}Icon`);
+            const result = document.getElementById(`test${testNum}Result`);
+            icon.className = `test-icon ${status}`;
+            
+            if (status === 'testing') {
+                icon.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            } else if (status === 'success') {
+                icon.innerHTML = '<i class="fa-solid fa-check-circle"></i>';
+                result.textContent = 'OK';
+                result.style.color = '#10b981';
+            } else if (status === 'error') {
+                icon.innerHTML = '<i class="fa-solid fa-times-circle"></i>';
+                result.textContent = 'Failed';
+                result.style.color = '#ef4444';
+            }
+        }
+
+        // Update progress
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        // Test 1: Local API
+        async function testLocalApi() {
+            addLog('Testing local API connection...', 'info');
+            updateTestIcon(1, 'testing');
+            
+            try {
+                const response = await fetch(`${DEVICE_URL}/device-id`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.deviceId) {
+                        deviceData = data;
+                        updateTestIcon(1, 'success');
+                        testResults.localApi = true;
+                        addLog(`✓ Local API connected: ${DEVICE_URL}`, 'success');
+                        
+                        // Update device info
+                        document.getElementById('deviceIdShort').textContent = data.deviceId.substring(0, 16) + '...';
+                        document.getElementById('deviceIdFull').textContent = data.deviceId;
+                        document.getElementById('deviceIdFull').style.display = 'block';
+                        document.getElementById('registeredStatus').textContent = data.registered ? 'Yes' : 'No';
+                        document.getElementById('registeredStatus').className = data.registered ? 'info-value success' : 'info-value error';
+                        document.getElementById('apiKeyStatus').textContent = data.registered ? 'Present' : 'Not set';
+                        document.getElementById('apiKeyStatus').className = data.registered ? 'info-value success' : 'info-value error';
+                        
+                        // Update device status badge
+                        const deviceStatus = document.getElementById('deviceStatus');
+                        deviceStatus.className = 'status-badge success';
+                        deviceStatus.innerHTML = '<i class="fa-solid fa-check-circle"></i><span>Connected</span>';
+                        
+                        return true;
+                    }
+                }
+                throw new Error('Invalid response from local API');
+            } catch (error) {
+                updateTestIcon(1, 'error');
+                testResults.localApi = false;
+                addLog(`✗ Local API failed: ${error.message}`, 'error');
+                addLog('Make sure device service is running on port 5000', 'warning');
+                
+                // Update device status badge
+                const deviceStatus = document.getElementById('deviceStatus');
+                deviceStatus.className = 'status-badge error';
+                deviceStatus.innerHTML = '<i class="fa-solid fa-times-circle"></i><span>Not Running</span>';
+                
+                return false;
+            }
+        }
+
+        // Test 2: Next.js API
+        async function testNextJs() {
+            addLog('Testing Next.js API connection...', 'info');
+            updateTestIcon(2, 'testing');
+            
+            try {
+                const response = await fetch(`${VPS_URL}/api/health`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    updateTestIcon(2, 'success');
+                    testResults.nextjs = true;
+                    addLog(`✓ Next.js API connected: ${VPS_URL}`, 'success');
+                    return true;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                updateTestIcon(2, 'error');
+                testResults.nextjs = false;
+                addLog(`✗ Next.js API failed: ${error.message}`, 'error');
+                addLog('Make sure Next.js server is running on port 3000', 'warning');
+                return false;
+            }
+        }
+
+        // Test 3: Parse Server
+        async function testParseServer() {
+            addLog('Testing Parse Server connection...', 'info');
+            updateTestIcon(3, 'testing');
+            
+            try {
+                // Try to access Parse Server health endpoint
+                const response = await fetch(`${VPS_URL}/parse/health`, {
+                    method: 'GET'
+                });
+                
+                if (response.ok || response.status === 404) {
+                    // 404 is acceptable - means Parse is running but health endpoint not configured
+                    updateTestIcon(3, 'success');
+                    testResults.parse = true;
+                    addLog('✓ Parse Server accessible', 'success');
+                    return true;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            } catch (error) {
+                updateTestIcon(3, 'error');
+                testResults.parse = false;
+                addLog(`✗ Parse Server failed: ${error.message}`, 'error');
+                addLog('Parse Server may not be running', 'warning');
+                return false;
+            }
+        }
+
+        // Test 4: Device Registration Status
+        async function testRegistration() {
+            addLog('Checking device registration status...', 'info');
+            updateTestIcon(4, 'testing');
+            
+            if (!deviceData) {
+                updateTestIcon(4, 'error');
+                testResults.registration = false;
+                addLog('✗ Cannot check registration: No device data', 'error');
+                return false;
+            }
+            
+            if (deviceData.registered) {
+                updateTestIcon(4, 'success');
+                testResults.registration = true;
+                addLog('✓ Device is registered with VPS', 'success');
+                return true;
+            } else {
+                updateTestIcon(4, 'error');
+                testResults.registration = false;
+                addLog('✗ Device not registered yet', 'warning');
+                addLog('Use device-pairing.html to register device', 'info');
+                return false;
+            }
+        }
+
+        // Run all tests
+        async function runTests() {
+            addLog('=== Starting connection tests ===', 'info');
+            updateProgress(0);
+            
+            // Update cloud status
+            const cloudStatus = document.getElementById('cloudStatus');
+            cloudStatus.className = 'status-badge loading';
+            cloudStatus.innerHTML = '<i class="fa-solid fa-spinner"></i><span>Testing...</span>';
+            
+            // Test 1: Local API
+            await testLocalApi();
+            updateProgress(25);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Test 2: Next.js
+            await testNextJs();
+            updateProgress(50);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Test 3: Parse Server
+            await testParseServer();
+            updateProgress(75);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Test 4: Registration
+            await testRegistration();
+            updateProgress(100);
+            
+            // Update cloud status based on results
+            const allPassed = testResults.localApi && testResults.nextjs;
+            if (allPassed) {
+                cloudStatus.className = 'status-badge success';
+                cloudStatus.innerHTML = '<i class="fa-solid fa-check-circle"></i><span>All Systems Operational</span>';
+                addLog('=== All tests passed ===', 'success');
+            } else {
+                cloudStatus.className = 'status-badge error';
+                cloudStatus.innerHTML = '<i class="fa-solid fa-times-circle"></i><span>Connection Issues</span>';
+                addLog('=== Some tests failed ===', 'error');
+            }
+        }
+
+        // Generate new ID (reset)
+        async function generateNewId() {
+            if (!confirm('This will reset your device identity. Continue?')) {
+                return;
+            }
+            
+            addLog('Resetting device identity...', 'warning');
+            
+            try {
+                const response = await fetch(`${DEVICE_URL}/device-unregister`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    addLog('✓ Device identity reset', 'success');
+                    addLog('Reloading page...', 'info');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    throw new Error('Reset failed');
+                }
+            } catch (error) {
+                addLog(`✗ Reset failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            addLog('Page loaded, starting automatic tests...', 'info');
+            setTimeout(runTests, 1000);
+        });
+    </script>
+</body>
+</html>

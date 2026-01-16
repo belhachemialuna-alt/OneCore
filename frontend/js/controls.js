@@ -1,5 +1,5 @@
-// BAYYTI-B1 User & System Controls
-const API_BASE = 'http://localhost:5000/api';
+// ElivateOne User & System Controls
+const API_BASE = window.location.origin + '/api';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,5 +1,5 @@
-// BAYYTI-B1 Hardware Schema Monitor
-const API_BASE = 'http://localhost:5000/api';
+// ElivateOne Hardware Schema Monitor
+const API_BASE = window.location.origin + '/api';
 
 // Hardware component states
 let hardwareState = {

@@ -3,7 +3,7 @@ const translations = {
     en: {
         // Header
         'project-title': 'Smart Irrigation System',
-        'project-name': 'BAYYTI-B1',
+        'project-name': 'ElivateOne',
         'analytics-title': 'Smart Irrigation Analytics',
         'emergency-title': 'Emergency Controls',
         'hardware-title': 'Hardware Schema',
@@ -60,7 +60,7 @@ const translations = {
         'footer-status': 'System Status',
         'footer-device': 'Device',
         'footer-version': 'Version',
-        'footer-copyright': '© 2024 BAYYTI Smart Irrigation System. All rights reserved.',
+        'footer-copyright': '© 2024 ElivateOne Smart Irrigation System. All rights reserved.',
         
         // Emergency
         'emergency-heading': 'Emergency Controls',
@@ -86,7 +86,7 @@ const translations = {
         
         // Controls Page
         'controls-page-title': 'User & System Controls',
-        'controls-page-desc': 'Manage users, configure system settings, and customize your BAYYTI-B1 experience',
+        'controls-page-desc': 'Manage users, configure system settings, and customize your ElivateOne experience',
         
         // Tabs
         'tab-user': 'User Management',
@@ -401,7 +401,7 @@ const translations = {
     fr: {
         // Header
         'project-title': 'Système d\'Irrigation Intelligent',
-        'project-name': 'BAYYTI-B1',
+        'project-name': 'ElivateOne',
         'analytics-title': 'Analyses d\'Irrigation Intelligente',
         'emergency-title': 'Contrôles d\'Urgence',
         'hardware-title': 'Schéma Matériel',
@@ -458,7 +458,7 @@ const translations = {
         'footer-status': 'État du Système',
         'footer-device': 'Appareil',
         'footer-version': 'Version',
-        'footer-copyright': '© 2024 Système d\'Irrigation Intelligent BAYYTI. Tous droits réservés.',
+        'footer-copyright': '© 2024 Système d\'Irrigation Intelligent ElivateOne. Tous droits réservés.',
         
         // Emergency
         'emergency-heading': 'Contrôles d\'Urgence',
@@ -484,7 +484,7 @@ const translations = {
         
         // Controls Page
         'controls-page-title': 'Contrôles Utilisateur et Système',
-        'controls-page-desc': 'Gérer les utilisateurs, configurer les paramètres système et personnaliser votre expérience BAYYTI-B1',
+        'controls-page-desc': 'Gérer les utilisateurs, configurer les paramètres système et personnaliser votre expérience ElivateOne',
         
         // Tabs
         'tab-user': 'Gestion des Utilisateurs',

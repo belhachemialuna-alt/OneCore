@@ -1,9 +1,8 @@
 /* Benchmarks Page Styling - Academic White Theme */
 
 .benchmarks-container {
+    width: 100%;
     padding: 2rem;
-    max-width: 1800px;
-    margin: 0 auto;
     background: #F5F5F5;
     min-height: 100vh;
 }

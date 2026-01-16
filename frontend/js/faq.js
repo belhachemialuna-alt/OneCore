@@ -1,6 +1,14 @@
 // FAQ Page JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Hide loader when page is ready
+    const loader = document.getElementById('globalLoader');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 500);
+    }
+    
     // FAQ accordion functionality
     const faqItems = document.querySelectorAll('.faq-item');
     

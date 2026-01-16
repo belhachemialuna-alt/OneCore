@@ -1,7 +1,7 @@
 // Space Dashboard - Additional functionality
 // This extends the main dashboard.js functionality
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = window.location.origin + '/api';
 
 // Real-time datetime update for tasks calendar
 function updateTasksCalendarDateTime() {

@@ -1,5 +1,5 @@
-// BAYYTI-B1 Support Page
-const API_BASE = 'http://localhost:5000/api';
+// ElivateOne Support Page
+const API_BASE = window.location.origin + '/api';
 
 // Notification storage
 let notifications = [];
@@ -245,11 +245,11 @@ async function loadSystemInfo() {
         const data = await response.json();
         
         if (data.success) {
-            document.getElementById('deviceName').textContent = data.device || 'BAYYTI-B1';
+            document.getElementById('deviceName').textContent = data.device || 'ElivateOne';
             document.getElementById('systemVersion').textContent = data.version || '1.0.0';
             
             // Update footer
-            document.getElementById('footerDevice').textContent = data.device || 'BAYYTI-B1';
+            document.getElementById('footerDevice').textContent = data.device || 'ElivateOne';
             document.getElementById('footerVersion').textContent = data.version || '1.0.0';
         }
     } catch (error) {
