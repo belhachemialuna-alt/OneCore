@@ -265,16 +265,137 @@
     border-color: #b0b0b0;
 }
 
-/* Tasks List */
+/* Tasks List - Enhanced with Strong Table Design */
 .tasks-list-container {
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 2px solid #e0e0e0;
+    border-top: 3px solid #000000;
+}
+
+.tasks-list-container h4 {
+    color: #000000;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tasks-list-container h4 i {
+    color: #000000;
+    font-size: 1.2rem;
 }
 
 .tasks-list {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
+    border: 2px solid #000000;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+/* Task Item - Table-like Design */
+.task-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-item:hover {
+    background: #f8f9fa;
+}
+
+.task-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #000000 0%, #333333 100%);
+    border: 2px solid #000000;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.task-name {
+    font-weight: 700;
+    color: #000000;
+    font-size: 1rem;
+}
+
+.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.task-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.task-meta-item i {
+    color: #000000;
+    font-size: 0.9rem;
+}
+
+.task-zone-badge {
+    padding: 0.25rem 0.75rem;
+    background: #000000;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.task-action-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.task-action-btn:hover {
+    background: #000000;
+    border-color: #000000;
+    color: white;
+    transform: scale(1.1);
+}
+
+.task-action-btn.delete:hover {
+    background: #dc3545;
+    border-color: #dc3545;
 }
 
 .task-item {

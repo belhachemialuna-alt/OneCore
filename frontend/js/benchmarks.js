@@ -7,7 +7,7 @@ let cpuChart, memoryChart, responseTimeChart, networkChart;
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
-    loadBenchmarkData();
+    loadRealBenchmarkData();
     
     // Refresh button
     document.getElementById('refreshBenchmarks')?.addEventListener('click', function() {
@@ -16,12 +16,123 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             icon.style.transform = 'rotate(0deg)';
         }, 500);
-        loadBenchmarkData();
+        loadRealBenchmarkData();
     });
     
     // Auto-refresh every 30 seconds
-    setInterval(loadBenchmarkData, 30000);
+    setInterval(loadRealBenchmarkData, 30000);
 });
+
+// Load real benchmark data from backend
+async function loadRealBenchmarkData() {
+    try {
+        // Fetch system performance metrics
+        const response = await fetch(`${API_BASE}/api/system/performance`);
+        if (!response.ok) {
+            console.warn('Failed to fetch benchmark data, using fallback');
+            loadBenchmarkData(); // Fallback to mock data
+            return;
+        }
+        
+        const data = await response.json();
+        
+        // Update performance cards
+        updatePerformanceCards(data);
+        
+        // Update charts with real data
+        updateChartsWithRealData(data);
+        
+        // Update tables with real data
+        updateTablesWithRealData(data);
+        
+    } catch (error) {
+        console.error('Error loading benchmark data:', error);
+        loadBenchmarkData(); // Fallback to mock data
+    }
+}
+
+// Update performance cards with real data
+function updatePerformanceCards(data) {
+    if (data.cpu) {
+        document.querySelector('.perf-card.cpu .perf-value').textContent = `${data.cpu.usage}%`;
+        document.querySelector('.perf-card.cpu .perf-status').textContent = data.cpu.status || 'Good';
+        document.querySelector('.perf-card.cpu .perf-status').className = `perf-status ${data.cpu.status?.toLowerCase() || 'good'}`;
+    }
+    
+    if (data.memory) {
+        document.querySelector('.perf-card.memory .perf-value').textContent = `${data.memory.usage}%`;
+        document.querySelector('.perf-card.memory .perf-status').textContent = data.memory.status || 'Good';
+        document.querySelector('.perf-card.memory .perf-status').className = `perf-status ${data.memory.status?.toLowerCase() || 'good'}`;
+    }
+    
+    if (data.response_time) {
+        document.querySelector('.perf-card.response .perf-value').textContent = `${data.response_time.avg}ms`;
+        document.querySelector('.perf-card.response .perf-status').textContent = data.response_time.status || 'Excellent';
+        document.querySelector('.perf-card.response .perf-status').className = `perf-status ${data.response_time.status?.toLowerCase() || 'excellent'}`;
+    }
+    
+    if (data.uptime) {
+        document.querySelector('.perf-card.uptime .perf-value').textContent = data.uptime.value || '99.9%';
+        document.querySelector('.perf-card.uptime .perf-status').textContent = data.uptime.status || 'Excellent';
+        document.querySelector('.perf-card.uptime .perf-status').className = `perf-status ${data.uptime.status?.toLowerCase() || 'excellent'}`;
+    }
+}
+
+// Update charts with real data
+function updateChartsWithRealData(data) {
+    if (data.cpu && data.cpu.history) {
+        cpuChart.data.datasets[0].data = data.cpu.history;
+        cpuChart.update();
+    }
+    
+    if (data.memory && data.memory.history) {
+        memoryChart.data.datasets[0].data = data.memory.history;
+        memoryChart.update();
+    }
+    
+    if (data.response_time && data.response_time.history) {
+        responseTimeChart.data.datasets[0].data = data.response_time.history;
+        responseTimeChart.update();
+    }
+    
+    if (data.network && data.network.history) {
+        networkChart.data.datasets[0].data = data.network.history;
+        networkChart.update();
+    }
+}
+
+// Update tables with real data
+function updateTablesWithRealData(data) {
+    // Update API endpoints table
+    if (data.api_endpoints) {
+        const apiTable = document.getElementById('apiEndpointsTable');
+        apiTable.innerHTML = data.api_endpoints.map(endpoint => `
+            <tr>
+                <td><code>${endpoint.path}</code></td>
+                <td><span class="metric-value">${endpoint.avg_time}ms</span></td>
+                <td><span class="metric-range">${endpoint.min_time}ms / ${endpoint.max_time}ms</span></td>
+                <td><span class="metric-value">${endpoint.requests_per_min}</span></td>
+                <td><span class="success-rate">${endpoint.success_rate}%</span></td>
+                <td><span class="status-badge ${endpoint.status.toLowerCase()}">${endpoint.status}</span></td>
+            </tr>
+        `).join('');
+    }
+    
+    // Update database queries table
+    if (data.database_queries) {
+        const dbTable = document.getElementById('databaseTable');
+        dbTable.innerHTML = data.database_queries.map(query => `
+            <tr>
+                <td><code>${query.type}</code></td>
+                <td><span class="metric-value">${query.avg_time}ms</span></td>
+                <td><span class="metric-value">${query.queries_per_sec}</span></td>
+                <td><span class="success-rate">${query.cache_hit_rate || 'N/A'}</span></td>
+                <td><span class="metric-value">${query.rows_affected}</span></td>
+                <td><span class="status-badge ${query.status.toLowerCase()}">${query.status}</span></td>
+            </tr>
+        `).join('');
+    }
+}
 
 // Initialize all charts
 function initializeCharts() {

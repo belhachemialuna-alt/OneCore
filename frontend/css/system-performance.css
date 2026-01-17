@@ -12,9 +12,10 @@
     position: sticky;
     top: 70px;
     height: fit-content;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 150px);
     flex-shrink: 0;
     margin-right: 1.5rem;
+    align-self: flex-start;
 }
 
 .irrigation-header-space {

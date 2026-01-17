@@ -62,8 +62,24 @@ def add_header(response):
 
 @app.route('/favicon.ico')
 def favicon():
-    """Serve favicon with correct MIME type"""
-    return send_from_directory(app.static_folder, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    """Serve favicon with correct MIME type and cache headers"""
+    try:
+        favicon_path = os.path.join(app.static_folder, 'favicon.ico')
+        if os.path.exists(favicon_path):
+            response = send_from_directory(app.static_folder, 'favicon.ico', mimetype='image/x-icon')
+            # Add cache headers - allow caching but with version parameter for cache busting
+            response.headers['Cache-Control'] = 'public, max-age=86400'  # 1 day
+            response.headers['Content-Type'] = 'image/x-icon'
+            return response
+        else:
+            print(f"WARNING: Favicon not found at: {favicon_path}")
+            print(f"Static folder: {app.static_folder}")
+            return '', 204  # No content but success
+    except Exception as e:
+        print(f"ERROR serving favicon: {e}")
+        import traceback
+        traceback.print_exc()
+        return '', 204  # No content but success
 
 # Device ID Endpoints
 @app.route('/device-id')
@@ -472,6 +488,23 @@ def setup_data():
         "soil_types": controller.soil_types_data.get('soil_types', []),
         "wilayas": controller.load_json('wilayas.json').get('wilayas', [])
     })
+
+@app.route("/api/setup/status", methods=["GET"])
+def setup_status():
+    """Check if setup is completed"""
+    try:
+        setup_completed = controller.system_config.get('setup_completed', False)
+        return jsonify({
+            "success": True,
+            "setup_completed": setup_completed,
+            "config": controller.system_config if setup_completed else {}
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "setup_completed": False,
+            "error": str(e)
+        })
 
 @app.route("/api/setup/complete", methods=["POST"])
 def complete_setup():

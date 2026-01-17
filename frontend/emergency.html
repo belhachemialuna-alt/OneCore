@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emergency Controls - BAYYTI-B1</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/emergency.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
@@ -16,7 +19,7 @@
     <!-- Global Loader -->
     <div class="global-loader" id="globalLoader">
         <div class="loader-content">
-            <div class="loader-icon"></div>
+            <div class="loader-spinner"></div>
             <div class="loader-text">Loading...</div>
         </div>
     </div>
@@ -33,8 +36,7 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Emergency Controls <strong>ElivateOne</strong></h1>
-                <div class="header-datetime" id="header-datetime">
+                <div class="header-datetime header-clock-large" id="header-datetime">
                     <i class="fa-solid fa-clock"></i>
                     <span id="header-time">--:--</span>
                     <span class="datetime-separator">•</span>
@@ -70,7 +72,7 @@
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
-                    <i class="fa-solid fa-brain"></i>
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
@@ -79,7 +81,7 @@
                     <i class="fa-solid fa-book"></i>
                 </a>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
-                    <i class="fa-solid fa-gear"></i>
+                    <i class="fa-solid fa-sliders"></i>
                 </a>
                 <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>

@@ -39,15 +39,69 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load irrigation schedule
 async function loadIrrigationSchedule() {
     try {
-        const response = await fetch(`${API_BASE}/api/logs`);
-        const data = await response.json();
+        // First try to get actual schedules
+        const scheduleResponse = await fetch(`${API_BASE}/api/schedules`);
+        const scheduleData = await scheduleResponse.json();
         
-        if (data.success && data.data) {
-            updateScheduleTable(data.data);
+        if (scheduleData.success && scheduleData.data && scheduleData.data.length > 0) {
+            // Display actual schedules
+            updateScheduleTableWithSchedules(scheduleData.data);
+        } else {
+            // Fallback to logs if no schedules exist
+            const logsResponse = await fetch(`${API_BASE}/api/logs`);
+            const logsData = await logsResponse.json();
+            
+            if (logsData.success && logsData.data) {
+                updateScheduleTable(logsData.data);
+            }
         }
     } catch (error) {
         console.error('Error loading irrigation schedule:', error);
     }
+}
+
+// Update schedule table with actual schedules from setup
+function updateScheduleTableWithSchedules(schedules) {
+    const tbody = document.getElementById('schedule-table-body');
+    if (!tbody) return;
+    
+    if (schedules.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="schedule-loading">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span>No schedules configured. Go to Setup to create schedules.</span>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = schedules.map(schedule => {
+        const startTime = schedule.start_time || '00:00';
+        const duration = schedule.duration ? `${Math.round(schedule.duration / 60)} min` : '30 min';
+        const days = schedule.days || 'Daily';
+        const zone = schedule.zone_id ? `Zone ${schedule.zone_id}` : 'All Zones';
+        
+        // Determine if schedule is active today
+        const now = new Date();
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = dayNames[now.getDay()];
+        const isActiveToday = days.includes(today) || days === 'Daily';
+        
+        const progressClass = isActiveToday ? 'scheduled' : 'idle';
+        const progressText = isActiveToday ? 'Scheduled' : 'Off';
+        
+        return `
+            <tr>
+                <td>${days.split(',')[0] || 'Daily'}</td>
+                <td class="schedule-time">${startTime}</td>
+                <td class="schedule-duration">${duration}</td>
+                <td>${zone}</td>
+                <td><span class="schedule-progress ${progressClass}">${progressText}</span></td>
+            </tr>
+        `;
+    }).join('');
 }
 
 // Update schedule table with irrigation logs
@@ -194,6 +248,12 @@ function updateWeatherSidebarTime() {
 // Load all system data
 async function loadSystemData() {
     try {
+        // Add spinning animation to refresh button
+        const updateBtn = document.getElementById('updateBtnMain');
+        if (updateBtn) {
+            updateBtn.classList.add('refreshing');
+        }
+        
         const response = await fetch(`${API_BASE}/api/status`);
         const data = await response.json();
         
@@ -211,9 +271,22 @@ async function loadSystemData() {
         
         // Load AI recommendation
         loadAIRecommendation();
+        
+        // Remove spinning animation after data loads
+        if (updateBtn) {
+            setTimeout(() => {
+                updateBtn.classList.remove('refreshing');
+            }, 500);
+        }
     } catch (error) {
         console.error('Error loading system data:', error);
         showError('Failed to load system data');
+        
+        // Remove spinning animation on error
+        const updateBtn = document.getElementById('updateBtnMain');
+        if (updateBtn) {
+            updateBtn.classList.remove('refreshing');
+        }
     }
 }
 
@@ -670,6 +743,17 @@ function updateSafetyDisplay(safety, batteryVoltage, batteryPercent, sensors, er
     const safetyIcon = safetyEnabled ? 'fa-shield-halved' : 'fa-shield-slash';
     
     statusGrid.innerHTML = `
+        <div class="status-item">
+            <div>
+                <i class="fa-solid fa-check-circle status-ok"></i>
+                <span>Final Stage Check</span>
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
         <div class="status-item">
             <div>
                 <i class="fa-solid ${batteryIcon} status-${batteryStatus}"></i>

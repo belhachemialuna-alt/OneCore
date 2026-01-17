@@ -37,7 +37,18 @@ function updateRefreshCountdown() {
         
         if (refreshCountdown < 0) {
             refreshCountdown = 30;
+            // Add spinning animation to refresh button
+            const refreshBtn = document.getElementById('update-schedule-btn');
+            if (refreshBtn) {
+                refreshBtn.classList.add('refreshing');
+            }
             loadIrrigationTasks(); // Refresh tasks
+            // Remove spinning animation after 1 second
+            setTimeout(() => {
+                if (refreshBtn) {
+                    refreshBtn.classList.remove('refreshing');
+                }
+            }, 1000);
         }
     }
 }

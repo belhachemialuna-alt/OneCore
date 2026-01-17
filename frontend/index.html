@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BAYYTI-B1 Smart Irrigation System</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css?v=4.0">
     <link rel="stylesheet" href="css/irrigation-sidebar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +20,7 @@
     <!-- Global Loader -->
     <div class="global-loader" id="globalLoader">
         <div class="loader-content">
-            <i class="fa-solid fa-spinner loader-icon"></i>
+            <div class="loader-spinner"></div>
             <div class="loader-text">Loading...</div>
         </div>
     </div>
@@ -41,8 +43,7 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Smart Irrigation Control Project <strong>BAYYTI-B1</strong></h1>
-                <div class="header-datetime" id="header-datetime">
+                <div class="header-datetime header-clock-large" id="header-datetime">
                     <i class="fa-solid fa-clock"></i>
                     <span id="header-time">--:--</span>
                     <span class="datetime-separator">•</span>
@@ -72,13 +73,13 @@
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
-                    <i class="fa-solid fa-microchip"></i>
+                    <i class="fa-solid fa-cpu"></i>
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
-                    <i class="fa-solid fa-brain"></i>
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
@@ -125,7 +126,7 @@
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="ai.html" class="sidebar-item" title="AI Model Testing">
-                    <i class="fa-solid fa-brain"></i>
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="support.html" class="sidebar-item" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
@@ -320,7 +321,7 @@
 
             <div class="control-card">
                 <div class="card-header">
-                    <h3><i class="fa-solid fa-brain"></i> AI Recommendation</h3>
+                    <h3><img src="icons/AI.png" alt="AI" style="width: 18px; height: 18px; object-fit: contain; vertical-align: middle; margin-right: 0.5rem;"> AI Recommendation</h3>
                     <label class="toggle-switch">
                         <input type="checkbox" id="auto-mode">
                         <span class="toggle-slider"></span>
@@ -495,28 +496,19 @@
         </aside>
     </div>
 
-    <!-- Clean Black Footer -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-info">
-                <h3>BAYYTI-B1</h3>
-                <p>Smart Irrigation System • Powered by AI</p>
+            <div class="footer-text">
+                &copy; 2024 <strong>TiOne</strong> Smart Irrigation System • Powered by AI
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>
+                <a href="space.html">Space</a>
                 <a href="analytics.html">Analytics</a>
-                <a href="emergency.html">Emergency</a>
-                <a href="hardware.html">Hardware</a>
-                <a href="controls.html">Controls</a>
-                <a href="ai.html">AI Testing</a>
+                <a href="benchmarks.html">Benchmarks</a>
                 <a href="support.html">Support</a>
             </div>
-            <div class="footer-status">
-                <p><strong>v1.0.0</strong> • <span class="status-online">● Online</span></p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 BAYYTI. All rights reserved.</p>
         </div>
     </footer>
 

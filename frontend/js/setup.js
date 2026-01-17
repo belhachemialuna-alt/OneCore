@@ -2,11 +2,40 @@ let currentStep = 1;
 let setupData = {network: {}, system: {}, zones: []};
 let cropsData = [], soilTypesData = [], wilayasData = [];
 
+// Prevent multiple initializations
+let setupInitialized = false;
+
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadData();
-    populateSelects();
-    selectZones(1);
-    setupDayButtons();
+    // Prevent multiple initializations
+    if (setupInitialized) return;
+    setupInitialized = true;
+    
+    // Hide loader immediately - no status check needed
+    const loader = document.getElementById('setup-loader');
+    if (loader) {
+        loader.classList.remove('active');
+    }
+    
+    // Load setup data directly
+    try {
+        await loadData();
+        populateSelects();
+        selectZones(1);
+        setupDayButtons();
+    } catch (e) {
+        console.error('Error loading setup data:', e);
+        // Show error to user briefly
+        if (loader) {
+            const loaderText = loader.querySelector('.setup-loader-text');
+            if (loaderText) {
+                loaderText.textContent = 'Error loading setup data. Please refresh the page.';
+                loader.classList.add('active');
+                setTimeout(() => {
+                    if (loader) loader.classList.remove('active');
+                }, 3000);
+            }
+        }
+    }
 });
 
 // Setup day button event listeners for existing checkboxes
@@ -60,20 +89,46 @@ function populateSelects() {
 
 function nextStep() {
     if (currentStep === 5) return;
-    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    const currentStepEl = document.getElementById(`step-${currentStep}`);
+    if (!currentStepEl) {
+        console.error(`Step ${currentStep} not found`);
+        return;
+    }
+    currentStepEl.classList.remove('active');
     document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active'));
     currentStep++;
-    document.getElementById(`step-${currentStep}`).classList.add('active');
-    document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
+    const nextStepEl = document.getElementById(`step-${currentStep}`);
+    const nextProgressStep = document.querySelector(`.progress-step[data-step="${currentStep}"]`);
+    if (nextStepEl) {
+        nextStepEl.classList.add('active');
+    }
+    if (nextProgressStep) {
+        nextProgressStep.classList.add('active');
+    }
 }
+
+// Make nextStep globally accessible
+window.nextStep = nextStep;
+window.prevStep = prevStep;
 
 function prevStep() {
     if (currentStep === 1) return;
-    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    const currentStepEl = document.getElementById(`step-${currentStep}`);
+    if (!currentStepEl) {
+        console.error(`Step ${currentStep} not found`);
+        return;
+    }
+    currentStepEl.classList.remove('active');
     document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active'));
     currentStep--;
-    document.getElementById(`step-${currentStep}`).classList.add('active');
-    document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
+    const prevStepEl = document.getElementById(`step-${currentStep}`);
+    const prevProgressStep = document.querySelector(`.progress-step[data-step="${currentStep}"]`);
+    if (prevStepEl) {
+        prevStepEl.classList.add('active');
+    }
+    if (prevProgressStep) {
+        prevProgressStep.classList.add('active');
+    }
 }
 
 function selectNetworkMode(mode) {
@@ -154,7 +209,7 @@ function addSchedule() {
                 <div class="day-label">Fr</div>
                 <div class="day-label">Sa</div>
                 <label class="day-btn">
-                    <input type="checkbox" value="Sunday" name="schedule-${scheduleCount}-days">
+                    <input type="checkbox" value="Sunday" checked name="schedule-${scheduleCount}-days">
                     <span>Sun</span>
                 </label>
                 <label class="day-btn">
@@ -178,7 +233,7 @@ function addSchedule() {
                     <span>Fri</span>
                 </label>
                 <label class="day-btn">
-                    <input type="checkbox" value="Saturday" name="schedule-${scheduleCount}-days">
+                    <input type="checkbox" value="Saturday" checked name="schedule-${scheduleCount}-days">
                     <span>Sat</span>
                 </label>
             </div>
@@ -206,6 +261,13 @@ function addSchedule() {
 }
 
 async function completeSetup() {
+    // Show loader
+    const loader = document.getElementById('setup-loader');
+    if (loader) {
+        loader.querySelector('.setup-loader-text').textContent = 'Saving configuration...';
+        loader.classList.add('active');
+    }
+    
     const config = {
         device_name: 'ElivateOne',
         setup_completed: true,
@@ -248,6 +310,8 @@ async function completeSetup() {
     
     try {
         // Save main configuration to backend (persists after reboot)
+        if (loader) loader.querySelector('.setup-loader-text').textContent = 'Saving to backend...';
+        
         const setupResponse = await fetch('/api/setup/complete', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -255,10 +319,13 @@ async function completeSetup() {
         });
         
         if (setupResponse.ok) {
-            console.log('Configuration saved to backend successfully');
+            const result = await setupResponse.json();
+            console.log('Configuration saved to backend successfully:', result);
         }
         
         // Save each schedule to database (persists after reboot)
+        if (loader) loader.querySelector('.setup-loader-text').textContent = 'Saving schedules...';
+        
         for (const schedule of config.schedules) {
             try {
                 await fetch('/api/schedules', {
@@ -278,15 +345,29 @@ async function completeSetup() {
             }
         }
         
+        // Verify setup completion
+        if (loader) loader.querySelector('.setup-loader-text').textContent = 'Verifying setup...';
+        
+        const verifyResponse = await fetch('/api/setup/status');
+        const verifyData = await verifyResponse.json();
+        
+        if (verifyData.success && verifyData.setup_completed) {
+            console.log('Setup verified successfully');
+        }
+        
         console.log('All configurations saved to backend - will persist after reboot');
     } catch (e) {
         console.error('Error saving to backend:', e);
         console.log('Falling back to local storage only');
+    } finally {
+        if (loader) loader.classList.remove('active');
     }
     
-    // Also save to localStorage as backup
+    // Also save to localStorage as backup - set both keys for compatibility
     localStorage.setItem('elivate_setup_complete', 'true');
+    localStorage.setItem('bayyti_setup_complete', 'true'); // Also set for index.html compatibility
     localStorage.setItem('elivate_config', JSON.stringify(config));
+    localStorage.setItem('bayyti_config', JSON.stringify(config)); // Also set for compatibility
     
     document.getElementById('step-5').style.display = 'none';
     document.getElementById('step-complete').style.display = 'block';

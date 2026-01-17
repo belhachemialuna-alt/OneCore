@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support - ElivateOne</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css?v=5.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -207,7 +210,10 @@
 <body>
     <!-- Global Loader -->
     <div class="global-loader" id="globalLoader">
-        <div class="loader-circle"></div>
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Loading...</div>
+        </div>
     </div>
 
     <!-- Sticky Header -->
@@ -222,7 +228,12 @@
                 </div>
             </div>
             <div class="header-center">
-                <h1 class="project-title">Support <strong>ElivateOne</strong></h1>
+                <div class="header-datetime header-clock-large" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
             </div>
             <div class="header-right">
                 <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
@@ -250,7 +261,7 @@
                     <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
-                    <i class="fa-solid fa-brain"></i>
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
