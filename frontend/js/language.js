@@ -18,6 +18,17 @@ const translations = {
         'nav-controls': 'Controls',
         'nav-support': 'Support',
         'nav-faq': 'FAQ',
+        'nav-space': 'Space Dashboard',
+        'space-subtitle': 'Optimized Full-Width Layout',
+        'irrigation-tasks-calendar': 'Irrigation Tasks Calendar',
+        'tasks-scheduled': 'Tasks Scheduled',
+        'auto-refresh': 'Auto-refresh',
+        'irrigation-time': 'Irrigation Time',
+        'minutes': 'Minutes',
+        'today': 'Today',
+        'valve-opens': 'Valve Opens',
+        'avg-duration': 'Avg Duration',
+        'water-used': 'Water Used',
         
         // Tooltips
         'tooltip-alerts': 'Alerts & Warnings',
@@ -217,6 +228,17 @@ const translations = {
         'nav-controls': 'الإعدادات',
         'nav-support': 'الدعم',
         'nav-faq': 'الأسئلة الشائعة',
+        'nav-space': 'لوحة الفضاء',
+        'space-subtitle': 'تخطيط محسّن بعرض كامل',
+        'irrigation-tasks-calendar': 'تقويم مهام الري',
+        'tasks-scheduled': 'المهام المجدولة',
+        'auto-refresh': 'التحديث التلقائي',
+        'irrigation-time': 'وقت الري',
+        'minutes': 'دقائق',
+        'today': 'اليوم',
+        'valve-opens': 'فتحات الصمام',
+        'avg-duration': 'متوسط المدة',
+        'water-used': 'المياه المستخدمة',
         
         // Tooltips
         'tooltip-alerts': 'التنبيهات والتحذيرات',
@@ -416,6 +438,21 @@ const translations = {
         'nav-controls': 'Contrôles',
         'nav-support': 'Assistance',
         'nav-faq': 'FAQ',
+        'nav-space': 'Tableau de Bord Espace',
+        'space-subtitle': 'Disposition Optimisée Pleine Largeur',
+        'irrigation-tasks-calendar': 'Calendrier des Tâches d\'Irrigation',
+        'tasks-scheduled': 'Tâches Programmées',
+        'auto-refresh': 'Actualisation automatique',
+        'irrigation-time': 'Temps d\'Irrigation',
+        'minutes': 'Minutes',
+        'today': 'Aujourd\'hui',
+        'valve-opens': 'Ouvertures de Vanne',
+        'avg-duration': 'Durée Moyenne',
+        'water-used': 'Eau Utilisée',
+        'suspected-farmland': 'Statistiques des terres agricoles suspectes',
+        'ai-doubt-stats': 'Statistiques de catégorie de doute IA',
+        'area-of-doubt': 'Zone de doute',
+        'total-area': 'Surface Totale',
         
         // Tooltips
         'tooltip-alerts': 'Alertes et Avertissements',
@@ -603,10 +640,33 @@ function getCurrentLanguage() {
     return localStorage.getItem('app-language') || 'en';
 }
 
+// Initialize language system on page load
+function initLanguageSystem() {
+    const currentLang = getCurrentLanguage();
+    
+    // Set direction FIRST
+    if (currentLang === 'ar') {
+        document.documentElement.dir = 'rtl';
+        document.body.classList.add('rtl');
+    } else {
+        document.documentElement.dir = 'ltr';
+        document.body.classList.remove('rtl');
+    }
+    
+    // Set lang attribute
+    document.documentElement.lang = currentLang;
+    
+    // Apply translations
+    applyTranslations(currentLang);
+    updateLanguageSelector(currentLang);
+    
+    console.log('Language system initialized:', currentLang);
+}
+
 // Set language
 function setLanguage(lang) {
     localStorage.setItem('app-language', lang);
-    applyTranslations(lang);
+    initLanguageSystem();
     
     // Update HTML lang attribute
     document.documentElement.lang = lang;
@@ -636,7 +696,16 @@ function applyTranslations(lang) {
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                 element.placeholder = trans[key];
             } else {
-                element.textContent = trans[key];
+                // Preserve HTML structure if element has children
+                if (element.children.length === 0) {
+                    element.textContent = trans[key];
+                } else {
+                    // For elements with children, update text nodes only
+                    const textNode = Array.from(element.childNodes).find(node => node.nodeType === 3);
+                    if (textNode) {
+                        textNode.textContent = trans[key];
+                    }
+                }
             }
         }
     });
@@ -648,6 +717,28 @@ function applyTranslations(lang) {
             element.title = trans[key];
         }
     });
+    
+    // Translate aria-label attributes
+    document.querySelectorAll('[data-i18n-aria]').forEach(element => {
+        const key = element.getAttribute('data-i18n-aria');
+        if (trans[key]) {
+            element.setAttribute('aria-label', trans[key]);
+        }
+    });
+    
+    // Update page title if exists
+    if (trans['project-title']) {
+        const titleElements = document.querySelectorAll('.project-title, .page-title');
+        titleElements.forEach(el => {
+            if (!el.hasAttribute('data-i18n')) {
+                // Don't override if element has specific translation key
+                const currentText = el.textContent.trim();
+                if (currentText.includes('Dashboard') || currentText.includes('لوحة') || currentText.includes('Tableau')) {
+                    el.textContent = trans['nav-dashboard'] || trans['project-title'];
+                }
+            }
+        });
+    }
 }
 
 // Update language selector display

@@ -6,6 +6,7 @@ from energy_manager import EnergyManager
 from irrigation_controller import IrrigationController
 from ai_engine.decision_engine import DecisionEngine
 from database import init_database, save_sensor_reading, log_irrigation_event
+from cloud_integration import CloudIntegration
 
 class MainController:
     def __init__(self):
@@ -25,6 +26,18 @@ class MainController:
             self.soil_types_data,
             self.irrigation_rules
         )
+        
+        # Initialize cloud integration
+        try:
+            self.cloud_integration = CloudIntegration()
+            cloud_status = self.cloud_integration.get_status()
+            print(f"Cloud Integration: {'✓ Registered' if cloud_status['registered'] else '⚠ Not Registered'}")
+            if not cloud_status['registered']:
+                print(f"  Register at: https://cloud.ielivate.com/link-device")
+                print(f"  Device ID: {cloud_status['device_id']}")
+        except Exception as e:
+            print(f"Cloud Integration: ⚠ Error - {str(e)}")
+            self.cloud_integration = None
         
         init_database()
         
@@ -63,7 +76,7 @@ class MainController:
         energy = self.energy_manager.get_status()
         irrigation = self.irrigation_controller.get_status()
         
-        return {
+        status = {
             'device_name': self.system_config.get('device_name', 'BAYYTI-B1'),
             'setup_completed': self.system_config.get('setup_completed', False),
             'timestamp': datetime.now().isoformat(),
@@ -72,6 +85,12 @@ class MainController:
             'irrigation': irrigation,
             'zones': self.system_config.get('zones', [])
         }
+        
+        # Add cloud status if available
+        if self.cloud_integration:
+            status['cloud'] = self.cloud_integration.get_status()
+        
+        return status
     
     def get_crop_by_id(self, crop_id):
         for crop in self.crops_data.get('crops', []):
@@ -114,10 +133,10 @@ class MainController:
         
         return decision
     
-    def execute_irrigation(self, zone_id, duration=None):
+    def execute_irrigation(self, zone_id, duration=None, trigger='ai_decision'):
         decision = self.make_irrigation_decision(zone_id)
         
-        if not decision.get('should_irrigate', False):
+        if not decision.get('should_irrigate', False) and trigger != 'cloud_command':
             return {
                 'success': False,
                 'message': decision.get('reason', 'Irrigation not recommended'),
@@ -130,14 +149,14 @@ class MainController:
         result = self.irrigation_controller.start_irrigation(
             zone_id=zone_id,
             duration=duration,
-            trigger='ai_decision'
+            trigger=trigger
         )
         
         if result['success']:
             log_irrigation_event(
                 action='irrigation_started',
                 duration=duration,
-                trigger_type='ai_decision',
+                trigger_type=trigger,
                 notes=f"Zone {zone_id}: {decision.get('reason', '')}"
             )
         
@@ -146,6 +165,7 @@ class MainController:
     def run_monitoring_cycle(self):
         sensors = self.sensor_reader.read_all_sensors()
         
+        # Save to local database
         save_sensor_reading(
             sensors['soil_moisture'],
             sensors['temperature'],
@@ -154,6 +174,21 @@ class MainController:
             sensors['pressure']
         )
         
+        # Sync with cloud and execute cloud commands
+        cloud_result = None
+        if self.cloud_integration and self.cloud_integration.check_registration():
+            try:
+                cloud_result = self.cloud_integration.sync_with_cloud(
+                    sensor_data=sensors,
+                    irrigation_controller=self.irrigation_controller
+                )
+                if cloud_result.get('commands_executed', 0) > 0:
+                    print(f"✓ Executed {cloud_result['commands_executed']} cloud command(s)")
+            except Exception as e:
+                print(f"Cloud sync error: {str(e)}")
+                cloud_result = {"success": False, "error": str(e)}
+        
+        # Run local AI decisions for auto mode zones
         for zone in self.system_config.get('zones', []):
             if zone.get('auto_mode', False):
                 decision = self.make_irrigation_decision(zone['id'])
@@ -161,11 +196,34 @@ class MainController:
                 if decision.get('should_irrigate', False):
                     self.execute_irrigation(zone['id'])
         
-        return {
+        result = {
             'success': True,
             'sensors': sensors,
             'timestamp': datetime.now().isoformat()
         }
+        
+        if cloud_result:
+            result['cloud_sync'] = cloud_result
+        
+        return result
+
+    def register_with_cloud(self, device_name=None):
+        """
+        Register device with cloud platform.
+        
+        Args:
+            device_name: Optional custom device name
+            
+        Returns:
+            Registration result
+        """
+        if not self.cloud_integration:
+            return {
+                "success": False,
+                "error": "Cloud integration not available"
+            }
+        
+        return self.cloud_integration.register_device(device_name)
 
 if __name__ == '__main__':
     controller = MainController()

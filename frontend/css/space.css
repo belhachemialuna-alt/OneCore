@@ -9,12 +9,14 @@
     padding-bottom: 2rem;
 }
 
-/* Main Content Container */
+/* Main Content Container - Full Page Optimization */
 .space-main-content {
     flex: 1;
     padding: 2rem 3rem;
     background: #F5F5F5;
-    min-height: calc(100vh - 60px);
+    overflow-y: auto;
+    min-height: calc(100vh - 48px);
+    box-sizing: border-box;
 }
 
 /* Page Title Section */
@@ -55,7 +57,7 @@
 .tasks-calendar-card {
     background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
     border: 2px solid #2196F3;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 4px 16px rgba(33, 150, 243, 0.15);
     margin-bottom: 2rem;
@@ -81,7 +83,7 @@
     height: 80px;
     background: linear-gradient(135deg, #000000 0%, #333333 100%);
     border: 3px solid #000000;
-    border-radius: 16px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -182,12 +184,253 @@
     font-weight: 700;
 }
 
+/* Weather Card - Deep Green Theme (Reduced Size) */
+.weather-card-space {
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+    border: 3px solid #4caf50;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 12px 32px rgba(27, 94, 32, 0.4);
+    transition: all 0.3s ease;
+    max-width: 280px;
+}
+
+.weather-card-space:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(27, 94, 32, 0.5);
+    border-color: #66bb6a;
+}
+
+.weather-card-icon {
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.weather-card-temp {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.weather-card-time {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+.weather-card-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.weather-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.weather-info-item svg {
+    stroke: #a5d6a7 !important;
+}
+
+.weather-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(102, 187, 106, 0.3);
+    transition: all 0.3s ease;
+}
+
+.weather-info-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+    transform: translateX(6px);
+    border-color: #66BB6A;
+}
+
+.weather-info-item span {
+    font-size: 1rem;
+    color: #1B5E20;
+    font-weight: 500;
+}
+
+.weather-info-item strong {
+    color: #2E7D32;
+    font-weight: 700;
+}
+
+/* Control Card Main - Beside Weather */
+.control-card-main {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e0e0e0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.control-card-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: #FF0000;
+}
+
+.control-card-main .card-header {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #FF0000;
+}
+
+.control-card-main .card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.valve-badge-main {
+    background: #757575;
+    color: white;
+    padding: 0.35rem 1rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.valve-badge-main.active {
+    background: #4caf50;
+}
+
+.control-card-main .card-body {
+    padding: 1.5rem;
+}
+
+.control-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 0.85rem 1.25rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-success {
+    background: #4caf50;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-danger {
+    background: #f44336;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #da190b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.btn-warning {
+    background: #ff9800;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #fb8c00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.irrigation-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.info-item {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.info-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #000;
+}
+
 /* Control Section - Space Layout */
 .control-section-space {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
+}
+
+@media (max-width: 1200px) {
+    .weather-control-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .control-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .irrigation-info {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Charts Grid - Space Layout */
@@ -266,6 +509,107 @@
 .space-main-content .activity-list {
     max-height: 400px;
     overflow-y: auto;
+}
+
+/* Enhanced Footer */
+.footer {
+    background: #000000;
+    color: white;
+    padding: 2.5rem 0 1.5rem;
+    margin-top: auto;
+    border-top: 3px solid #FF0000;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+.footer-left {
+    flex: 1;
+    max-width: 400px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-brand strong {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FF0000;
+    letter-spacing: -0.5px;
+}
+
+.footer-tagline {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.footer-copyright {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 3rem;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.footer-nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-nav-section h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-nav-section a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.25rem 0;
+}
+
+.footer-nav-section a:hover {
+    color: #FF0000;
+    padding-left: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .footer-nav {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .footer-left {
+        max-width: 100%;
+    }
 }
 
 /* Responsive Design */
@@ -491,14 +835,33 @@
     color: white;
 }
 
-/* Improved Shadows and Borders */
+/* Enhanced Card Designs - Smart Agriculture Style */
 .space-main-content .sensor-card,
 .space-main-content .control-card,
 .space-main-content .chart-card,
 .space-main-content .status-card,
 .space-main-content .stat-card {
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    background: white;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.space-main-content .sensor-card::before,
+.space-main-content .control-card::before,
+.space-main-content .chart-card::before,
+.space-main-content .status-card::before,
+.space-main-content .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
 }
 
 .space-main-content .sensor-card:hover,
@@ -506,7 +869,9 @@
 .space-main-content .chart-card:hover,
 .space-main-content .status-card:hover,
 .space-main-content .stat-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+    border-color: #4CAF50;
 }
 
 /* Button Styling in Space */

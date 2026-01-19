@@ -124,36 +124,44 @@ function updateHardwareState(data) {
         description: data.sensors?.pressure !== undefined ? `${data.sensors.pressure} PSI` : 'No Data'
     };
     
-    // Main valve status
-    hardwareState.valves.main = {
-        id: 'main-valve',
-        name: 'Main Control Valve',
-        status: data.irrigation?.valve_open ? 'online' : 'offline',
-        description: data.irrigation?.valve_open ? 'Open - Active' : 'Closed - Inactive'
+    // GPIO Relay Control (replaces valve concept)
+    hardwareState.system.relay = {
+        id: 'gpio-relay',
+        name: 'GPIO Relay Control',
+        status: data.irrigation?.valve_state === 'open' ? 'online' : 'offline',
+        description: data.irrigation?.valve_state === 'open' ? 'Active - Irrigation ON' : 'Standby - Irrigation OFF'
     };
     
-    // Soil moisture sensors for each zone
+    // Soil moisture sensors - only show if they exist in data
     if (data.sensors) {
-        ['soil_moisture', 'soil_moisture_2', 'soil_moisture_3'].forEach((sensor, index) => {
-            const zoneNum = index + 1;
-            const value = data.sensors[sensor];
-            hardwareState.sensors[`soil-${zoneNum}`] = {
-                id: `soil-sensor-${zoneNum}`,
-                name: `Soil Sensor ${zoneNum}`,
-                status: value !== undefined && value !== null ? 'online' : 'offline',
-                description: value !== undefined ? `${value}%` : 'No Data'
+        const soilMoisture = data.sensors.soil_moisture;
+        if (soilMoisture !== undefined && soilMoisture !== null) {
+            hardwareState.sensors['soil-1'] = {
+                id: 'soil-sensor-1',
+                name: 'Soil Moisture Sensor',
+                status: 'online',
+                description: `${soilMoisture}%`
             };
-        });
+        }
     }
     
-    // Zone valves (simulate from zones data or create default)
-    for (let i = 1; i <= 3; i++) {
-        const isActive = data.irrigation?.valve_open && i === 1; // Assume zone 1 is active when valve is open
-        hardwareState.valves[`zone-${i}`] = {
-            id: `zone-valve-${i}`,
-            name: `Zone ${i} Valve`,
-            status: isActive ? 'online' : 'offline',
-            description: isActive ? 'Active' : 'Inactive'
+    // Temperature sensor
+    if (data.sensors?.temperature !== undefined) {
+        hardwareState.sensors.temperature = {
+            id: 'temp-sensor',
+            name: 'Temperature Sensor',
+            status: 'online',
+            description: `${data.sensors.temperature}°C`
+        };
+    }
+    
+    // Humidity sensor
+    if (data.sensors?.humidity !== undefined) {
+        hardwareState.sensors.humidity = {
+            id: 'humidity-sensor',
+            name: 'Humidity Sensor',
+            status: 'online',
+            description: `${data.sensors.humidity}%`
         };
     }
     

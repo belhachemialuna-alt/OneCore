@@ -119,12 +119,49 @@ async function updateIrrigationSidebarSpace() {
     }
 }
 
-// Initialize real-time updates
+// Update weather card with real data
+async function updateWeatherCard() {
+    try {
+        const response = await fetch(`${API_BASE}/status`);
+        const data = await response.json();
+        
+        if (data.success && data.sensors) {
+            // Update temperature
+            const tempEl = document.getElementById('weather-temp-space');
+            if (tempEl && data.sensors.temperature !== undefined) {
+                tempEl.textContent = Math.round(data.sensors.temperature);
+            }
+            
+            // Update humidity
+            const humidityEl = document.getElementById('weather-humidity-space');
+            if (humidityEl && data.sensors.humidity !== undefined) {
+                humidityEl.textContent = Math.round(data.sensors.humidity);
+            }
+            
+            // Update time
+            const timeEl = document.getElementById('weather-time-space');
+            if (timeEl) {
+                const now = new Date();
+                const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                timeEl.textContent = `${weekdays[now.getDay()]} ${hours}:${minutes}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error updating weather card:', error);
+    }
+}
+
+// Initialize real-time updates immediately
+updateTasksCalendarDateTime(); // Immediate first update
+updateIrrigationSidebarSpace(); // Immediate first update
+updateWeatherCard(); // Immediate weather update
+
 setInterval(updateTasksCalendarDateTime, 1000); // Update every second
 setInterval(updateRefreshCountdown, 1000); // Update countdown every second
 setInterval(updateIrrigationSidebarSpace, 2000); // Update irrigation sidebar every 2 seconds
-setTimeout(updateTasksCalendarDateTime, 100); // Initial update
-setTimeout(updateIrrigationSidebarSpace, 500); // Initial irrigation sidebar update
+setInterval(updateWeatherCard, 5000); // Update weather card every 5 seconds
 
 // Toggle Irrigation Tasks Sidebar
 function setupTasksSidebar() {
@@ -353,12 +390,42 @@ function setupScheduleModal() {
     }
 }
 
-// Initialize tasks sidebar
-setTimeout(() => {
+// Initialize tasks sidebar and load tasks immediately
+document.addEventListener('DOMContentLoaded', () => {
     setupTasksSidebar();
     setupScheduleModal();
     loadIrrigationTasks(); // Load initial count
-}, 500);
+    
+    // Also try loading from schedules endpoint
+    loadSchedulesCount();
+});
+
+// Fallback if DOMContentLoaded already fired
+if (document.readyState === 'loading') {
+    // Already set up above
+} else {
+    setupTasksSidebar();
+    setupScheduleModal();
+    loadIrrigationTasks();
+    loadSchedulesCount();
+}
+
+// Load schedules count from API
+async function loadSchedulesCount() {
+    try {
+        const response = await fetch(`${API_BASE}/schedules`);
+        const data = await response.json();
+        
+        if (data.success && data.schedules) {
+            const tasksCount = document.getElementById('tasks-count');
+            if (tasksCount && data.schedules.length > 0) {
+                tasksCount.textContent = data.schedules.length;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading schedules count:', error);
+    }
+}
 
 // Sync quick stats with main irrigation sidebar data
 function updateQuickStats() {

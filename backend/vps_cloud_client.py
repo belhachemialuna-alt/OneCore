@@ -40,8 +40,8 @@ class VPSCloudClient:
         
         return {
             "Content-Type": "application/json",
-            "Authorization": f"Device {api_key}",
-            "X-Device-ID": self.device_identity["deviceId"]
+            "X-Device-API-Key": api_key,
+            "User-Agent": "BAYYTI-Backend/1.0.0"
         }
     
     def check_registration(self):
@@ -78,13 +78,28 @@ class VPSCloudClient:
                 "error": "Device not registered with VPS"
             }
         
-        endpoint = f"{self.vps_url}/api/device/data"
+        endpoint = f"{self.vps_url}/api/devices/data"
         
+        # Transform to cloud format (camelCase)
         payload = {
-            "deviceId": self.device_identity["deviceId"],
-            "timestamp": datetime.utcnow().isoformat(),
-            "sensors": sensor_data
+            "temperature": sensor_data.get("temperature"),
+            "humidity": sensor_data.get("humidity"),
+            "soilMoisture": sensor_data.get("soil_moisture"),
+            "timestamp": datetime.utcnow().isoformat() + 'Z'
         }
+        
+        # Add metadata for extra sensors
+        metadata = {}
+        if "water_flow" in sensor_data:
+            metadata["waterFlow"] = sensor_data["water_flow"]
+        if "water_pressure" in sensor_data:
+            metadata["waterPressure"] = sensor_data["water_pressure"]
+        if "battery_voltage" in sensor_data:
+            metadata["batteryVoltage"] = sensor_data["battery_voltage"]
+        if "solar_voltage" in sensor_data:
+            metadata["solarVoltage"] = sensor_data["solar_voltage"]
+        if metadata:
+            payload["metadata"] = metadata
         
         try:
             response = requests.post(
@@ -142,7 +157,7 @@ class VPSCloudClient:
                 "error": "Device not registered with VPS"
             }
         
-        endpoint = f"{self.vps_url}/api/device/irrigation"
+        endpoint = f"{self.vps_url}/api/devices/commands"
         
         payload = {
             "deviceId": self.device_identity["deviceId"],
@@ -194,7 +209,7 @@ class VPSCloudClient:
                 "error": "Device not registered with VPS"
             }
         
-        endpoint = f"{self.vps_url}/api/device/alert"
+        endpoint = f"{self.vps_url}/api/devices/alerts"
         
         payload = {
             "deviceId": self.device_identity["deviceId"],
@@ -237,7 +252,7 @@ class VPSCloudClient:
                 "error": "Device not registered with VPS"
             }
         
-        endpoint = f"{self.vps_url}/api/device/config"
+        endpoint = f"{self.vps_url}/api/devices/config"
         
         try:
             response = requests.get(
@@ -273,7 +288,7 @@ class VPSCloudClient:
                 "error": "Device not registered with VPS"
             }
         
-        endpoint = f"{self.vps_url}/api/device/heartbeat"
+        endpoint = f"{self.vps_url}/api/devices/heartbeat"
         
         payload = {
             "deviceId": self.device_identity["deviceId"],

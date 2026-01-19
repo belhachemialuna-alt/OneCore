@@ -25,14 +25,14 @@
     </div>
 
     <!-- Sticky Red Header Bar -->
-    <header class="top-header sticky-header">
+    <header class="top-header">
         <div class="header-container">
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    <img src="logosetup.png" alt="ElivateOne Logo" class="logo-setup-image">
                 </div>
             </div>
             <div class="header-center">
@@ -141,7 +141,7 @@
                         <i class="fa-solid fa-microchip"></i>
                     </div>
                     <div class="page-title-info">
-                        <h2>Hardware Schema</h2>
+                        <h2 data-i18n="nav-hardware">Hardware Schema</h2>
                         <div class="device-id-container">
                             <span class="device-id-label">Device ID:</span>
                             <code class="device-id-value" id="deviceIdDisplay">Loading...</code>
@@ -264,16 +264,63 @@
             </div>
         </div>
 
-        <!-- Hardware Schema SVG -->
+        <!-- Enhanced System Architecture Section -->
         <div class="schema-container">
             <div class="schema-header">
-                <h2><i class="fa-solid fa-diagram-project"></i> System Architecture</h2>
-                <button class="terminal-btn" id="openTerminalBtn" title="Debug & Analyze Components">
-                    <i class="fa-solid fa-terminal"></i>
-                    <span>Debug Terminal</span>
-                </button>
+                <h2><i class="fa-solid fa-diagram-project"></i> Deep System Architecture</h2>
+                <div class="schema-controls">
+                    <button class="schema-btn" id="toggleLayersBtn" title="Toggle Architecture Layers">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Layers</span>
+                    </button>
+                    <button class="schema-btn" id="toggleFlowBtn" title="Show Data Flow">
+                        <i class="fa-solid fa-arrows-spin"></i>
+                        <span>Flow</span>
+                    </button>
+                    <button class="schema-btn" id="resetSchemaBtn" title="Reset View">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reset</span>
+                    </button>
+                    <button class="terminal-btn" id="openTerminalBtn" title="Debug & Analyze Components">
+                        <i class="fa-solid fa-terminal"></i>
+                        <span>Debug Terminal</span>
+                    </button>
+                </div>
             </div>
-            <div class="schema-wrapper">
+            
+            <!-- Architecture Info Panel -->
+            <div class="architecture-info-panel">
+                <div class="info-item">
+                    <i class="fa-solid fa-microchip"></i>
+                    <div>
+                        <span class="info-label">Processing Unit</span>
+                        <span class="info-value">Raspberry Pi 4B</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fa-solid fa-memory"></i>
+                    <div>
+                        <span class="info-label">Memory</span>
+                        <span class="info-value">4GB LPDDR4</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <div>
+                        <span class="info-label">Connectivity</span>
+                        <span class="info-value">WiFi 5 + Ethernet</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fa-solid fa-bolt"></i>
+                    <div>
+                        <span class="info-label">Power</span>
+                        <span class="info-value">5V 3A USB-C</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="schema-wrapper" id="schemaWrapper">
                 <svg id="hardware-schema" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
                     <!-- Definitions for patterns and gradients -->
                     <defs>
@@ -535,6 +582,15 @@
                     <!-- Failure Summary -->
                     <div class="failure-summary">
                         <div class="failure-summary-item">
+                            <div class="failure-icon total">
+                                <i class="fa-solid fa-list"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="totalFailures">0</span>
+                                <span class="failure-label">Total Issues</span>
+                            </div>
+                        </div>
+                        <div class="failure-summary-item">
                             <div class="failure-icon critical">
                                 <i class="fa-solid fa-circle-xmark"></i>
                             </div>
@@ -544,20 +600,11 @@
                             </div>
                         </div>
                         <div class="failure-summary-item">
-                            <div class="failure-icon warning">
-                                <i class="fa-solid fa-exclamation-triangle"></i>
-                            </div>
-                            <div class="failure-details">
-                                <span class="failure-count" id="warningFailures">2</span>
-                                <span class="failure-label">Warnings</span>
-                            </div>
-                        </div>
-                        <div class="failure-summary-item">
                             <div class="failure-icon resolved">
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                             <div class="failure-details">
-                                <span class="failure-count" id="resolvedFailures">15</span>
+                                <span class="failure-count" id="resolvedFailures">0</span>
                                 <span class="failure-label">Resolved</span>
                             </div>
                         </div>
@@ -612,39 +659,38 @@
         </div>
     </div>
 
-    <!-- Clean Black Footer -->
+    <!-- Enhanced Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-section">
-                <h3>ElivateOne</h3>
-                <p>Smart Irrigation System</p>
-                <p>Powered by AI • Made with ❤️</p>
+            <div class="footer-left">
+                <div class="footer-brand">
+                    <strong>TiOne</strong>
+                    <span class="footer-tagline">Smart Irrigation System</span>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2024-2026 TiOne. All rights reserved. • Powered by AI
+                </div>
             </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a href="index.html">Dashboard</a>
-                <a href="analytics.html">Analytics</a>
-                <a href="emergency.html">Emergency</a>
-                <a href="hardware.html">Hardware</a>
-                <a href="controls.html">Controls</a>
-                <a href="support.html">Support</a>
+            <div class="footer-nav">
+                <div class="footer-nav-section">
+                    <h4>Dashboard</h4>
+                    <a href="index.html">Classic View</a>
+                    <a href="space.html">Space View</a>
+                    <a href="analytics.html">Analytics</a>
+                </div>
+                <div class="footer-nav-section">
+                    <h4>System</h4>
+                    <a href="hardware.html">Hardware</a>
+                    <a href="controls.html">Controls</a>
+                    <a href="emergency.html">Emergency</a>
+                </div>
+                <div class="footer-nav-section">
+                    <h4>Help</h4>
+                    <a href="support.html">Support</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="ai.html">AI Assistant</a>
+                </div>
             </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <a href="https://github.com/belhachemialuna-alt/OneCore" target="_blank">GitHub</a>
-                <a href="UPDATE_SYSTEM_README.md" target="_blank">Documentation</a>
-                <a href="#">API Reference</a>
-                <a href="https://github.com/belhachemialuna-alt/OneCore/releases" target="_blank">Release Notes</a>
-            </div>
-            <div class="footer-section">
-                <h4>System Status</h4>
-                <p>Device: <strong id="device-name">ElivateOne</strong></p>
-                <p>Version: <strong id="system-version">1.0.0</strong></p>
-                <p>Status: <span class="status-online">● Online</span></p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 BAYYTI Smart Irrigation System. All rights reserved.</p>
         </div>
     </footer>
 
@@ -737,6 +783,9 @@
     </div>
 
     <script src="js/hardware.js?v=1.0"></script>
+    
+    <!-- Hardware Drag & Drop System -->
+    <script src="js/hardware-drag-drop.js?v=1.0"></script>
     
     <!-- Language System -->
     <script src="js/language.js?v=1.0"></script>
@@ -875,102 +924,183 @@
         // Bind terminal button
         document.getElementById('openTerminalBtn')?.addEventListener('click', openTerminal);
         
-        // Initialize Failure Statistics Charts
-        function initializeFailureCharts() {
-            // Failure Distribution Pie Chart
-            const distributionCtx = document.getElementById('failureDistributionChart');
-            if (distributionCtx) {
-                new Chart(distributionCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Sensor Failures', 'Valve Failures', 'Network Issues', 'Power Issues', 'Other'],
-                        datasets: [{
-                            data: [5, 3, 2, 1, 4],
-                            backgroundColor: [
-                                '#EF5350',
-                                '#FFA726',
-                                '#42A5F5',
-                                '#66BB6A',
-                                '#AB47BC'
-                            ],
-                            borderWidth: 2,
-                            borderColor: '#fff'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#333',
-                                    font: { size: 11 }
-                                }
-                            }
+        // Initialize failure statistics charts with REAL data
+        async function initializeFailureCharts() {
+            try {
+                // Fetch real alerts and logs data
+                const [alertsResponse, logsResponse] = await Promise.all([
+                    fetch('/api/alerts'),
+                    fetch('/api/logs?limit=100')
+                ]);
+                
+                const alertsData = await alertsResponse.json();
+                const logsData = await logsResponse.json();
+                
+                // Process alerts to categorize failures
+                const failureCounts = {
+                    'Sensor Failures': 0,
+                    'Irrigation Issues': 0,
+                    'Network Issues': 0,
+                    'System Errors': 0,
+                    'Other': 0
+                };
+                
+                if (alertsData.success && alertsData.data) {
+                    alertsData.data.forEach(alert => {
+                        const msg = alert.message.toLowerCase();
+                        if (msg.includes('sensor') || msg.includes('moisture') || msg.includes('temperature')) {
+                            failureCounts['Sensor Failures']++;
+                        } else if (msg.includes('irrigation') || msg.includes('valve') || msg.includes('water')) {
+                            failureCounts['Irrigation Issues']++;
+                        } else if (msg.includes('network') || msg.includes('connection')) {
+                            failureCounts['Network Issues']++;
+                        } else if (msg.includes('system') || msg.includes('error')) {
+                            failureCounts['System Errors']++;
+                        } else {
+                            failureCounts['Other']++;
                         }
-                    }
-                });
-            }
-            
-            // Failure Trends Line Chart
-            const trendsCtx = document.getElementById('failureTrendsChart');
-            if (trendsCtx) {
-                new Chart(trendsCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                        datasets: [{
-                            label: 'Critical',
-                            data: [2, 1, 0, 0],
-                            borderColor: '#EF5350',
-                            backgroundColor: 'rgba(239, 83, 80, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Warnings',
-                            data: [5, 4, 3, 2],
-                            borderColor: '#FFA726',
-                            backgroundColor: 'rgba(255, 167, 38, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Resolved',
-                            data: [3, 5, 4, 3],
-                            borderColor: '#66BB6A',
-                            backgroundColor: 'rgba(102, 187, 106, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: '#333',
-                                    font: { size: 11 }
-                                }
-                            }
+                    });
+                }
+                
+                // Failure Distribution Pie Chart with REAL data
+                const distributionCtx = document.getElementById('failureDistributionChart');
+                if (distributionCtx) {
+                    new Chart(distributionCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: Object.keys(failureCounts),
+                            datasets: [{
+                                data: Object.values(failureCounts),
+                                backgroundColor: [
+                                    '#EF5350',
+                                    '#FFA726',
+                                    '#42A5F5',
+                                    '#66BB6A',
+                                    '#AB47BC'
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#fff'
+                            }]
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { 
-                                    color: '#666',
-                                    stepSize: 1
-                                },
-                                grid: { color: 'rgba(0, 0, 0, 0.05)' }
-                            },
-                            x: {
-                                ticks: { color: '#666' },
-                                grid: { display: false }
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#333',
+                                        font: { size: 11 }
+                                    }
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
+                
+                // Process logs for trends (last 4 weeks)
+                const weeklyData = {
+                    critical: [0, 0, 0, 0],
+                    warnings: [0, 0, 0, 0],
+                    resolved: [0, 0, 0, 0]
+                };
+                
+                if (logsData.success && logsData.data) {
+                    const now = new Date();
+                    logsData.data.forEach(log => {
+                        const logDate = new Date(log.timestamp);
+                        const weeksDiff = Math.floor((now - logDate) / (7 * 24 * 60 * 60 * 1000));
+                        
+                        if (weeksDiff < 4) {
+                            const weekIndex = 3 - weeksDiff; // Reverse order for display
+                            const level = log.level?.toLowerCase() || '';
+                            
+                            if (level.includes('error') || level.includes('critical')) {
+                                weeklyData.critical[weekIndex]++;
+                            } else if (level.includes('warning') || level.includes('warn')) {
+                                weeklyData.warnings[weekIndex]++;
+                            } else if (level.includes('info') || level.includes('success')) {
+                                weeklyData.resolved[weekIndex]++;
+                            }
+                        }
+                    });
+                }
+                
+                // Failure Trends Line Chart with REAL data
+                const trendsCtx = document.getElementById('failureTrendsChart');
+                if (trendsCtx) {
+                    new Chart(trendsCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                            datasets: [{
+                                label: 'Critical',
+                                data: weeklyData.critical,
+                                borderColor: '#EF5350',
+                                backgroundColor: 'rgba(239, 83, 80, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }, {
+                                label: 'Warnings',
+                                data: weeklyData.warnings,
+                                borderColor: '#FFA726',
+                                backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }, {
+                                label: 'Resolved',
+                                data: weeklyData.resolved,
+                                borderColor: '#66BB6A',
+                                backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#333',
+                                        font: { size: 11 }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { 
+                                        color: '#666',
+                                        stepSize: 1
+                                    },
+                                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                                },
+                                x: {
+                                    ticks: { color: '#666' },
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Update failure summary counts with real data
+                const totalFailures = Object.values(failureCounts).reduce((a, b) => a + b, 0);
+                const criticalCount = weeklyData.critical.reduce((a, b) => a + b, 0);
+                const resolvedCount = weeklyData.resolved.reduce((a, b) => a + b, 0);
+                
+                document.getElementById('totalFailures').textContent = totalFailures;
+                document.getElementById('criticalFailures').textContent = criticalCount;
+                document.getElementById('resolvedFailures').textContent = resolvedCount;
+                
+            } catch (error) {
+                console.error('Error loading failure statistics:', error);
+                // Fallback to showing zeros if API fails
+                document.getElementById('totalFailures').textContent = '0';
+                document.getElementById('criticalFailures').textContent = '0';
+                document.getElementById('resolvedFailures').textContent = '0';
             }
         }
     </script>

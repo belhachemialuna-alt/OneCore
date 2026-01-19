@@ -54,6 +54,70 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
+/* Footer - Clean Black One-Bar Design */
+.footer {
+    background: #000000;
+    color: white;
+    padding: 1rem 0;
+    margin-top: auto;
+    border-top: 3px solid #FF0000;
+}
+
+.footer-content {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-text {
+    font-family: 'Figtree', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-text strong {
+    color: #FF0000;
+    font-weight: 700;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #FF0000;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+    
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+
 /* Red Header (BleuHive Style) */
 /* Sticky Header */
 .top-header {
@@ -2336,8 +2400,8 @@ body.rtl .stat-info {
     }
     
     .logo-setup-image {
-        height: 60px !important;
-        max-height: 60px !important;
+        height: 40px !important;
+        max-height: 40px !important;
         width: auto;
         object-fit: contain;
         padding: 0 !important;

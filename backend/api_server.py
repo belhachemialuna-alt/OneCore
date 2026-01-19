@@ -15,6 +15,14 @@ from sensor_service import SensorService
 from system_monitor import SystemMonitor
 from system_stats import get_system_stats
 
+# Import terminal API blueprint for debugging
+try:
+    from terminal_api import terminal_bp
+    TERMINAL_AVAILABLE = True
+except ImportError:
+    TERMINAL_AVAILABLE = False
+    print("Warning: Terminal API not available")
+
 # Use absolute path for static folder to avoid path issues
 static_folder_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
 app = Flask(__name__, static_folder=static_folder_path)
@@ -51,6 +59,11 @@ try:
 except Exception as e:
     print(f"⚠ Device identity module failed to load: {e}")
     device_identity = None
+
+# Register terminal API blueprint if available
+if TERMINAL_AVAILABLE:
+    app.register_blueprint(terminal_bp, url_prefix='/api')
+    print("✓ Terminal API registered at /api/terminal/*")
 
 # Disable caching for all responses
 @app.after_request
@@ -114,31 +127,72 @@ def get_device_id():
 
 @app.route('/device-register', methods=['POST'])
 def register_device():
-    """Update device registration information"""
-    if device_identity is None:
-        return jsonify({
-            "success": False,
-            "error": "Device identity module not available"
-        }), 500
-    
+    """Update device registration information from cloud"""
     try:
+        from device_identity import update_device_identity, is_device_registered
+        
         data = request.get_json()
         api_key = data.get('apiKey')
         device_name = data.get('deviceName')
         owner_id = data.get('ownerId')
         
-        if api_key:
-            device_identity.update_api_key(api_key)
-        if device_name:
-            device_identity.update_device_name(device_name)
-        if owner_id:
-            device_identity.update_owner_id(owner_id)
+        if not api_key:
+            return jsonify({
+                "success": False,
+                "error": "API key is required"
+            }), 400
+        
+        # Update device identity with cloud registration info
+        identity = update_device_identity(
+            api_key=api_key,
+            registered=True,
+            device_name=device_name,
+            owner_id=owner_id
+        )
         
         return jsonify({
             "success": True,
-            "message": "Device registration updated",
-            "registered": device_identity.is_registered()
+            "message": "Device registered successfully",
+            "deviceId": identity["deviceId"],
+            "registered": identity["registered"]
         })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route('/cloud-register', methods=['POST'])
+def cloud_register():
+    """Register device with cloud platform"""
+    try:
+        data = request.get_json() or {}
+        device_name = data.get('deviceName')
+        
+        result = controller.register_with_cloud(device_name)
+        
+        if result.get('success'):
+            return jsonify(result)
+        else:
+            return jsonify(result), 400
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route('/cloud-status')
+def cloud_status():
+    """Get cloud integration status"""
+    try:
+        if controller.cloud_integration:
+            status = controller.cloud_integration.get_status()
+            return jsonify(status)
+        else:
+            return jsonify({
+                "registered": False,
+                "error": "Cloud integration not available"
+            })
     except Exception as e:
         return jsonify({
             "success": False,

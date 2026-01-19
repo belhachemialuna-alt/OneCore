@@ -24,6 +24,6 @@ ENABLE_GPIO = os.environ.get('ENABLE_GPIO', 'false').lower() == 'true'
 SOLAR_VOLTAGE_PIN = 0
 BATTERY_VOLTAGE_PIN = 1
 
-WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY', '')
+WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY', '5f0ddcc22f7e4c5b1d2f2318e4d0f2')
 LOCATION_LAT = 33.5731
 LOCATION_LON = -7.5898
