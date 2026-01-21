@@ -29,6 +29,10 @@ const translations = {
         'valve-opens': 'Valve Opens',
         'avg-duration': 'Avg Duration',
         'water-used': 'Water Used',
+        'suspected-farmland': 'Suspected farmland statistics',
+        'ai-doubt-stats': 'AI doubt category statistics',
+        'area-of-doubt': 'Area of doubt',
+        'total-area': 'Total Area',
         
         // Tooltips
         'tooltip-alerts': 'Alerts & Warnings',
@@ -449,10 +453,6 @@ const translations = {
         'valve-opens': 'Ouvertures de Vanne',
         'avg-duration': 'Durée Moyenne',
         'water-used': 'Eau Utilisée',
-        'suspected-farmland': 'Statistiques des terres agricoles suspectes',
-        'ai-doubt-stats': 'Statistiques de catégorie de doute IA',
-        'area-of-doubt': 'Zone de doute',
-        'total-area': 'Surface Totale',
         
         // Tooltips
         'tooltip-alerts': 'Alertes et Avertissements',

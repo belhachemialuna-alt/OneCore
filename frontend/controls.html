@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/controls.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -31,7 +30,9 @@
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    <a href="space.html">
+                        <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    </a>
                 </div>
             </div>
             <div class="header-center">
@@ -69,6 +70,9 @@
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls" style="background: rgba(255, 255, 255, 0.25);">
                     <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
+                    <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -610,52 +614,24 @@
             </section>
         </div>
 
-        <!-- Danger Zone - Redesigned -->
+        <!-- Danger Zone - Simplified -->
         <section class="control-section danger-zone-section">
-            <div class="danger-zone-header">
-                <div class="danger-zone-icon">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <div class="danger-zone-title">
-                    <h2><span data-i18n="danger-zone">Danger Zone</span></h2>
-                    <p class="danger-zone-subtitle">Critical system operations - proceed with caution</p>
-                </div>
-            </div>
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="danger-zone">Danger Zone</span></h2>
             
-            <div class="danger-actions-grid">
-                <div class="danger-card-enhanced">
-                    <div class="danger-card-icon reset">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </div>
-                    <div class="danger-card-content">
-                        <h3 data-i18n="reset-settings">Reset System Settings</h3>
-                        <p data-i18n="reset-settings-desc">Restore all settings to factory defaults (keeps user data)</p>
-                        <ul class="danger-card-features">
-                            <li><i class="fa-solid fa-check"></i> Preserves user accounts</li>
-                            <li><i class="fa-solid fa-check"></i> Keeps irrigation schedules</li>
-                            <li><i class="fa-solid fa-check"></i> Maintains network config</li>
-                        </ul>
-                    </div>
-                    <button class="btn-danger-enhanced reset-btn">
+            <div class="danger-actions-simple">
+                <div class="danger-card-simple">
+                    <h3 data-i18n="reset-settings">Reset System Settings</h3>
+                    <p data-i18n="reset-settings-desc">Restore all settings to factory defaults</p>
+                    <button class="btn btn-black">
                         <i class="fa-solid fa-rotate-left"></i>
                         <span data-i18n="btn-reset-settings">Reset Settings</span>
                     </button>
                 </div>
                 
-                <div class="danger-card-enhanced critical">
-                    <div class="danger-card-icon factory">
-                        <i class="fa-solid fa-bomb"></i>
-                    </div>
-                    <div class="danger-card-content">
-                        <h3 data-i18n="factory-reset">Factory Reset</h3>
-                        <p data-i18n="factory-reset-desc">Erase all data and restore to factory state</p>
-                        <ul class="danger-card-features warning">
-                            <li><i class="fa-solid fa-xmark"></i> Deletes all user data</li>
-                            <li><i class="fa-solid fa-xmark"></i> Removes all schedules</li>
-                            <li><i class="fa-solid fa-xmark"></i> <strong>CANNOT BE UNDONE</strong></li>
-                        </ul>
-                    </div>
-                    <button class="btn-danger-enhanced factory-btn">
+                <div class="danger-card-simple">
+                    <h3 data-i18n="factory-reset">Factory Reset</h3>
+                    <p data-i18n="factory-reset-desc">Erase all data and restore to factory state</p>
+                    <button class="btn btn-black">
                         <i class="fa-solid fa-bomb"></i>
                         <span data-i18n="btn-factory-reset">Factory Reset</span>
                     </button>
@@ -664,40 +640,6 @@
         </section>
     </div>
 
-    <!-- Clean Black Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>BAYYTI-B1</h4>
-                <p>Smart Irrigation System</p>
-                <p>Powered by AI • Made with ❤️</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a href="index.html">Dashboard</a>
-                <a href="analytics.html">Analytics</a>
-                <a href="emergency.html">Emergency</a>
-                <a href="controls.html">Controls</a>
-                <a href="support.html">Support</a>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <a href="https://github.com/belhachemialuna-alt/OneCore" target="_blank">GitHub</a>
-                <a href="UPDATE_SYSTEM_README.md" target="_blank">Documentation</a>
-                <a href="#">API Reference</a>
-                <a href="https://github.com/belhachemialuna-alt/OneCore/releases" target="_blank">Release Notes</a>
-            </div>
-            <div class="footer-section">
-                <h4>System Status</h4>
-                <p>Device: <strong id="device-name">ElivateOne</strong></p>
-                <p>Version: <strong id="system-version">1.0.0</strong></p>
-                <p>Status: <span class="status-online">● Online</span></p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 BAYYTI Smart Irrigation System. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="js/controls.js?v=1.0"></script>
     
@@ -758,5 +700,16 @@
         updateHeaderDateTime();
         setInterval(updateHeaderDateTime, 60000);
     </script>
+    <!-- Simplified Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+            </div>
+            <div class="footer-text">
+                <p>&copy; 2024-2026 TiOne Smart Irrigation System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

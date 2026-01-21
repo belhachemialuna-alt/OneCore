@@ -7,14 +7,11 @@ class CustomCursor {
     constructor() {
         this.cursor = null;
         this.cursorDot = null;
-        this.cursorRing = null;
         this.mouseX = 0;
         this.mouseY = 0;
         this.currentX = 0;
         this.currentY = 0;
         this.isVisible = true;
-        this.trailEnabled = true;
-        this.trailInterval = null;
         
         this.init();
     }
@@ -28,11 +25,6 @@ class CustomCursor {
         
         // Start animation loop
         this.animate();
-        
-        // Start trail effect
-        if (this.trailEnabled) {
-            this.startTrail();
-        }
     }
     
     createCursor() {
@@ -245,6 +237,14 @@ class CustomCursor {
     hide() {
         this.isVisible = false;
         this.cursor.classList.add('hidden');
+    }
+    
+    setDisabled(disabled) {
+        if (disabled) {
+            this.cursor.classList.add('disabled');
+        } else {
+            this.cursor.classList.remove('disabled');
+        }
     }
 }
 

@@ -42,9 +42,9 @@ body {
     flex-direction: column;
 }
 
-/* Apply JetBrains Mono to headings and key elements for stronger UI */
+/* Apply Mulish to headings and key elements */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Mulish', sans-serif;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
@@ -54,36 +54,46 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-/* Footer - Clean Black One-Bar Design */
+/* Simplified Footer Design */
 .footer {
     background: #000000;
-    color: white;
-    padding: 1rem 0;
+    color: #FFFFFF;
+    padding: 1.5rem 0;
     margin-top: auto;
-    border-top: 3px solid #FF0000;
+    border-top: 2px solid #FF0000;
+    width: 100%;
 }
 
 .footer-content {
-    max-width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-logo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+}
+
+.footer-logo-img {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
 }
 
 .footer-text {
-    font-family: 'Figtree', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    color: #CCCCCC;
+    text-align: center;
 }
 
-.footer-text strong {
-    color: #FF0000;
-    font-weight: 700;
+.footer-text p {
+    margin: 0;
 }
 
 .footer-links {
@@ -1025,20 +1035,17 @@ h3 img,
     box-shadow: var(--shadow-md);
 }
 
-.btn-success {
-    background: #505050;
+.btn-success, .btn-danger, .btn-warning, .btn-black {
+    background: #000000;
     color: white;
-    border: 1px solid #606060;
+    border: 2px solid #000000;
+    transition: all 0.3s ease;
 }
 
-.btn-danger {
-    background: var(--danger);
-    color: white;
-}
-
-.btn-warning {
-    background: var(--warning);
-    color: var(--text-dark);
+.btn-success:hover, .btn-danger:hover, .btn-warning:hover, .btn-black:hover {
+    background: #333333;
+    border-color: #333333;
+    transform: translateY(-1px);
 }
 
 .irrigation-info {
@@ -2400,15 +2407,15 @@ body.rtl .stat-info {
     }
     
     .logo-setup-image {
-        height: 40px !important;
-        max-height: 40px !important;
+        height: 45px !important;
+        max-height: 45px !important;
         width: auto;
         object-fit: contain;
         padding: 0 !important;
     }
     
     .logo-image {
-        height: 60px;
+        height: 45px;
         width: auto;
         object-fit: contain;
     }
@@ -2882,6 +2889,20 @@ body.rtl .stat-info {
     
     .modal-header {
         padding: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
     }
     
     .modal-title {

@@ -9,10 +9,9 @@
     <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css?v=4.0">
-    <link rel="stylesheet" href="css/space.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=News+Cycle:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
+    <link rel="stylesheet" href="css/space.css?v=2.0">
     <link rel="stylesheet" href="css/system-performance.css">
     <link rel="stylesheet" href="css/schedule-modal.css">
     <link rel="stylesheet" href="css/calendar-modal.css">
@@ -51,7 +50,9 @@
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="logosetup.png" alt="ElivateOne Logo" class="logo-setup-image">
+                    <a href="space.html">
+                        <img src="logosetup.png" alt="ElivateOne Logo" class="logo-setup-image">
+                    </a>
                 </div>
             </div>
             <div class="header-center">
@@ -78,13 +79,10 @@
                 <button class="header-icon-btn drag-toggle-btn" id="dragToggleBtn" title="Enable/Disable Drag & Drop">
                     <i class="fa-solid fa-grip-vertical"></i>
                 </button>
-                <a href="index.html" class="header-icon-btn" title="Classic Dashboard">
-                    <i class="fa-solid fa-gauge"></i>
-                </a>
                 <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
-                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
@@ -92,6 +90,9 @@
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
+                    <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -221,7 +222,6 @@
                 <i class="fa-solid fa-rocket"></i>
             </div>
             <h1 class="page-title" data-i18n="nav-space">Space Dashboard</h1>
-            <p class="page-subtitle" data-i18n="space-subtitle">Optimized Full-Width Layout</p>
         </div>
 
         <!-- Irrigation Tasks Card with Real-Time Calendar -->
@@ -270,82 +270,13 @@
                 </div>
                 <div class="card-body">
                     <div class="control-buttons">
-                        <button class="btn btn-success" id="start-irrigation-main">
+                        <button class="btn btn-black" id="start-irrigation-main">
                             <i class="fa-solid fa-play"></i> Start Irrigation
                         </button>
-                        <button class="btn btn-danger" id="stop-irrigation-main">
+                        <button class="btn btn-black" id="stop-irrigation-main">
                             <i class="fa-solid fa-stop"></i> Stop Irrigation
                         </button>
-                        <button class="btn btn-warning" id="emergency-stop-main">
-                            <i class="fa-solid fa-circle-exclamation"></i> Emergency Stop
-                        </button>
-                    </div>
-                    <div class="irrigation-info">
-                        <div class="info-item">
-                            <span class="info-label">Duration:</span>
-                            <span class="info-value" id="irrigation-duration-main">--</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Water Used:</span>
-                            <span class="info-value" id="water-used-main">--</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Last Irrigation:</span>
-                            <span class="info-value" id="last-irrigation-main">--</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Weather Card - Green Theme -->
-            <div class="weather-card-space">
-                <div class="weather-card-icon">
-                    <svg viewBox="0 0 200 200" width="100" height="100">
-                        <circle cx="80" cy="80" r="60" fill="#1e5631"/>
-                        <circle cx="120" cy="100" r="50" fill="#2d7a3e"/>
-                        <rect x="125" y="80" width="15" height="40" fill="#4a9f5e" rx="3"/>
-                        <rect x="145" y="70" width="15" height="50" fill="#4a9f5e" rx="3"/>
-                        <rect x="165" y="60" width="15" height="60" fill="#5db36e" rx="3"/>
-                    </svg>
-                </div>
-                
-                <div class="weather-card-temp">
-                    <span id="weather-temp-space">--</span>°C
-                </div>
-                
-                <div class="weather-card-time" id="weather-time-space">Loading...</div>
-                
-                <div class="weather-card-info">
-                    <div class="weather-info-item">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4a9f5e" stroke-width="2">
-                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-                        </svg>
-                        <span id="weather-condition-space">Mostly Cloudy</span>
-                    </div>
-                    <div class="weather-info-item">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4a9f5e" stroke-width="2">
-                            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-                        </svg>
-                        <span>Humidity: <strong id="weather-humidity-space">--</strong>%</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Irrigation Control Card -->
-            <div class="control-card-main">
-                <div class="card-header">
-                    <h3><i class="fa-solid fa-valve"></i> Irrigation Control</h3>
-                    <span class="valve-badge-main" id="valve-badge-main">OFF</span>
-                </div>
-                <div class="card-body">
-                    <div class="control-buttons">
-                        <button class="btn btn-success" id="start-irrigation-main">
-                            <i class="fa-solid fa-play"></i> Start Irrigation
-                        </button>
-                        <button class="btn btn-danger" id="stop-irrigation-main">
-                            <i class="fa-solid fa-stop"></i> Stop Irrigation
-                        </button>
-                        <button class="btn btn-warning" id="emergency-stop-main">
+                        <button class="btn btn-black" id="emergency-stop-main">
                             <i class="fa-solid fa-circle-exclamation"></i> Emergency Stop
                         </button>
                     </div>
@@ -366,7 +297,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Real-Time Sensor Data Grid -->
         <div class="sensor-grid">
             <div class="sensor-card">
@@ -696,37 +627,14 @@
     </aside>
     </div>
 
-    <!-- Enhanced Footer -->
+    <!-- Simplified Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-brand">
-                    <strong>TiOne</strong>
-                    <span class="footer-tagline">Smart Irrigation System</span>
-                </div>
-                <div class="footer-copyright">
-                    &copy; 2024-2026 TiOne. All rights reserved. • Powered by AI
-                </div>
+            <div class="footer-logo">
+                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
             </div>
-            <div class="footer-nav">
-                <div class="footer-nav-section">
-                    <h4>Dashboard</h4>
-                    <a href="index.html">Classic View</a>
-                    <a href="space.html">Space View</a>
-                    <a href="analytics.html">Analytics</a>
-                </div>
-                <div class="footer-nav-section">
-                    <h4>System</h4>
-                    <a href="hardware.html">Hardware</a>
-                    <a href="controls.html">Controls</a>
-                    <a href="emergency.html">Emergency</a>
-                </div>
-                <div class="footer-nav-section">
-                    <h4>Help</h4>
-                    <a href="support.html">Support</a>
-                    <a href="faq.html">FAQ</a>
-                    <a href="ai.html">AI Assistant</a>
-                </div>
+            <div class="footer-text">
+                <p>&copy; 2024-2026 TiOne Smart Irrigation System. All rights reserved.</p>
             </div>
         </div>
     </footer>

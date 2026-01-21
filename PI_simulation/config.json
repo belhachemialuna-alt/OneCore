@@ -1,0 +1,40 @@
+{
+  "simulation": {
+    "device_id": "sim_pi_001",
+    "api_key": "sim_device_key_12345",
+    "location": "Simulation Lab",
+    "version": "1.0.0"
+  },
+  "endpoints": {
+    "cloud_dashboard": "http://localhost:3000",
+    "pi_server_local": "http://localhost:5000",
+    "pi_server_remote": "http://192.168.137.193:5000"
+  },
+  "sensor_settings": {
+    "interval_seconds": 30,
+    "baselines": {
+      "temperature": 25.0,
+      "humidity": 60.0,
+      "soilMoisture": 45.0,
+      "ph": 7.0,
+      "light": 800,
+      "pressure": 1013.25,
+      "windSpeed": 5.0
+    },
+    "variations": {
+      "temperature": 15.0,
+      "humidity": 30.0,
+      "soilMoisture": 40.0,
+      "ph": 1.5,
+      "light": 500,
+      "pressure": 50.0,
+      "windSpeed": 10.0
+    }
+  },
+  "features": {
+    "time_based_variations": true,
+    "day_night_cycle": true,
+    "weather_simulation": true,
+    "realistic_constraints": true
+  }
+}
