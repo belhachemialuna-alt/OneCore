@@ -60,6 +60,132 @@ except Exception as e:
     print(f"⚠ Device identity module failed to load: {e}")
     device_identity = None
 
+# Import AI decision engine
+try:
+    from ai_decision_engine import generate_ai_irrigation_decisions, store_simulation_data, get_stored_data
+    print("✓ AI Decision Engine imported successfully")
+except ImportError as e:
+    print(f"⚠ AI Decision Engine import failed: {e}")
+    # Fallback functions
+    def generate_ai_irrigation_decisions(data):
+        return [{"id": "fallback", "type": "ERROR", "action": "AI engine not available"}]
+    def store_simulation_data(data, decisions):
+        pass
+    def get_stored_data():
+        return []
+
+# Add critical API endpoints directly to fix 404/405 errors
+@app.route('/api/simulation/send-data', methods=['POST'])
+def receive_simulation_data():
+    """Receive sensor data from Pi simulation and generate AI decisions"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"success": False, "error": "No data provided"}), 400
+        
+        print(f"📊 Agricultural data received: {data}")
+        
+        # Generate intelligent AI decisions based on data
+        ai_decisions = generate_ai_irrigation_decisions(data)
+        
+        # Store the data and decisions for retrieval
+        store_simulation_data(data, ai_decisions)
+        
+        return jsonify({
+            "success": True,
+            "message": "Agricultural data analyzed by AI",
+            "timestamp": datetime.utcnow().isoformat() + 'Z',
+            "ai_decisions": ai_decisions,
+            "data_id": len(get_stored_data())
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/simulation/ai-decisions', methods=['GET'])
+def get_ai_decisions():
+    """Get latest AI decisions for the simulation"""
+    try:
+        stored_data = get_stored_data()
+        if not stored_data:
+            return jsonify({
+                "success": True,
+                "decisions": [],
+                "message": "No data available for AI analysis"
+            })
+        
+        latest_entry = stored_data[-1]
+        return jsonify({
+            "success": True,
+            "decisions": latest_entry.get("ai_decisions", []),
+            "timestamp": latest_entry.get("timestamp"),
+            "plant_type": latest_entry.get("plantType", "unknown")
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/device/api-keys', methods=['GET'])
+def get_device_api_keys():
+    """Get device API keys"""
+    try:
+        config_path = os.path.join(os.path.dirname(__file__), 'device_activation.json')
+        if os.path.exists(config_path):
+            with open(config_path, 'r') as f:
+                activation_data = json.load(f)
+            
+            api_keys = [{
+                "id": 1,
+                "deviceId": activation_data.get('deviceId'),
+                "deviceName": activation_data.get('deviceName', 'BAYYTI-B1'),
+                "apiKey": activation_data.get('apiKey'),
+                "status": "active" if activation_data.get('activated') else "inactive",
+                "activatedAt": activation_data.get('activatedAt')
+            }]
+            
+            return jsonify({"success": True, "apiKeys": api_keys, "count": len(api_keys)})
+        else:
+            return jsonify({"success": True, "apiKeys": [], "count": 0})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/device/activation-status', methods=['GET'])
+def get_activation_status():
+    """Get device activation status"""
+    try:
+        config_path = os.path.join(os.path.dirname(__file__), 'device_activation.json')
+        if os.path.exists(config_path):
+            with open(config_path, 'r') as f:
+                activation_data = json.load(f)
+            
+            return jsonify({
+                "success": True,
+                "deviceId": activation_data.get('deviceId'),
+                "deviceName": activation_data.get('deviceName'),
+                "apiKey": activation_data.get('apiKey'),
+                "activated": True,
+                "activatedAt": activation_data.get('activatedAt'),
+                "hasApiKey": True,
+                "message": "Device is activated"
+            })
+        else:
+            return jsonify({"success": True, "activated": False, "message": "Device not yet activated"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# Import and register device activation endpoints
+try:
+    from device_activation import add_device_activation_routes
+    from secure_device_linking import add_secure_device_linking_routes
+    from pi_simulation_endpoints import add_pi_simulation_routes
+    add_device_activation_routes(app)
+    add_secure_device_linking_routes(app)
+    add_pi_simulation_routes(app)
+    print("✓ Device activation endpoints loaded")
+    print("✓ Secure device linking endpoints loaded")
+    print("✓ Pi simulation endpoints loaded")
+except Exception as e:
+    print(f"⚠ Device activation module failed to load: {e}")
+    print("✓ Using direct endpoint implementation as fallback")
+
 # Register terminal API blueprint if available
 if TERMINAL_AVAILABLE:
     app.register_blueprint(terminal_bp, url_prefix='/api')
@@ -124,6 +250,24 @@ def get_device_id():
             "success": False,
             "error": str(e)
         }), 500
+
+@app.route('/api-keys')
+def api_keys_page():
+    """Serve the API keys management page"""
+    try:
+        return send_from_directory(app.static_folder, 'api-keys.html')
+    except Exception as e:
+        print(f"ERROR serving api-keys.html: {e}")
+        return f"<h1>API Keys Page</h1><p>Error loading page: {e}</p><p>Make sure api-keys.html exists in the frontend folder.</p>", 500
+
+@app.route('/PI_simulation.html')
+def pi_simulation_page():
+    """Serve the Pi simulation page"""
+    try:
+        return send_from_directory(app.static_folder, 'PI_simulation.html')
+    except Exception as e:
+        print(f"ERROR serving PI_simulation.html: {e}")
+        return f"<h1>Pi Simulation Page</h1><p>Error loading page: {e}</p><p>Make sure PI_simulation.html exists in the frontend folder.</p>", 500
 
 @app.route('/device-register', methods=['POST'])
 def register_device():
@@ -1024,6 +1168,37 @@ def server_error(e):
         "error": "Internal server error"
     }), 500
 
+def display_api_key_info():
+    """Display API key information on startup"""
+    try:
+        config_path = os.path.join(os.path.dirname(__file__), 'device_activation.json')
+        if os.path.exists(config_path):
+            with open(config_path, 'r') as f:
+                activation_data = json.load(f)
+            
+            if activation_data.get('activated'):
+                print("🔑 API KEY INFORMATION:")
+                print(f"   Device Name: {activation_data.get('deviceName', 'BAYYTI-B1')}")
+                print(f"   API Key: {activation_data.get('apiKey', 'Not available')[:12]}...")
+                print(f"   Owner ID: {activation_data.get('ownerId', 'Unknown')}")
+                print(f"   Activated: {activation_data.get('activatedAt', 'Unknown')}")
+                print(f"   Status: ✅ ACTIVE")
+                return True
+            else:
+                print("🔑 API KEY INFORMATION:")
+                print(f"   Status: ⚠️ NOT ACTIVATED")
+                print(f"   Action: Go to http://localhost:3000/link-device to activate")
+                return False
+        else:
+            print("🔑 API KEY INFORMATION:")
+            print(f"   Status: ⚠️ NO ACTIVATION DATA")
+            print(f"   Action: Device needs to be activated first")
+            return False
+    except Exception as e:
+        print(f"🔑 API KEY INFORMATION:")
+        print(f"   Status: ❌ ERROR - {e}")
+        return False
+
 if __name__ == "__main__":
     print("=" * 60)
     print(f"Starting {DEVICE_NAME} API Server v{API_VERSION}")
@@ -1032,10 +1207,20 @@ if __name__ == "__main__":
         print(f"✓ Device ID: {device_identity.get_device_id()}")
         print(f"✓ Registered: {device_identity.is_registered()}")
     print("-" * 60)
+    
+    # Display API key information
+    display_api_key_info()
+    
+    print("-" * 60)
+    print("📡 SERVER ENDPOINTS:")
     print("Dashboard:        http://localhost:5000/")
     print("Device Link:      http://localhost:5000/device-link.html")
     print("Hardware:         http://localhost:5000/hardware.html")
+    print("API Keys:         http://localhost:5000/api-keys")
+    print("Pi Simulation:    http://localhost:5000/PI_simulation.html")
     print("API Endpoints:    http://localhost:5000/api/")
     print("Device ID:        http://localhost:5000/device-id")
+    print("=" * 60)
+    print("🚀 Server starting... Press Ctrl+C to stop")
     print("=" * 60)
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -155,6 +155,27 @@ def get_api_key():
     identity = load_identity()
     return identity.get("apiKey")
 
+def update_registration_status(registered, api_key=None, device_name=None, owner_id=None):
+    """
+    Update device registration status and related information.
+    This method is called by the device activation system.
+    
+    Args:
+        registered (bool): Registration status
+        api_key (str, optional): API key from activation
+        device_name (str, optional): Device name
+        owner_id (str, optional): Owner user ID
+    
+    Returns:
+        dict: Updated identity
+    """
+    return update_identity(
+        api_key=api_key,
+        registered=registered,
+        device_name=device_name,
+        owner_id=owner_id
+    )
+
 def reset_identity():
     """
     Reset device identity (for testing or re-registration).
