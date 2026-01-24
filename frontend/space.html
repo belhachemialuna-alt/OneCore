@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/system-performance.css">
     <link rel="stylesheet" href="css/schedule-modal.css">
     <link rel="stylesheet" href="css/calendar-modal.css">
+    <link rel="stylesheet" href="css/irrigation-config-modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -240,6 +241,9 @@
                     </div>
                 </div>
                 <div class="tasks-calendar-actions">
+                    <button class="tasks-action-btn" id="irrigation-config-btn" title="Irrigation Configuration">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
                     <button class="tasks-action-btn" id="add-schedule-btn" title="Add New Schedule">
                         <i class="fa-solid fa-plus"></i>
                     </button>
@@ -249,13 +253,24 @@
                 </div>
             </div>
             <div class="tasks-calendar-stats">
-                <div class="tasks-stat-item">
+                <div class="tasks-stat-item clickable" id="tasks-scheduled-toggle" title="Click to view all tasks">
                     <i class="fa-solid fa-list-check"></i>
                     <span><strong id="tasks-count">0</strong> <span data-i18n="tasks-scheduled">Tasks Scheduled</span></span>
+                    <i class="fa-solid fa-chevron-down toggle-icon"></i>
                 </div>
                 <div class="tasks-stat-item">
                     <i class="fa-solid fa-rotate"></i>
                     <span><span data-i18n="auto-refresh">Auto-refresh</span>: <strong id="refresh-countdown">30s</strong></span>
+                </div>
+            </div>
+            
+            <!-- Tasks Preview List (collapsed by default) -->
+            <div class="tasks-preview-list" id="tasks-preview-list" style="display: none;">
+                <div class="tasks-preview-header">
+                    <h4><i class="fa-solid fa-calendar-check"></i> Upcoming Irrigation Tasks</h4>
+                </div>
+                <div class="tasks-preview-items" id="tasks-preview-items">
+                    <!-- Tasks will be populated here -->
                 </div>
             </div>
         </div>
@@ -751,6 +766,122 @@
         </div>
     </div>
 
+    <!-- Irrigation Configuration Modal -->
+    <div id="irrigationConfigModal" class="custom-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeIrrigationConfig()"></div>
+        <div class="modal-content config-modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-gear modal-icon"></i>
+                <h3 class="modal-title">Irrigation System Configuration</h3>
+                <button class="modal-close-btn" onclick="closeIrrigationConfig()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body config-modal-body">
+                <form id="irrigation-config-form">
+                    <div class="config-section">
+                        <h4><i class="fa-solid fa-seedling"></i> Plant Information</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Plant Type</label>
+                                <select id="config-plant-type" required>
+                                    <option value="">Select Plant Type</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="flowers">Flowers</option>
+                                    <option value="herbs">Herbs</option>
+                                    <option value="grass">Grass/Lawn</option>
+                                    <option value="trees">Trees</option>
+                                    <option value="mixed">Mixed Plants</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Plant Age</label>
+                                <select id="config-plant-age">
+                                    <option value="seedling">Seedling (0-2 weeks)</option>
+                                    <option value="young">Young (2-8 weeks)</option>
+                                    <option value="mature">Mature (2+ months)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h4><i class="fa-solid fa-droplet"></i> Water Resources</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Available Water (Liters/Day)</label>
+                                <input type="number" id="config-water-available" min="0" placeholder="e.g., 500" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Water Pressure (Bar)</label>
+                                <input type="number" id="config-water-pressure" min="0" step="0.1" placeholder="e.g., 2.5">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Water Source</label>
+                            <select id="config-water-source">
+                                <option value="municipal">Municipal Water</option>
+                                <option value="well">Well</option>
+                                <option value="rainwater">Rainwater Collection</option>
+                                <option value="mixed">Mixed Sources</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h4><i class="fa-solid fa-map"></i> Zone Configuration</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Number of Zones</label>
+                                <input type="number" id="config-zone-count" min="1" max="8" value="4" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Area (m²)</label>
+                                <input type="number" id="config-total-area" min="0" placeholder="e.g., 100">
+                            </div>
+                        </div>
+                        <div id="zone-details-container">
+                            <!-- Zone details will be dynamically generated -->
+                        </div>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h4><i class="fa-solid fa-cloud-sun"></i> Environmental Settings</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Soil Type</label>
+                                <select id="config-soil-type">
+                                    <option value="clay">Clay</option>
+                                    <option value="sandy">Sandy</option>
+                                    <option value="loamy">Loamy</option>
+                                    <option value="silty">Silty</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sun Exposure</label>
+                                <select id="config-sun-exposure">
+                                    <option value="full">Full Sun (6+ hours)</option>
+                                    <option value="partial">Partial Sun (3-6 hours)</option>
+                                    <option value="shade">Shade (< 3 hours)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeIrrigationConfig()">
+                            <i class="fa-solid fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-save"></i> Save Configuration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Irrigation Tasks Calendar Modal -->
     <div id="tasksCalendarModal" class="custom-modal" style="display: none;">
         <div class="modal-overlay" onclick="closeTasksCalendar()"></div>
@@ -1015,50 +1146,69 @@
             try {
                 const response = await fetch('/api/schedules');
                 if (response.ok) {
-                    const schedules = await response.json();
+                    const data = await response.json();
+                    const schedules = data.data || data;
+                    
+                    console.log('Loaded schedules from backend:', schedules);
                     
                     // Convert schedules to tasks format for calendar display
-                    schedules.forEach(schedule => {
-                        if (schedule.enabled) {
-                            // Create task entries for the next 30 days based on days_of_week
-                            const daysOfWeek = schedule.days_of_week ? schedule.days_of_week.split(',') : [];
-                            const today = new Date();
-                            
-                            for (let i = 0; i < 30; i++) {
-                                const date = new Date(today);
-                                date.setDate(today.getDate() + i);
-                                const dayName = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][date.getDay()];
+                    if (Array.isArray(schedules)) {
+                        schedules.forEach(schedule => {
+                            if (schedule.enabled) {
+                                // Create task entries for the next 30 days based on days_of_week
+                                const daysOfWeek = schedule.days_of_week ? schedule.days_of_week.split(',') : [];
+                                const today = new Date();
                                 
-                                if (daysOfWeek.includes(dayName)) {
-                                    const dateStr = date.toISOString().split('T')[0];
-                                    const existingTask = tasks.find(t => 
-                                        t.date === dateStr && 
-                                        t.time === schedule.start_time && 
-                                        t.name === schedule.name
-                                    );
+                                for (let i = 0; i < 30; i++) {
+                                    const date = new Date(today);
+                                    date.setDate(today.getDate() + i);
+                                    const dayName = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][date.getDay()];
                                     
-                                    if (!existingTask) {
-                                        tasks.push({
-                                            id: `schedule-${schedule.id}-${dateStr}`,
-                                            name: schedule.name,
-                                            date: dateStr,
-                                            time: schedule.start_time,
-                                            zone: 'Auto',
-                                            duration: Math.floor(schedule.duration / 60),
-                                            repeat: 'weekly',
-                                            fromSchedule: true
-                                        });
+                                    if (daysOfWeek.includes(dayName)) {
+                                        const dateStr = date.toISOString().split('T')[0];
+                                        const existingTask = tasks.find(t => 
+                                            t.date === dateStr && 
+                                            t.time === schedule.start_time && 
+                                            t.name === schedule.name
+                                        );
+                                        
+                                        if (!existingTask) {
+                                            tasks.push({
+                                                id: `schedule-${schedule.id}-${dateStr}`,
+                                                name: schedule.name,
+                                                date: dateStr,
+                                                time: schedule.start_time,
+                                                zone: `Zone ${schedule.zone_id || 1}`,
+                                                duration: Math.floor(schedule.duration / 60) || 30,
+                                                repeat: 'weekly',
+                                                fromSchedule: true
+                                            });
+                                        }
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             } catch (error) {
                 console.log('Could not load schedules from backend:', error);
             }
             
+            // Update tasks count on main dashboard
+            const tasksCount = document.getElementById('tasks-count');
+            if (tasksCount) {
+                const upcomingCount = tasks.filter(task => {
+                    const taskDate = new Date(task.date);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return taskDate >= today;
+                }).length;
+                tasksCount.textContent = upcomingCount;
+            }
+            
             const tasksList = document.getElementById('tasks-list');
+            if (!tasksList) return;
+            
             tasksList.innerHTML = '';
             
             if (tasks.length === 0) {
@@ -1126,6 +1276,34 @@
             });
         }
         
+        function editTask(taskId) {
+            const task = tasks.find(t => t.id == taskId);
+            if (!task) return;
+            
+            // Populate form with task data
+            document.getElementById('task-name').value = task.name;
+            document.getElementById('task-date').value = task.date;
+            document.getElementById('task-time').value = task.time;
+            document.getElementById('task-zone').value = task.zone;
+            document.getElementById('task-duration').value = task.duration;
+            document.getElementById('task-repeat').value = task.repeat || 'none';
+            
+            // Set editing mode
+            const form = document.getElementById('task-form');
+            form.dataset.editingId = taskId;
+            
+            // Change button text
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update Task';
+            }
+            
+            // Scroll to form
+            document.querySelector('.task-form-container').scrollIntoView({ behavior: 'smooth' });
+            
+            showNotification('Edit task and click Update to save changes', 'info');
+        }
+        
         function deleteTask(taskId) {
             if (confirm('Are you sure you want to delete this task?')) {
                 tasks = tasks.filter(t => t.id !== taskId);
@@ -1136,12 +1314,132 @@
             }
         }
         
+        // Toggle tasks preview list
+        document.getElementById('tasks-scheduled-toggle')?.addEventListener('click', function() {
+            const previewList = document.getElementById('tasks-preview-list');
+            const toggleIcon = this.querySelector('.toggle-icon');
+            
+            if (previewList.style.display === 'none') {
+                previewList.style.display = 'block';
+                this.classList.add('expanded');
+                updateTasksPreview();
+            } else {
+                previewList.style.display = 'none';
+                this.classList.remove('expanded');
+            }
+        });
+        
+        // Update tasks preview list
+        function updateTasksPreview() {
+            const previewItems = document.getElementById('tasks-preview-items');
+            if (!previewItems) return;
+            
+            previewItems.innerHTML = '';
+            
+            // Get upcoming tasks (next 7 days)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const futureDate = new Date();
+            futureDate.setDate(today.getDate() + 7);
+            
+            const upcomingTasks = tasks.filter(task => {
+                const taskDate = new Date(task.date);
+                return taskDate >= today && taskDate <= futureDate;
+            }).slice(0, 5); // Show max 5 tasks
+            
+            if (upcomingTasks.length === 0) {
+                previewItems.innerHTML = '<p style="text-align: center; color: #999; padding: 1rem;">No upcoming tasks in the next 7 days</p>';
+                return;
+            }
+            
+            upcomingTasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-preview-item';
+                taskItem.innerHTML = `
+                    <div class="task-preview-icon">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <div class="task-preview-details">
+                        <div class="task-preview-name">${task.name}</div>
+                        <div class="task-preview-meta">
+                            <span><i class="fa-solid fa-calendar"></i> ${task.date}</span>
+                            <span><i class="fa-solid fa-clock"></i> ${task.time}</span>
+                            <span><i class="fa-solid fa-hourglass"></i> ${task.duration} min</span>
+                        </div>
+                    </div>
+                    <div class="task-preview-zone">${task.zone}</div>
+                `;
+                previewItems.appendChild(taskItem);
+            });
+        }
+        
+        // Initialize tasks on page load
+        loadTasks();
+        
+        // Open irrigation configuration modal
+        function openIrrigationConfig() {
+            const modal = document.getElementById('irrigationConfigModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                loadIrrigationConfig();
+            }
+        }
+        
+        // Close irrigation configuration modal
+        function closeIrrigationConfig() {
+            const modal = document.getElementById('irrigationConfigModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Load saved irrigation configuration
+        function loadIrrigationConfig() {
+            const config = JSON.parse(localStorage.getItem('irrigation_config') || '{}');
+            
+            if (config.plantType) document.getElementById('config-plant-type').value = config.plantType;
+            if (config.plantAge) document.getElementById('config-plant-age').value = config.plantAge;
+            if (config.waterAvailable) document.getElementById('config-water-available').value = config.waterAvailable;
+            if (config.waterPressure) document.getElementById('config-water-pressure').value = config.waterPressure;
+            if (config.waterSource) document.getElementById('config-water-source').value = config.waterSource;
+            if (config.zoneCount) document.getElementById('config-zone-count').value = config.zoneCount;
+            if (config.totalArea) document.getElementById('config-total-area').value = config.totalArea;
+            if (config.soilType) document.getElementById('config-soil-type').value = config.soilType;
+            if (config.sunExposure) document.getElementById('config-sun-exposure').value = config.sunExposure;
+        }
+        
+        // Save irrigation configuration
+        document.getElementById('irrigation-config-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const config = {
+                plantType: document.getElementById('config-plant-type').value,
+                plantAge: document.getElementById('config-plant-age').value,
+                waterAvailable: document.getElementById('config-water-available').value,
+                waterPressure: document.getElementById('config-water-pressure').value,
+                waterSource: document.getElementById('config-water-source').value,
+                zoneCount: document.getElementById('config-zone-count').value,
+                totalArea: document.getElementById('config-total-area').value,
+                soilType: document.getElementById('config-soil-type').value,
+                sunExposure: document.getElementById('config-sun-exposure').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('irrigation_config', JSON.stringify(config));
+            showNotification('Irrigation configuration saved successfully!', 'success');
+            closeIrrigationConfig();
+        });
+        
+        // Bind irrigation config button
+        document.getElementById('irrigation-config-btn')?.addEventListener('click', openIrrigationConfig);
+        
         // Bind calendar icon click
         document.getElementById('tasks-toggle-card')?.addEventListener('click', openTasksCalendar);
         document.getElementById('add-schedule-btn')?.addEventListener('click', openTasksCalendar);
         document.getElementById('update-schedule-btn')?.addEventListener('click', () => {
             openTasksCalendar();
-            showNotification('Select a task from the list to update', 'info');
+            loadTasks(); // Refresh tasks when clicking update
+            showNotification('Calendar updated with latest schedules', 'success');
         });
         
         // Drag and Drop Functionality
@@ -1285,6 +1583,29 @@
                 console.error('Error loading dashboard layout:', e);
             }
         }
+        
+        // Update Header DateTime
+        function updateHeaderDateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('header-time');
+            const dateElement = document.getElementById('header-date');
+            
+            if (timeElement) {
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                timeElement.textContent = `${hours}:${minutes}`;
+            }
+            
+            if (dateElement) {
+                const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+                const dateStr = now.toLocaleDateString('en-US', options);
+                dateElement.textContent = dateStr;
+            }
+        }
+        
+        // Initialize clock immediately and update every second
+        updateHeaderDateTime();
+        setInterval(updateHeaderDateTime, 1000);
         
         // Bind drag toggle button
         document.getElementById('dragToggleBtn')?.addEventListener('click', toggleDragMode);

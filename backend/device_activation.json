@@ -1,9 +1,13 @@
 {
-  "deviceId": "4af572fb94849a2ff3f64945512bf7019280ac17b260daab1f53e970a150f932",
+  "deviceId": "6e9e6d6c9fe5d8d2586cb42f505a8cd504f3116c3e484d07f01aac4d4a583955",
   "apiKey": "UhRM59UABCeferskzUIpcRyYwt",
   "deviceName": "BAYYTI-B1",
   "ownerId": "cloud-sync",
   "activated": true,
   "activatedAt": "2026-01-21T15:29:03.181259Z",
-  "cloudEndpoint": "http://localhost:3000"
+  "cloudEndpoint": "http://localhost:3000",
+  "updatedAt": "2026-01-24T11:36:08.506989",
+  "migrated": true,
+  "migration_date": "2026-01-24T11:36:08.507030",
+  "old_device_id": "4af572fb94849a2ff3f64945512bf7019280ac17b260daab1f53e970a150f932"
 }

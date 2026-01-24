@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 import sys
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from database import (init_database, get_recent_sensor_data, get_recent_logs, 
                      get_active_schedules, get_unresolved_alerts, get_db)
 from main_controller import MainController
@@ -14,6 +14,7 @@ from ai_decision_service import AIDecisionService
 from sensor_service import SensorService
 from system_monitor import SystemMonitor
 from system_stats import get_system_stats
+from irrigation_simulator import irrigation_simulator
 
 # Import terminal API blueprint for debugging
 try:
@@ -496,53 +497,104 @@ def logs():
 
 @app.route("/api/irrigation/tasks")
 def irrigation_tasks():
-    """Get irrigation tasks from the last 7 days"""
+    """Get irrigation tasks - both scheduled (future) and historical (past 7 days)"""
     try:
         with get_db() as conn:
             cursor = conn.cursor()
+            tasks = []
+            
+            # Get active schedules and generate upcoming tasks
+            cursor.execute('''
+                SELECT id, name, start_time, duration, days_of_week, zone_id, enabled
+                FROM irrigation_schedules
+                WHERE enabled = 1
+                ORDER BY start_time
+            ''')
+            
+            schedules = cursor.fetchall()
+            today = datetime.now()
+            
+            # Generate tasks for next 14 days from schedules
+            for schedule in schedules:
+                schedule_id, name, start_time, duration, days_str, zone_id, enabled = schedule
+                days_list = days_str.split(',') if days_str else []
+                
+                for day_offset in range(14):  # Next 14 days
+                    check_date = today + timedelta(days=day_offset)
+                    weekday = check_date.strftime('%a').lower()
+                    
+                    if weekday in [d.lower() for d in days_list]:
+                        # Parse start time
+                        try:
+                            time_parts = start_time.split(':')
+                            task_datetime = check_date.replace(
+                                hour=int(time_parts[0]),
+                                minute=int(time_parts[1]),
+                                second=0,
+                                microsecond=0
+                            )
+                            
+                            # Only include future tasks
+                            if task_datetime > today:
+                                duration_minutes = duration if duration else 30
+                                estimated_water = duration_minutes * 15  # ~15L per minute
+                                
+                                tasks.append({
+                                    'start_day': task_datetime.isoformat(),
+                                    'start_time': start_time,
+                                    'duration': f"{duration_minutes} min",
+                                    'volume': f"{estimated_water} l",
+                                    'progress': 0,
+                                    'trigger_type': 'scheduled',
+                                    'status': 'pending',
+                                    'zone': f"Zone {zone_id}",
+                                    'schedule_name': name
+                                })
+                        except:
+                            pass
+            
+            # Get historical tasks from logs (last 7 days)
             cursor.execute('''
                 SELECT 
-                    timestamp as start_day,
-                    timestamp as start_time,
+                    timestamp,
                     duration,
-                    water_used as volume,
+                    water_used,
                     trigger_type,
-                    status
+                    status,
+                    zone_id
                 FROM irrigation_logs
                 WHERE DATE(timestamp) >= DATE('now', '-7 days')
                 ORDER BY timestamp DESC
-                LIMIT 20
+                LIMIT 10
             ''')
             
-            rows = cursor.fetchall()
-            tasks = []
+            log_rows = cursor.fetchall()
             
-            for row in rows:
+            for row in log_rows:
                 start_datetime = datetime.fromisoformat(row[0])
-                duration_seconds = row[2] or 0
-                water_used = row[3] or 0
-                status = row[5] or 'completed'
+                duration_seconds = row[1] or 0
+                water_used = row[2] or 0
+                status = row[4] or 'completed'
+                zone_id = row[5] or 1
                 
-                # Calculate progress based on status
                 progress = 100 if status == 'completed' else 0
-                
-                # Format duration
                 duration_minutes = duration_seconds // 60
-                duration_str = f"{duration_minutes} min" if duration_minutes > 0 else "~30 min"
-                
-                # Format volume
-                volume_str = f"{int(water_used)} l" if water_used > 0 else "447 l"
+                duration_str = f"{duration_minutes} min" if duration_minutes > 0 else "30 min"
+                volume_str = f"{int(water_used)} l" if water_used > 0 else "450 l"
                 
                 tasks.append({
                     'start_day': start_datetime.isoformat(),
                     'start_time': start_datetime.strftime('%H:%M'),
-                    'end_rule': f"~{duration_minutes} min" if duration_minutes > 0 else "~30 min",
                     'duration': duration_str,
                     'volume': volume_str,
                     'progress': progress,
-                    'trigger_type': row[4],
-                    'status': status
+                    'trigger_type': row[3],
+                    'status': status,
+                    'zone': f"Zone {zone_id}"
                 })
+            
+            # Sort tasks by date
+            tasks.sort(key=lambda x: x['start_day'])
             
             return jsonify({
                 "success": True,
@@ -551,6 +603,7 @@ def irrigation_tasks():
             })
             
     except Exception as e:
+        print(f"Error in irrigation_tasks: {e}")
         return jsonify({
             "success": False,
             "error": str(e),

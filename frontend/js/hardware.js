@@ -21,6 +21,124 @@ let cpuData = [];
 let ramData = [];
 let timeLabels = [];
 
+// Update Header DateTime
+function updateHeaderDateTime() {
+    const now = new Date();
+    const timeElement = document.getElementById('header-time');
+    const dateElement = document.getElementById('header-date');
+    
+    if (timeElement) {
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeElement.textContent = `${hours}:${minutes}`;
+    }
+    
+    if (dateElement) {
+        const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('en-US', options);
+        dateElement.textContent = dateStr;
+    }
+}
+
+// Load System Architecture Information
+async function loadSystemArchitecture() {
+    try {
+        const response = await fetch(`${API_BASE}/system/info`);
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update Processor
+            const processorEl = document.getElementById('system-processor');
+            const processorDetailEl = document.getElementById('system-processor-detail');
+            if (processorEl && data.processor) {
+                processorEl.textContent = data.processor.model || 'Raspberry Pi 4B';
+                if (processorDetailEl) {
+                    processorDetailEl.textContent = `${data.processor.cores || 4} Cores @ ${data.processor.frequency || '1.5'} GHz`;
+                }
+            }
+            
+            // Update Memory
+            const memoryEl = document.getElementById('system-memory');
+            const memoryDetailEl = document.getElementById('system-memory-detail');
+            if (memoryEl && data.memory) {
+                const totalGB = (data.memory.total / (1024 * 1024 * 1024)).toFixed(1);
+                const usedGB = (data.memory.used / (1024 * 1024 * 1024)).toFixed(1);
+                memoryEl.textContent = `${totalGB} GB LPDDR4`;
+                if (memoryDetailEl) {
+                    memoryDetailEl.textContent = `${usedGB} GB Used (${data.memory.percent || 0}%)`;
+                }
+            }
+            
+            // Update Connectivity
+            const connectivityEl = document.getElementById('system-connectivity');
+            const connectivityDetailEl = document.getElementById('system-connectivity-detail');
+            if (connectivityEl && data.network) {
+                const interfaces = [];
+                if (data.network.wifi) interfaces.push('WiFi 5');
+                if (data.network.ethernet) interfaces.push('Ethernet');
+                connectivityEl.textContent = interfaces.join(' + ') || 'WiFi 5 + Ethernet';
+                if (connectivityDetailEl) {
+                    const ip = data.network.ip || 'Not Connected';
+                    connectivityDetailEl.textContent = `IP: ${ip}`;
+                }
+            }
+            
+            // Update Power
+            const powerEl = document.getElementById('system-power');
+            const powerDetailEl = document.getElementById('system-power-detail');
+            if (powerEl && data.power) {
+                powerEl.textContent = data.power.supply || '5V 3A USB-C';
+                if (powerDetailEl) {
+                    const voltage = data.power.voltage || '5.0';
+                    const current = data.power.current || '3.0';
+                    powerDetailEl.textContent = `${voltage}V @ ${current}A`;
+                }
+            }
+            
+            // Update Storage
+            const storageEl = document.getElementById('system-storage');
+            const storageDetailEl = document.getElementById('system-storage-detail');
+            if (storageEl && data.storage) {
+                const totalGB = (data.storage.total / (1024 * 1024 * 1024)).toFixed(0);
+                const usedGB = (data.storage.used / (1024 * 1024 * 1024)).toFixed(1);
+                storageEl.textContent = `${totalGB} GB Storage`;
+                if (storageDetailEl) {
+                    storageDetailEl.textContent = `${usedGB} GB Used (${data.storage.percent || 0}%)`;
+                }
+            }
+            
+            // Update Temperature
+            const temperatureEl = document.getElementById('system-temperature');
+            const temperatureDetailEl = document.getElementById('system-temperature-detail');
+            if (temperatureEl && data.temperature) {
+                const temp = data.temperature.cpu || 0;
+                temperatureEl.textContent = `${temp}°C`;
+                if (temperatureDetailEl) {
+                    let status = 'Normal';
+                    if (temp > 70) status = 'High';
+                    else if (temp > 80) status = 'Critical';
+                    temperatureDetailEl.textContent = `Status: ${status}`;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading system architecture:', error);
+        // Set default values on error
+        document.getElementById('system-processor').textContent = 'Raspberry Pi 4B';
+        document.getElementById('system-processor-detail').textContent = '4 Cores @ 1.5 GHz';
+        document.getElementById('system-memory').textContent = '4 GB LPDDR4';
+        document.getElementById('system-memory-detail').textContent = 'System info unavailable';
+        document.getElementById('system-connectivity').textContent = 'WiFi 5 + Ethernet';
+        document.getElementById('system-connectivity-detail').textContent = 'Network info unavailable';
+        document.getElementById('system-power').textContent = '5V 3A USB-C';
+        document.getElementById('system-power-detail').textContent = 'Power info unavailable';
+        document.getElementById('system-storage').textContent = '32 GB Storage';
+        document.getElementById('system-storage-detail').textContent = 'Storage info unavailable';
+        document.getElementById('system-temperature').textContent = '--°C';
+        document.getElementById('system-temperature-detail').textContent = 'Temperature unavailable';
+    }
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupMobileSidebar();
@@ -29,12 +147,18 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSystemPerformance();
     loadSystemStats();
     updateComponentLists();
+    loadSystemArchitecture();
+    
+    // Initialize clock
+    updateHeaderDateTime();
+    setInterval(updateHeaderDateTime, 1000);
     
     // Start real-time monitoring (every 2 seconds)
     updateInterval = setInterval(() => {
         loadHardwareStatus();
         loadSystemPerformance();
         loadSystemStats();
+        loadSystemArchitecture();
     }, 2000);
 });
 

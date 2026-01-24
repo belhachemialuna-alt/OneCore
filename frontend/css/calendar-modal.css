@@ -373,8 +373,8 @@
 }
 
 .task-action-btn {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     background: white;
@@ -384,6 +384,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     color: #666;
+    font-size: 1.1rem;
 }
 
 .task-action-btn:hover {

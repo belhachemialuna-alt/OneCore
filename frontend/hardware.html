@@ -11,7 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
     <link rel="stylesheet" href="css/hardware.css?v=1.0">
+    <link rel="stylesheet" href="css/hardware-architecture.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -58,20 +60,20 @@
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
                 </button>
-                <a href="space.html" class="header-icon-btn" title="Dashboard">
-                    <i class="fa-solid fa-gauge"></i>
-                </a>
-                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
-                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="header-icon-btn" title="Hardware Schema" style="background: rgba(255, 255, 255, 0.25);">
-                    <i class="fa-solid fa-cpu"></i>
+                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
+                    <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -83,7 +85,7 @@
                     <i class="fa-solid fa-book"></i>
                 </a>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
-                    <i class="fa-solid fa-gear"></i>
+                    <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -157,6 +159,10 @@
                             <button class="copy-device-btn" id="copyDeviceIdBtn" title="Copy Device ID">
                                 <i class="fa-solid fa-copy"></i>
                             </button>
+                        </div>
+                        <div class="device-id-hint">
+                            <i class="fa-solid fa-cloud"></i>
+                            <span>Use this ID to link your device with the cloud VPS at <strong>cloud.ielivate.com</strong></span>
                         </div>
                     </div>
                 </div>
@@ -310,31 +316,63 @@
             <!-- Architecture Info Panel -->
             <div class="architecture-info-panel">
                 <div class="info-item">
-                    <i class="fa-solid fa-microchip"></i>
-                    <div>
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="info-label">Processing Unit</span>
-                        <span class="info-value">Raspberry Pi 4B</span>
+                        <span class="info-value" id="system-processor">Loading...</span>
+                        <span class="info-detail" id="system-processor-detail">Fetching data...</span>
                     </div>
                 </div>
                 <div class="info-item">
-                    <i class="fa-solid fa-memory"></i>
-                    <div>
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-memory"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="info-label">Memory</span>
-                        <span class="info-value">4GB LPDDR4</span>
+                        <span class="info-value" id="system-memory">Loading...</span>
+                        <span class="info-detail" id="system-memory-detail">Fetching data...</span>
                     </div>
                 </div>
                 <div class="info-item">
-                    <i class="fa-solid fa-network-wired"></i>
-                    <div>
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="info-label">Connectivity</span>
-                        <span class="info-value">WiFi 5 + Ethernet</span>
+                        <span class="info-value" id="system-connectivity">Loading...</span>
+                        <span class="info-detail" id="system-connectivity-detail">Fetching data...</span>
                     </div>
                 </div>
                 <div class="info-item">
-                    <i class="fa-solid fa-bolt"></i>
-                    <div>
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="info-label">Power</span>
-                        <span class="info-value">5V 3A USB-C</span>
+                        <span class="info-value" id="system-power">Loading...</span>
+                        <span class="info-detail" id="system-power-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-hard-drive"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Storage</span>
+                        <span class="info-value" id="system-storage">Loading...</span>
+                        <span class="info-detail" id="system-storage-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-temperature-half"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Temperature</span>
+                        <span class="info-value" id="system-temperature">Loading...</span>
+                        <span class="info-detail" id="system-temperature-detail">Fetching data...</span>
                     </div>
                 </div>
             </div>

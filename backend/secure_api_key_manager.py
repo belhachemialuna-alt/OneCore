@@ -8,6 +8,8 @@ import secrets
 import string
 import json
 import os
+import uuid
+import platform
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 
@@ -44,10 +46,67 @@ class SecureAPIKeyManager:
         """
         Generate proper device ID format: IRR-ALG-XXXXXX
         Following the specified format for irrigation controllers
+        Uses hardware identifiers to ensure uniqueness across devices
         """
-        # Generate 6-digit unique identifier
-        unique_id = ''.join(secrets.choice(string.digits) for _ in range(6))
+        # Get hardware identifiers
+        hardware_id = self._get_hardware_identifier()
+        
+        # Generate 6-digit unique identifier from hardware hash
+        hash_digest = hashlib.sha256(hardware_id.encode()).hexdigest()
+        unique_id = hash_digest[:6].upper()
+        
         return f"IRR-ALG-{unique_id}"
+    
+    def _get_hardware_identifier(self) -> str:
+        """
+        Get unique hardware identifier combining multiple sources
+        Works on both Windows/Linux and Raspberry Pi
+        """
+        identifiers = []
+        
+        # 1. MAC Address (most reliable cross-platform)
+        mac = uuid.getnode()
+        identifiers.append(str(mac))
+        
+        # 2. System information
+        identifiers.append(platform.system())
+        identifiers.append(platform.machine())
+        identifiers.append(platform.node())
+        
+        # 3. Raspberry Pi CPU Serial (if available)
+        try:
+            with open('/proc/cpuinfo', 'r') as f:
+                for line in f:
+                    if line.startswith('Serial'):
+                        serial = line.split(':')[1].strip()
+                        identifiers.append(serial)
+                        break
+        except (FileNotFoundError, IOError, PermissionError):
+            pass  # Not on Raspberry Pi or no access
+        
+        # 4. Machine ID (Linux/systemd)
+        try:
+            with open('/etc/machine-id', 'r') as f:
+                machine_id = f.read().strip()
+                identifiers.append(machine_id)
+        except (FileNotFoundError, IOError, PermissionError):
+            pass  # Not available on this system
+        
+        # 5. Windows Product ID (if on Windows)
+        if platform.system() == 'Windows':
+            try:
+                import winreg
+                key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 
+                                    r"SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+                product_id, _ = winreg.QueryValueEx(key, "ProductId")
+                identifiers.append(product_id)
+                winreg.CloseKey(key)
+            except:
+                pass  # Registry access failed
+        
+        # Combine all identifiers
+        combined = '|'.join(identifiers)
+        return combined
     
     def create_device_activation_record(self, device_id: str, user_id: Optional[str] = None) -> Dict[str, Any]:
         """

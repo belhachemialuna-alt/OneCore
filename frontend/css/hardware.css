@@ -205,6 +205,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .header-right {
     gap: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.header-right::-webkit-scrollbar {
+    display: none;
 }
 
 .header-icon-btn {
@@ -315,21 +325,49 @@ h1, h2, h3, h4, h5, h6 {
     box-sizing: border-box;
     margin: 0 auto;
     padding: 2rem 3rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    min-height: calc(100vh - 48px - 60px);
+    display: block;
+    min-height: calc(100vh - 64px);
 }
 
 @media (max-width: 1400px) {
     .main-content {
         padding: 1.5rem 2rem;
     }
+    
+    .hardware-info-section {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .hardware-info-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .performance-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 1024px) {
     .main-content {
         padding: 1.5rem 1rem;
+    }
+    
+    .hardware-info-section {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .header-icon-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 1.1rem;
+    }
+    
+    .performance-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
 }
 
@@ -364,9 +402,10 @@ h1, h2, h3, h4, h5, h6 {
 /* Hardware Info Section */
 .hardware-info-section {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
     margin-bottom: 2rem;
+    width: 100%;
 }
 
 .hardware-info-card,
@@ -424,10 +463,14 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     border: 1px solid #ddd;
     flex: 1;
-    min-width: 200px;
+    min-width: 150px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .copy-device-btn {
@@ -443,6 +486,29 @@ h1, h2, h3, h4, h5, h6 {
 .copy-device-btn:hover {
     background: #333;
     transform: scale(1.05);
+}
+
+.device-id-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: #e3f2fd;
+    border-left: 4px solid #2196F3;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #1565C0;
+}
+
+.device-id-hint i {
+    font-size: 1.1rem;
+    color: #2196F3;
+}
+
+.device-id-hint strong {
+    color: #0D47A1;
+    font-weight: 600;
 }
 
 .status-items {
@@ -614,12 +680,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .main-content-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 2rem;
-    padding: 2rem;
-    max-width: 1800px;
-    margin: 0 auto;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 2rem;
 }
 
 @media (max-width: 1400px) {
@@ -903,8 +967,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .performance-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .performance-card {
@@ -2164,13 +2229,15 @@ h1, h2, h3, h4, h5, h6 {
     
     .hardware-info-section {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 0 1rem;
+        gap: 1rem;
+        padding: 0;
+        margin-bottom: 1rem;
     }
     
     .page-title-section {
         width: 100%;
-        padding: 0 1rem;
+        padding: 0;
+        margin-bottom: 1rem;
     }
     
     .hardware-info-card,
@@ -2178,29 +2245,51 @@ h1, h2, h3, h4, h5, h6 {
         width: 100%;
         max-width: 100%;
         min-width: auto;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        position: relative !important;
+        padding: 1rem;
+        box-sizing: border-box;
     }
     
     .device-id-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.5rem;
+        gap: 0.75rem;
+        width: 100%;
     }
     
     .device-id {
         width: 100%;
         min-width: auto;
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
     }
     
-    .page-title-content {
+    .copy-device-btn {
         width: 100%;
+        padding: 0.75rem;
+        justify-content: center;
     }
     
-    .page-title-info h2 {
+    .page-title {
         font-size: 1.5rem;
+    }
+    
+    .page-title-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+    
+    .info-header h3,
+    .status-header h3 {
+        font-size: 1rem;
+    }
+    
+    .status-items {
+        gap: 0.75rem;
+    }
+    
+    .status-item {
+        padding: 0.5rem 0.75rem;
     }
     
     .summary-items {

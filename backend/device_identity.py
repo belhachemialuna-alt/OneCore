@@ -17,21 +17,57 @@ DEVICE_FILE = os.path.join(os.path.dirname(__file__), "device_identity.json")
 def generate_device_id():
     """
     Generate a unique device ID based on hardware characteristics.
-    Uses MAC address, system info, and machine type for uniqueness.
+    Uses MAC address, system info, machine type, and hardware-specific IDs for uniqueness.
+    Works on Windows, Linux, and Raspberry Pi.
     
     Returns:
         str: SHA256 hash representing the device ID
     """
-    # Get MAC address (unique per network interface)
-    mac = uuid.getnode()
+    identifiers = []
     
-    # Get system information
+    # 1. MAC address (unique per network interface)
+    mac = uuid.getnode()
+    identifiers.append(str(mac))
+    
+    # 2. System information
     system = platform.system()
     machine = platform.machine()
     node = platform.node()
+    identifiers.extend([system, machine, node])
+    
+    # 3. Raspberry Pi CPU Serial (if available)
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            for line in f:
+                if line.startswith('Serial'):
+                    serial = line.split(':')[1].strip()
+                    identifiers.append(serial)
+                    break
+    except (FileNotFoundError, IOError, PermissionError):
+        pass  # Not on Raspberry Pi or no access
+    
+    # 4. Machine ID (Linux/systemd)
+    try:
+        with open('/etc/machine-id', 'r') as f:
+            machine_id = f.read().strip()
+            identifiers.append(machine_id)
+    except (FileNotFoundError, IOError, PermissionError):
+        pass  # Not available on this system
+    
+    # 5. Windows Product ID (if on Windows)
+    if system == 'Windows':
+        try:
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 
+                                r"SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+            product_id, _ = winreg.QueryValueEx(key, "ProductId")
+            identifiers.append(product_id)
+            winreg.CloseKey(key)
+        except:
+            pass  # Registry access failed
     
     # Combine all unique identifiers
-    raw = f"{mac}{system}{machine}{node}"
+    raw = '|'.join(identifiers)
     
     # Generate SHA256 hash for consistent format
     device_id = hashlib.sha256(raw.encode()).hexdigest()
@@ -41,38 +77,63 @@ def generate_device_id():
 def get_device_identity():
     """
     Get or create device identity.
-    If identity file exists, load it. Otherwise, create new identity.
+    CRITICAL: Device ID is ALWAYS regenerated based on current hardware.
+    This ensures each physical device gets a unique ID.
     
     Returns:
         dict: Device identity containing deviceId, registered status, and apiKey
     """
+    # ALWAYS generate device ID based on current hardware
+    current_hardware_id = generate_device_id()
+    
     # Check if identity file exists
     if os.path.exists(DEVICE_FILE):
         try:
             with open(DEVICE_FILE, "r") as f:
                 identity = json.load(f)
-                # Validate required fields
-                if "deviceId" in identity and "registered" in identity:
-                    return identity
+                
+                # Check if device ID matches current hardware
+                stored_id = identity.get("deviceId")
+                
+                if stored_id != current_hardware_id:
+                    # Hardware changed or old static ID detected
+                    print(f"⚠️  Device ID mismatch detected!")
+                    print(f"   Stored ID:  {stored_id[:32]}...")
+                    print(f"   Hardware ID: {current_hardware_id[:32]}...")
+                    print(f"   Regenerating device ID based on current hardware...")
+                    
+                    # Update to hardware-based ID
+                    identity["deviceId"] = current_hardware_id
+                    identity["updatedAt"] = datetime.utcnow().isoformat()
+                    
+                    # Save updated identity
+                    with open(DEVICE_FILE, "w") as f:
+                        json.dump(identity, f, indent=2)
+                    
+                    print(f"✅ Device ID updated to hardware-based ID")
+                
+                return identity
+                
         except (json.JSONDecodeError, IOError) as e:
             print(f"Error reading device identity file: {e}")
             # Continue to create new identity
     
-    # Create new identity
+    # Create new identity with hardware-based ID
+    from datetime import datetime
     identity = {
-        "deviceId": generate_device_id(),
+        "deviceId": current_hardware_id,
         "registered": False,
         "apiKey": None,
         "deviceName": None,
         "ownerId": None,
-        "createdAt": None
+        "createdAt": datetime.utcnow().isoformat()
     }
     
     # Save identity to file
     try:
         with open(DEVICE_FILE, "w") as f:
             json.dump(identity, f, indent=2)
-        print(f"New device identity created: {identity['deviceId']}")
+        print(f"✅ New device identity created: {identity['deviceId'][:32]}...")
     except IOError as e:
         print(f"Error saving device identity: {e}")
     

@@ -153,15 +153,17 @@ async function updateWeatherCard() {
     }
 }
 
-// Initialize real-time updates immediately
-updateTasksCalendarDateTime(); // Immediate first update
-updateIrrigationSidebarSpace(); // Immediate first update
-updateWeatherCard(); // Immediate weather update
+// Initialize real-time updates when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    updateTasksCalendarDateTime(); // Immediate first update
+    updateIrrigationSidebarSpace(); // Immediate first update
+    updateWeatherCard(); // Immediate weather update
 
-setInterval(updateTasksCalendarDateTime, 1000); // Update every second
-setInterval(updateRefreshCountdown, 1000); // Update countdown every second
-setInterval(updateIrrigationSidebarSpace, 2000); // Update irrigation sidebar every 2 seconds
-setInterval(updateWeatherCard, 5000); // Update weather card every 5 seconds
+    setInterval(updateTasksCalendarDateTime, 1000); // Update every second
+    setInterval(updateRefreshCountdown, 1000); // Update countdown every second
+    setInterval(updateIrrigationSidebarSpace, 2000); // Update irrigation sidebar every 2 seconds
+    setInterval(updateWeatherCard, 5000); // Update weather card every 5 seconds
+});
 
 // Toggle Irrigation Tasks Sidebar
 function setupTasksSidebar() {

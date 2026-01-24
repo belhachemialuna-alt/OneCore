@@ -144,6 +144,149 @@
     margin: 0 0 0.5rem 0;
 }
 
+.tasks-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    color: #333;
+}
+
+.tasks-stat-item.clickable {
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(33, 150, 243, 0.05);
+}
+
+.tasks-stat-item.clickable:hover {
+    background: rgba(33, 150, 243, 0.15);
+    transform: translateX(4px);
+}
+
+.tasks-stat-item .toggle-icon {
+    margin-left: auto;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.tasks-stat-item.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.tasks-preview-list {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #e0e0e0;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tasks-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tasks-preview-header h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+}
+
+.tasks-preview-header i {
+    color: #2196F3;
+}
+
+.tasks-preview-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.task-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: #f8f9fa;
+    border-left: 4px solid #2196F3;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.task-preview-item:hover {
+    background: #e3f2fd;
+    transform: translateX(4px);
+}
+
+.task-preview-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.task-preview-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-preview-name {
+    font-weight: 600;
+    color: #000;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.task-preview-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.task-preview-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.task-preview-meta i {
+    font-size: 0.8rem;
+}
+
+.task-preview-zone {
+    padding: 0.25rem 0.75rem;
+    background: #2196F3;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 .tasks-calendar-datetime {
     display: flex;
     align-items: center;
@@ -818,7 +961,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+    background: linear-gradient(90deg, #2196F3 0%, #42A5F5 100%);
 }
 
 .space-main-content .sensor-card:hover,
@@ -828,7 +971,7 @@
 .space-main-content .stat-card:hover {
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
     transform: translateY(-4px);
-    border-color: #4CAF50;
+    border-color: #2196F3;
 }
 
 /* Button Styling in Space */

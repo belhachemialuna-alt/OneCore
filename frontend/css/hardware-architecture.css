@@ -1,0 +1,105 @@
+/* Enhanced Architecture Info Panel Styles */
+
+.architecture-info-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%);
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    border: 2px solid rgba(33, 150, 243, 0.2);
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2196F3 0%, #42A5F5 100%);
+}
+
+.info-item:hover {
+    background: white;
+    border-color: #2196F3;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(33, 150, 243, 0.2);
+}
+
+.info-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.info-icon-wrapper i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.info-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 0.25rem;
+}
+
+.info-detail {
+    font-size: 0.85rem;
+    color: #2196F3;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .architecture-info-panel {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    
+    .info-item {
+        padding: 1.25rem;
+    }
+    
+    .info-icon-wrapper {
+        width: 45px;
+        height: 45px;
+    }
+}

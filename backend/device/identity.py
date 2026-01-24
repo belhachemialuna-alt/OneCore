@@ -24,17 +24,58 @@ def generate_device_id():
     - MAC address (uuid.getnode())
     - System type (platform.system())
     - Machine architecture (platform.machine())
+    - Raspberry Pi CPU Serial (if available)
+    - Linux machine-id (if available)
+    - Windows Product ID (if available)
     
     Returns:
         str: SHA256 hash of combined hardware identifiers
     """
-    # Get hardware identifiers
+    identifiers = []
+    
+    # 1. MAC address (unique per network interface)
     mac = uuid.getnode()
+    identifiers.append(str(mac))
+    
+    # 2. System information
     system = platform.system()
     machine = platform.machine()
+    node = platform.node()
+    identifiers.extend([system, machine, node])
     
-    # Combine into unique string
-    raw = f"{mac}{system}{machine}"
+    # 3. Raspberry Pi CPU Serial (if available)
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            for line in f:
+                if line.startswith('Serial'):
+                    serial = line.split(':')[1].strip()
+                    identifiers.append(serial)
+                    break
+    except (FileNotFoundError, IOError, PermissionError):
+        pass  # Not on Raspberry Pi or no access
+    
+    # 4. Machine ID (Linux/systemd)
+    try:
+        with open('/etc/machine-id', 'r') as f:
+            machine_id = f.read().strip()
+            identifiers.append(machine_id)
+    except (FileNotFoundError, IOError, PermissionError):
+        pass  # Not available on this system
+    
+    # 5. Windows Product ID (if on Windows)
+    if system == 'Windows':
+        try:
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 
+                                r"SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+            product_id, _ = winreg.QueryValueEx(key, "ProductId")
+            identifiers.append(product_id)
+            winreg.CloseKey(key)
+        except:
+            pass  # Registry access failed
+    
+    # Combine all unique identifiers
+    raw = '|'.join(identifiers)
     
     # Generate SHA256 hash for consistent format
     device_id = hashlib.sha256(raw.encode()).hexdigest()
@@ -44,26 +85,48 @@ def generate_device_id():
 def load_identity():
     """
     Load device identity from file.
-    If file doesn't exist, create new identity.
+    CRITICAL: Always validates device ID against current hardware.
+    If mismatch detected, regenerates ID based on hardware.
     
     Returns:
         dict: Device identity containing deviceId, apiKey, registered status
     """
+    # ALWAYS generate device ID based on current hardware
+    current_hardware_id = generate_device_id()
+    
     # Check if identity file exists
     if os.path.exists(DEVICE_FILE):
         try:
             with open(DEVICE_FILE, "r") as f:
                 identity = json.load(f)
-                # Validate required fields
-                if "deviceId" in identity and "registered" in identity:
-                    return identity
+                
+                # Validate device ID matches current hardware
+                stored_id = identity.get("deviceId")
+                
+                if stored_id != current_hardware_id:
+                    # Hardware changed or old static ID detected
+                    print(f"⚠️  Device ID mismatch detected!")
+                    print(f"   Stored ID:  {stored_id[:32] if stored_id else 'None'}...")
+                    print(f"   Hardware ID: {current_hardware_id[:32]}...")
+                    print(f"   Regenerating device ID based on current hardware...")
+                    
+                    # Update to hardware-based ID
+                    identity["deviceId"] = current_hardware_id
+                    identity["updatedAt"] = datetime.utcnow().isoformat()
+                    
+                    # Save updated identity
+                    save_identity(identity)
+                    print(f"✅ Device ID updated to hardware-based ID")
+                
+                return identity
+                
         except (json.JSONDecodeError, IOError) as e:
             print(f"Error reading device identity: {e}")
             # Continue to create new identity
     
-    # Create new identity
+    # Create new identity with hardware-based ID
     identity = {
-        "deviceId": generate_device_id(),
+        "deviceId": current_hardware_id,
         "apiKey": None,
         "registered": False,
         "deviceName": None,
@@ -74,7 +137,7 @@ def load_identity():
     
     # Save to file
     save_identity(identity)
-    print(f"New device identity created: {identity['deviceId']}")
+    print(f"✅ New device identity created: {identity['deviceId'][:32]}...")
     
     return identity
 
