@@ -523,7 +523,7 @@ body.rtl .language-dropdown {
 }
 
 .control-section h2 i {
-    color: var(--primary-red);
+    color: #000000;
 }
 
 /* Settings Grid */
@@ -533,14 +533,14 @@ body.rtl .language-dropdown {
     gap: 1.5rem;
 }
 
-/* Setting Card - Enhanced */
+/* Setting Card - Professional Black Design */
 .setting-card {
-    background: white;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-    border: 2px solid #e0e0e0;
-    transition: all 0.3s;
+    border: 2px solid #000000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
@@ -550,15 +550,15 @@ body.rtl .language-dropdown {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #FF0000 0%, #FF6B6B 100%);
+    background: linear-gradient(90deg, #000000 0%, #1a1a1a 100%);
 }
 
 .setting-card:hover {
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
     transform: translateY(-4px);
-    border-color: #FF0000;
+    border-color: #000000;
 }
 
 .setting-header {
@@ -571,7 +571,7 @@ body.rtl .language-dropdown {
 .setting-icon {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, #FF0000 0%, #FF6B6B 100%);
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
     color: white;
     border-radius: 12px;
     display: flex;
@@ -579,8 +579,8 @@ body.rtl .language-dropdown {
     justify-content: center;
     font-size: 1.5rem;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
-    border: 2px solid #cc0000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 2px solid #000000;
 }
 
 .setting-header h3 {
@@ -777,12 +777,25 @@ input:disabled + .toggle-slider:hover {
     color: var(--text-dark);
 }
 
-/* Users Table */
+/* Users Table - Professional Black Design */
 .users-table {
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow-md);
-    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 16px;
+    border: 2px solid #000000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.users-table::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #000000 0%, #1a1a1a 100%);
 }
 
 .table-header {
@@ -795,14 +808,16 @@ table {
 }
 
 thead tr {
-    border-bottom: 2px solid var(--border);
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    border-bottom: none;
 }
 
 th {
     text-align: left;
     padding: 1rem 0.75rem;
     font-weight: 700;
-    color: var(--text-dark);
+    color: #ffffff;
+    border-bottom: none;
 }
 
 td {
@@ -823,7 +838,7 @@ tr:last-child td {
 .user-avatar {
     width: 40px;
     height: 40px;
-    background: var(--primary-red);
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -831,6 +846,8 @@ tr:last-child td {
     justify-content: center;
     font-weight: 700;
     font-size: 1.1rem;
+    border: 2px solid #000000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Badges */

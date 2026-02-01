@@ -266,6 +266,9 @@ async function loadSystemData() {
         // Check valve status for notifications
         checkValveStatusAndNotify(data.irrigation);
         
+        // Monitor battery levels for notifications
+        checkBatteryLevelAndNotify(data.energy);
+        
         // Load Safety Status (CRITICAL for lithium battery monitoring)
         loadSafetyStatus();
         
@@ -1216,40 +1219,49 @@ function updateCharts(sensors) {
 
 // Event listeners
 function setupEventListeners() {
-    // Start irrigation
-    document.getElementById('start-irrigation')?.addEventListener('click', async () => {
+    // Start irrigation - Fixed ID to match HTML
+    document.getElementById('start-irrigation-main')?.addEventListener('click', async () => {
         try {
             const response = await fetch(`${API_BASE}/api/valve/on`, { method: 'POST' });
             const data = await response.json();
-            showNotification(data.success ? 'Irrigation started' : data.message, data.success ? 'success' : 'error');
-            loadSystemData();
+            if (data.success) {
+                showNotification('Irrigation started successfully!', 'success');
+            } else {
+                showNotification('Failed to start irrigation: ' + data.message, 'error');
+            }
         } catch (error) {
-            showNotification('Failed to start irrigation', 'error');
+            showNotification('Error starting irrigation: ' + error.message, 'error');
         }
     });
     
-    // Stop irrigation
-    document.getElementById('stop-irrigation')?.addEventListener('click', async () => {
+    // Stop irrigation - Fixed ID to match HTML
+    document.getElementById('stop-irrigation-main')?.addEventListener('click', async () => {
         try {
             const response = await fetch(`${API_BASE}/api/valve/off`, { method: 'POST' });
             const data = await response.json();
-            showNotification(data.success ? 'Irrigation stopped' : data.message, data.success ? 'success' : 'error');
-            loadSystemData();
+            if (data.success) {
+                showNotification('Irrigation stopped successfully!', 'success');
+            } else {
+                showNotification('Failed to stop irrigation: ' + data.message, 'error');
+            }
         } catch (error) {
-            showNotification('Failed to stop irrigation', 'error');
+            showNotification('Error stopping irrigation: ' + error.message, 'error');
         }
     });
     
-    // Emergency stop
-    document.getElementById('emergency-stop')?.addEventListener('click', async () => {
+    // Emergency stop - Fixed ID to match HTML
+    document.getElementById('emergency-stop-main')?.addEventListener('click', async () => {
         showCustomModal('Emergency Stop', 'Are you sure you want to trigger emergency stop? This will immediately stop all irrigation.', async () => {
             try {
                 const response = await fetch(`${API_BASE}/api/emergency-stop`, { method: 'POST' });
                 const data = await response.json();
-                showNotification('Emergency stop activated', 'warning');
-                loadSystemData();
+                if (data.success) {
+                    showNotification('Emergency stop activated!', 'warning');
+                } else {
+                    showNotification('Failed to activate emergency stop: ' + data.message, 'error');
+                }
             } catch (error) {
-                showNotification('Failed to trigger emergency stop', 'error');
+                showNotification('Error activating emergency stop: ' + error.message, 'error');
             }
         });
     });
@@ -1626,26 +1638,152 @@ function closeNotificationPanel() {
     if (panel) panel.classList.remove('active');
 }
 
+// Enhanced valve status monitoring with detailed pump information
+let lastPumpState = null;
+let lastBatteryLevel = null;
+let batteryWarningShown = false;
+
 function checkValveStatusAndNotify(irrigation) {
     if (!irrigation) return;
     
     const valveOpen = irrigation.valve_open || false;
+    const pumpRunning = irrigation.pump_running || false;
+    const duration = irrigation.current_duration || 0;
+    const waterFlow = irrigation.flow_rate || 0;
     
+    // Check for valve/pump state changes
     if (lastValveState !== null && lastValveState !== valveOpen) {
         const notification = {
             id: Date.now(),
             type: valveOpen ? 'success' : 'info',
             icon: valveOpen ? 'fa-droplet' : 'fa-droplet-slash',
-            title: valveOpen ? 'Irrigation Started' : 'Irrigation Stopped',
-            message: valveOpen ? 'Valve opened - watering in progress' : 'Valve closed - irrigation complete',
+            title: valveOpen ? 'Pump Started' : 'Pump Stopped',
+            message: valveOpen 
+                ? `Irrigation pump activated - Water flow: ${waterFlow.toFixed(1)} L/min` 
+                : `Pump stopped after ${Math.floor(duration / 60)} minutes - Total water used: ${(waterFlow * duration / 60).toFixed(1)}L`,
             time: new Date().toLocaleTimeString(),
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            priority: valveOpen ? 'high' : 'medium'
         };
         
         addNotification(notification);
+        
+        // Show additional system status notification
+        if (valveOpen) {
+            setTimeout(() => {
+                addNotification({
+                    id: Date.now() + 1,
+                    type: 'info',
+                    icon: 'fa-info-circle',
+                    title: 'System Status',
+                    message: 'Monitoring irrigation cycle - Check water pressure and flow rate',
+                    time: new Date().toLocaleTimeString(),
+                    timestamp: Date.now(),
+                    priority: 'low'
+                });
+            }, 2000);
+        }
+    }
+    
+    // Check for pump malfunction (valve open but no flow)
+    if (valveOpen && waterFlow < 0.1 && duration > 30) {
+        addNotification({
+            id: Date.now() + 2,
+            type: 'warning',
+            icon: 'fa-triangle-exclamation',
+            title: 'Pump Warning',
+            message: 'Low water flow detected - Check water source and pump connection',
+            time: new Date().toLocaleTimeString(),
+            timestamp: Date.now(),
+            priority: 'high'
+        });
     }
     
     lastValveState = valveOpen;
+    lastPumpState = pumpRunning;
+}
+
+// Battery level monitoring and notifications
+function checkBatteryLevelAndNotify(energy) {
+    if (!energy || energy.battery_percent === undefined) return;
+    
+    const batteryLevel = energy.battery_percent;
+    const isCharging = energy.solar_status === 'charging';
+    const currentTime = Date.now();
+    
+    // Critical battery level (below 15%)
+    if (batteryLevel < 15 && !batteryWarningShown) {
+        addNotification({
+            id: currentTime,
+            type: 'error',
+            icon: 'fa-battery-empty',
+            title: 'Critical Battery Level',
+            message: `Battery at ${batteryLevel.toFixed(1)}% - System may shut down soon. Charge immediately!`,
+            time: new Date().toLocaleTimeString(),
+            timestamp: currentTime,
+            priority: 'critical'
+        });
+        batteryWarningShown = true;
+    }
+    
+    // Low battery level (15-30%)
+    else if (batteryLevel >= 15 && batteryLevel < 30 && (lastBatteryLevel === null || lastBatteryLevel >= 30)) {
+        addNotification({
+            id: currentTime + 1,
+            type: 'warning',
+            icon: 'fa-battery-quarter',
+            title: 'Low Battery Warning',
+            message: `Battery level at ${batteryLevel.toFixed(1)}% - Consider reducing irrigation frequency`,
+            time: new Date().toLocaleTimeString(),
+            timestamp: currentTime,
+            priority: 'high'
+        });
+    }
+    
+    // Battery level restored (above 50% after being low)
+    else if (batteryLevel >= 50 && lastBatteryLevel !== null && lastBatteryLevel < 30) {
+        addNotification({
+            id: currentTime + 2,
+            type: 'success',
+            icon: 'fa-battery-three-quarters',
+            title: 'Battery Restored',
+            message: `Battery level restored to ${batteryLevel.toFixed(1)}% - Normal operations resumed`,
+            time: new Date().toLocaleTimeString(),
+            timestamp: currentTime,
+            priority: 'medium'
+        });
+        batteryWarningShown = false; // Reset warning flag
+    }
+    
+    // Solar charging status changes
+    if (isCharging && (lastBatteryLevel === null || !energy.was_charging)) {
+        addNotification({
+            id: currentTime + 3,
+            type: 'info',
+            icon: 'fa-solar-panel',
+            title: 'Solar Charging',
+            message: `Solar panels active - Battery charging at ${energy.charge_rate || 'unknown'} rate`,
+            time: new Date().toLocaleTimeString(),
+            timestamp: currentTime,
+            priority: 'low'
+        });
+    }
+    
+    // Battery fully charged
+    if (batteryLevel >= 95 && lastBatteryLevel !== null && lastBatteryLevel < 95) {
+        addNotification({
+            id: currentTime + 4,
+            type: 'success',
+            icon: 'fa-battery-full',
+            title: 'Battery Fully Charged',
+            message: `Battery at ${batteryLevel.toFixed(1)}% - System ready for extended operation`,
+            time: new Date().toLocaleTimeString(),
+            timestamp: currentTime,
+            priority: 'low'
+        });
+    }
+    
+    lastBatteryLevel = batteryLevel;
 }
 
 function addNotification(notification) {
@@ -1684,13 +1822,19 @@ function updateNotificationList() {
     }
     
     list.innerHTML = notifications.map(n => `
-        <div class="notification-item ${n.type}">
+        <div class="notification-item ${n.type} priority-${n.priority || 'medium'}">
             <div class="notification-item-header">
                 <i class="fa-solid ${n.icon}"></i>
                 <strong>${n.title}</strong>
+                <span class="notification-priority">${(n.priority || 'medium').toUpperCase()}</span>
             </div>
             <p>${n.message}</p>
-            <div class="notification-item-time">${n.time}</div>
+            <div class="notification-item-footer">
+                <span class="notification-item-time">${n.time}</span>
+                <button class="notification-dismiss" onclick="dismissNotification(${n.id})" title="Dismiss">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
         </div>
     `).join('');
 }
@@ -1706,8 +1850,16 @@ function hideLoader() {
     if (loader) loader.classList.remove('active');
 }
 
+// Dismiss notification function
+function dismissNotification(notificationId) {
+    notifications = notifications.filter(n => n.id !== notificationId);
+    updateNotificationBadge();
+    updateNotificationList();
+}
+
 // Export functions
 window.closeNotificationPanel = closeNotificationPanel;
+window.dismissNotification = dismissNotification;
 window.showLoader = showLoader;
 window.hideLoader = hideLoader;
 

@@ -10,7 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
     <link rel="stylesheet" href="css/controls.css?v=1.0">
+    <link rel="stylesheet" href="css/mobile-header-enhancement.css">
+    <link rel="stylesheet" href="css/notification-enhancements.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -31,7 +34,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="ElivateOne Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -56,19 +59,19 @@
                     <i class="fa-solid fa-rotate"></i>
                     <span class="update-indicator" id="updateIndicator"></span>
                 </button>
-                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
-                    <i class="fa-solid fa-rocket"></i>
-                </a>
+                <button class="header-icon-btn drag-toggle-btn" id="dragToggleBtn" title="Enable/Disable Drag & Drop">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </button>
                 <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
-                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
                     <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
-                <a href="controls.html" class="header-icon-btn" title="User & System Controls" style="background: rgba(255, 255, 255, 0.25);">
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
@@ -92,6 +95,14 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile Page Title Bar -->
+    <div class="mobile-page-title show">
+        <div class="mobile-title-content">
+            <i class="fa-solid fa-sliders"></i>
+            <span>User & System Controls</span>
+        </div>
+    </div>
 
     <!-- Mobile Sidebar Menu -->
     <div class="mobile-sidebar" id="mobile-sidebar">
@@ -700,6 +711,9 @@
         updateHeaderDateTime();
         setInterval(updateHeaderDateTime, 60000);
     </script>
+    
+    <!-- Dashboard functionality for notifications and controls -->
+    <script src="js/dashboard.js?v=5.0"></script>
     <!-- Simplified Footer -->
     <footer class="footer">
         <div class="footer-content">

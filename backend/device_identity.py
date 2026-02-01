@@ -10,6 +10,7 @@ import platform
 import os
 import json
 from pathlib import Path
+from datetime import datetime
 
 # Device identity file location
 DEVICE_FILE = os.path.join(os.path.dirname(__file__), "device_identity.json")
@@ -119,7 +120,6 @@ def get_device_identity():
             # Continue to create new identity
     
     # Create new identity with hardware-based ID
-    from datetime import datetime
     identity = {
         "deviceId": current_hardware_id,
         "registered": False,
@@ -165,7 +165,6 @@ def update_device_identity(api_key=None, registered=None, device_name=None, owne
         identity["ownerId"] = owner_id
     
     # Update timestamp
-    from datetime import datetime
     identity["updatedAt"] = datetime.utcnow().isoformat()
     
     # Save updated identity

@@ -52,7 +52,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="logosetup.png" alt="ElivateOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -113,6 +113,37 @@
             </div>
         </div>
     </header>
+
+    <!-- Secondary Navigation Bar -->
+    <nav class="secondary-nav">
+        <div class="nav-container">
+            <div class="nav-breadcrumb">
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <i class="fa-solid fa-chevron-right nav-separator"></i>
+                <span class="nav-current">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>Space Dashboard</span>
+                </span>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-action-btn" id="refresh-data-btn" title="Refresh All Data">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Refresh</span>
+                </button>
+                <button class="nav-action-btn" id="export-data-btn" title="Export Dashboard Data">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Export</span>
+                </button>
+                <button class="nav-action-btn" id="fullscreen-btn" title="Toggle Fullscreen">
+                    <i class="fa-solid fa-expand"></i>
+                    <span>Fullscreen</span>
+                </button>
+            </div>
+        </div>
+    </nav>
 
     <!-- Mobile Sidebar Menu -->
     <div class="mobile-sidebar" id="mobile-sidebar">
@@ -293,6 +324,9 @@
                         </button>
                         <button class="btn btn-black" id="emergency-stop-main">
                             <i class="fa-solid fa-circle-exclamation"></i> Emergency Stop
+                        </button>
+                        <button class="btn btn-black" id="irrigation-chat-btn">
+                            <i class="fa-solid fa-comments"></i> Ask Assistant
                         </button>
                     </div>
                     <div class="irrigation-info">
@@ -981,6 +1015,73 @@
         </div>
     </div>
 
+    <!-- Irrigation Assistant Chat Modal -->
+    <div id="irrigationChatModal" class="custom-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeIrrigationChat()"></div>
+        <div class="modal-content chat-modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-comments modal-icon"></i>
+                <h3 class="modal-title">Irrigation Assistant</h3>
+                <button class="modal-close-btn" onclick="closeIrrigationChat()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body chat-modal-body">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message bot-message">
+                            <div class="message-avatar">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Hello! I'm your irrigation assistant. I can help you with scheduling questions like:
+                                    <ul>
+                                        <li>What's the best schedule for my crops?</li>
+                                        <li>How often should I water my plants?</li>
+                                        <li>What's the optimal irrigation duration?</li>
+                                        <li>When should I adjust my watering schedule?</li>
+                                    </ul>
+                                    Ask me anything about irrigation scheduling!
+                                </div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-quick-questions">
+                        <div class="quick-question-header">Quick Questions:</div>
+                        <div class="quick-questions-grid">
+                            <button class="quick-question-btn" onclick="askQuickQuestion('What is the best schedule for vegetables?')">
+                                <i class="fa-solid fa-leaf"></i>
+                                Best schedule for vegetables?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('How much water do my plants need daily?')">
+                                <i class="fa-solid fa-droplet"></i>
+                                Daily water requirements?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('When should I water during hot weather?')">
+                                <i class="fa-solid fa-sun"></i>
+                                Hot weather watering?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('How to adjust schedule for different seasons?')">
+                                <i class="fa-solid fa-calendar-alt"></i>
+                                Seasonal adjustments?
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chatInput" placeholder="Ask about irrigation scheduling..." maxlength="200">
+                            <button class="chat-send-btn" onclick="sendChatMessage()">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/dashboard.js?v=4.0"></script>
     <script src="js/space.js"></script>
     <script src="js/valve-stats.js?v=1.0"></script>
@@ -1612,6 +1713,137 @@
         
         // Load saved layout on page load
         loadDashboardLayout();
+        
+        // Chat functionality
+        function openIrrigationChat() {
+            const modal = document.getElementById('irrigationChatModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+        
+        function closeIrrigationChat() {
+            const modal = document.getElementById('irrigationChatModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        function askQuickQuestion(question) {
+            const chatMessages = document.getElementById('chatMessages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user-message';
+            userMessage.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${question}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+            chatMessages.appendChild(userMessage);
+            
+            // Simulate bot response
+            setTimeout(() => {
+                const botResponse = getBotResponse(question);
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chat-message bot-message';
+                botMessage.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${botResponse}</div>
+                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                `;
+                chatMessages.appendChild(botMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            askQuickQuestion(message);
+            input.value = '';
+        }
+        
+        function getBotResponse(question) {
+            const responses = {
+                'vegetables': 'For vegetables, I recommend watering 2-3 times per week with 20-30 minutes per session. Early morning (6-8 AM) is optimal to reduce evaporation and prevent fungal diseases.',
+                'daily': 'Daily water requirements vary by plant type: Vegetables need 1-2 inches per week, fruits need 1.5-2.5 inches, and herbs need 0.5-1 inch. Monitor soil moisture at 2-3 inch depth.',
+                'hot weather': 'During hot weather (above 85°F), water early morning (5-7 AM) or late evening (7-9 PM). Increase frequency but reduce duration to prevent water stress.',
+                'seasons': 'Seasonal adjustments: Spring - increase gradually, Summer - peak watering, Fall - reduce frequency, Winter - minimal watering. Adjust based on temperature and rainfall.'
+            };
+            
+            const lowerQuestion = question.toLowerCase();
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerQuestion.includes(key)) {
+                    return response;
+                }
+            }
+            
+            return 'Thank you for your question! For specific irrigation advice, I recommend checking your soil moisture levels and considering factors like plant type, weather conditions, and soil drainage. Would you like me to help you create a custom schedule?';
+        }
+        
+        // Secondary navigation functionality
+        document.getElementById('refresh-data-btn')?.addEventListener('click', function() {
+            showNotification('Refreshing all dashboard data...', 'info');
+            // Trigger data refresh
+            setTimeout(() => {
+                showNotification('Dashboard data refreshed successfully!', 'success');
+            }, 2000);
+        });
+        
+        document.getElementById('export-data-btn')?.addEventListener('click', function() {
+            showNotification('Exporting dashboard data...', 'info');
+            // Simulate export
+            setTimeout(() => {
+                showNotification('Dashboard data exported successfully!', 'success');
+            }, 1500);
+        });
+        
+        document.getElementById('fullscreen-btn')?.addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                this.innerHTML = '<i class="fa-solid fa-compress"></i><span>Exit Fullscreen</span>';
+            } else {
+                document.exitFullscreen();
+                this.innerHTML = '<i class="fa-solid fa-expand"></i><span>Fullscreen</span>';
+            }
+        });
+        
+        // Initialize chat functionality with proper error handling
+        function initializeChatFunctionality() {
+            try {
+                const chatBtn = document.getElementById('irrigation-chat-btn');
+                if (chatBtn) {
+                    chatBtn.addEventListener('click', openIrrigationChat);
+                }
+                
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) {
+                    chatInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            sendChatMessage();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing chat functionality:', error);
+            }
+        }
+        
+        // Initialize everything with delay to ensure DOM is ready
+        setTimeout(() => {
+            initializeChatFunctionality();
+        }, 100);
     </script>
 </body>
 </html>

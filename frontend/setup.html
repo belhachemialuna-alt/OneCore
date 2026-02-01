@@ -9,8 +9,7 @@
     <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/setup.css?v=4.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -18,7 +17,7 @@
     <div class="setup-container">
         <div class="setup-header">
             <div class="logo">
-                <img src="logosetup.png" alt="ElivateOne Logo" class="logo-setup-image">
+                <img src="TIONESETUP.png" alt="ElivateOne Logo" class="logo-setup-image">
             </div>
             <div class="progress-bar">
                 <div class="progress-step active" data-step="1">
@@ -69,7 +68,7 @@
                         <p>Eco-friendly operation with battery backup</p>
                     </div>
                     <div class="feature-item">
-                        <img src="icons/AI.png" alt="AI" style="width: 48px; height: 48px; object-fit: contain;">
+                        <i class="fa-solid fa-brain" style="font-size: 48px; color: #2196F3;"></i>
                         <h3>AI Decisions</h3>
                         <p>Smart irrigation based on crop and soil needs</p>
                     </div>
@@ -418,6 +417,10 @@
                 </div>
 
                 <div class="step-actions">
+                    <button class="btn btn-secondary btn-small reset-setup-btn" onclick="resetSetupProcess()" title="Reset Setup Process">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Reset Setup
+                    </button>
                     <button class="btn btn-primary btn-large" onclick="goToDashboard()">
                         <i class="fa-solid fa-gauge"></i>
                         Go to Dashboard

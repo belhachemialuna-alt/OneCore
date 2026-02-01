@@ -376,3 +376,155 @@ async function completeSetup() {
 function goToDashboard() {
     window.location.href = 'space.html';
 }
+
+// Reset setup process function
+function resetSetupProcess() {
+    // Show professional confirmation modal instead of ugly browser confirm
+    showSetupResetModal('Reset Setup Process', 'Are you sure you want to reset the entire setup process? This will clear all your configuration and restart from the beginning.', () => {
+        // Clear all stored data
+        localStorage.removeItem('elivate_setup_complete');
+        localStorage.removeItem('bayyti_setup_complete');
+        localStorage.removeItem('elivate_config');
+        localStorage.removeItem('bayyti_config');
+        
+        // Reset global variables
+        currentStep = 1;
+        setupData = {network: {}, system: {}, zones: []};
+        
+        // Clear backend setup status (optional - depends on backend implementation)
+        try {
+            fetch('/api/setup/reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).catch(err => {
+                console.log('Backend reset failed (this is OK if backend doesn\'t support reset):', err);
+            });
+        } catch (e) {
+            console.log('Backend reset not available');
+        }
+        
+        // Reset UI to first step properly
+        document.querySelectorAll('.setup-step').forEach(step => {
+            step.style.display = 'none';
+            step.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.progress-step').forEach(step => {
+            step.classList.remove('active', 'completed');
+        });
+        
+        // Show first step and ensure it's properly activated
+        const firstStep = document.getElementById('step-1');
+        const firstProgressStep = document.querySelector('.progress-step[data-step="1"]');
+        
+        if (firstStep) {
+            firstStep.style.display = 'block';
+            firstStep.classList.add('active');
+        }
+        
+        if (firstProgressStep) {
+            firstProgressStep.classList.add('active');
+        }
+        
+        // Reset any form data
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = false;
+            } else {
+                input.value = '';
+            }
+        });
+        
+        // Reset step navigation state
+        updateNavigationButtons();
+        
+        console.log('Setup process has been reset');
+        showNotification('Setup process has been reset successfully!', 'success');
+    });
+}
+
+// Professional setup reset modal function
+function showSetupResetModal(title, message, onConfirm) {
+    // Create modal HTML if it doesn't exist
+    let modal = document.getElementById('setup-reset-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'setup-reset-modal';
+        modal.className = 'custom-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="fa-solid fa-triangle-exclamation modal-icon"></i>
+                    <h3 class="modal-title">${title}</h3>
+                </div>
+                <div class="modal-body">
+                    <p>${message}</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn modal-btn-cancel" id="setup-reset-cancel">
+                        <i class="fa-solid fa-times"></i>
+                        <span>Cancel</span>
+                    </button>
+                    <button class="modal-btn modal-btn-confirm" id="setup-reset-confirm">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Reset Setup</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // Update content
+    modal.querySelector('.modal-title').textContent = title;
+    modal.querySelector('.modal-body p').textContent = message;
+    
+    // Remove existing event listeners by cloning buttons
+    const confirmBtn = document.getElementById('setup-reset-confirm');
+    const cancelBtn = document.getElementById('setup-reset-cancel');
+    const overlay = modal.querySelector('.modal-overlay');
+    
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    const newOverlay = overlay.cloneNode(true);
+    
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    overlay.parentNode.replaceChild(newOverlay, overlay);
+    
+    // Add new event listeners
+    newConfirmBtn.addEventListener('click', () => {
+        hideSetupResetModal();
+        if (onConfirm) onConfirm();
+    });
+    
+    newCancelBtn.addEventListener('click', () => {
+        hideSetupResetModal();
+    });
+    
+    newOverlay.addEventListener('click', () => {
+        hideSetupResetModal();
+    });
+    
+    // Show modal
+    modal.classList.add('active');
+    
+    // Close on Escape key
+    const escapeHandler = (e) => {
+        if (e.key === 'Escape') {
+            hideSetupResetModal();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+}
+
+function hideSetupResetModal() {
+    const modal = document.getElementById('setup-reset-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
