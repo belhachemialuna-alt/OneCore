@@ -135,6 +135,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1000;
 }
 
+
 .header-container {
     max-width: 100%;
     width: 100%;
@@ -179,7 +180,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 0.75rem;
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.95);
+    color: #FFFFFF;
     font-weight: 500;
 }
 
@@ -196,11 +197,13 @@ h1, h2, h3, h4, h5, h6 {
 .header-clock-large #header-time {
     font-size: 1.2rem;
     font-weight: 600;
+    color: #FFFFFF;
 }
 
 .header-clock-large #header-date {
     font-size: 1rem;
     font-weight: 500;
+    color: #FFFFFF;
 }
 
 .datetime-separator {
@@ -1372,8 +1375,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .chart-timeframe {
-    color: #666666;
+    color: #FFFFFF;
     font-size: 0.85rem;
+    font-weight: 500;
 }
 
 .chart-container canvas {
@@ -1519,8 +1523,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .performance-freq,
 .performance-detail {
-    color: #666;
+    color: #FFFFFF;
     font-size: 0.75rem;
+    font-weight: 500;
 }
 
 .summary-item {

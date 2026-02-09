@@ -1,0 +1,116 @@
+/* Space Dashboard Compact View for PC */
+
+/* Reduce sensor grid spacing and card sizes */
+.space-main-content .sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.sensor-card {
+    padding: 1rem !important;
+    border-radius: 12px !important;
+}
+
+.sensor-icon {
+    width: 45px !important;
+    height: 45px !important;
+    font-size: 1.2rem !important;
+}
+
+.sensor-value {
+    font-size: 1.4rem !important;
+}
+
+.sensor-label {
+    font-size: 0.85rem !important;
+}
+
+/* Compact weather control row */
+.weather-control-row {
+    gap: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Reduce chart heights */
+.chart-main .card-body {
+    min-height: 350px !important;
+}
+
+/* Compact stats overview */
+.stats-overview {
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.stat-card {
+    padding: 1rem !important;
+}
+
+.stat-value {
+    font-size: 1.8rem !important;
+}
+
+/* Reduce zones grid spacing */
+.zones-grid {
+    gap: 1rem !important;
+}
+
+.zone-card {
+    padding: 1rem !important;
+}
+
+/* Compact irrigation sidebar */
+.irrigation-tasks-sidebar {
+    width: 280px !important;
+}
+
+/* Reduce section title spacing */
+.section-title-container {
+    margin: 1.5rem 0 1rem 0 !important;
+    padding: 1rem 1.5rem !important;
+}
+
+/* Compact page layout */
+@media (min-width: 1024px) {
+    .space-main-content {
+        padding: 1.25rem 1.75rem !important;
+    }
+    
+    .page-title-section {
+        margin-bottom: 1.25rem !important;
+    }
+    
+    .tasks-calendar-card {
+        padding: 1.25rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+    
+    .weather-card-space {
+        padding: 1.25rem !important;
+        max-width: 250px !important;
+    }
+}
+
+/* Ultra compact for large screens */
+@media (min-width: 1440px) {
+    .space-main-content {
+        padding: 1rem 1.5rem !important;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .sensor-grid {
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+    
+    .stats-overview {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+    
+    .zones-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}

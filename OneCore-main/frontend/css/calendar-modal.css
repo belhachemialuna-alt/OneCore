@@ -1,0 +1,532 @@
+/* Calendar Modal Styles */
+.calendar-modal-content {
+    max-width: 1200px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-close-btn {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.calendar-modal-body {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Calendar Container */
+.calendar-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.calendar-header h3 {
+    color: #000;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.calendar-nav-btn {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.calendar-nav-btn:hover {
+    background: #2196F3;
+    border-color: #2196F3;
+    color: white;
+    transform: scale(1.1);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-weight: 700;
+    color: #666;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    text-transform: uppercase;
+}
+
+#calendar-days {
+    display: contents;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e8e8e8;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    font-weight: 600;
+    color: #333;
+    background: #fafafa;
+}
+
+.calendar-day:hover {
+    background: #e3f2fd;
+    border-color: #2196F3;
+    transform: scale(1.05);
+}
+
+.calendar-day.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.calendar-day.today {
+    background: #2196F3;
+    color: white;
+    border-color: #1976D2;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.calendar-day.selected {
+    background: #1976D2;
+    color: white;
+    border-color: #1565C0;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.calendar-day.has-tasks {
+    background: #fff3e0;
+    border-color: #FF9800;
+}
+
+.task-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #FF9800;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Task Form Container */
+.task-form-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 2px solid #e0e0e0;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.task-form-container h4 {
+    color: #000;
+    font-size: 1.1rem;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #e0e0e0;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.btn-secondary {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #d0d0d0;
+}
+
+.btn-secondary:hover {
+    background: #e8e8e8;
+    border-color: #b0b0b0;
+}
+
+/* Tasks List - Enhanced with Strong Table Design */
+.tasks-list-container {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 3px solid #000000;
+}
+
+.tasks-list-container h4 {
+    color: #000000;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tasks-list-container h4 i {
+    color: #000000;
+    font-size: 1.2rem;
+}
+
+.tasks-list {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 2px solid #000000;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+/* Task Item - Table-like Design */
+.task-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-item:hover {
+    background: #f8f9fa;
+}
+
+.task-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #000000 0%, #333333 100%);
+    border: 2px solid #000000;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.task-name {
+    font-weight: 700;
+    color: #000000;
+    font-size: 1rem;
+}
+
+.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.task-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.task-meta-item i {
+    color: #000000;
+    font-size: 0.9rem;
+}
+
+.task-zone-badge {
+    padding: 0.25rem 0.75rem;
+    background: #000000;
+    color: white;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.task-action-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.task-action-btn:hover {
+    background: #000000;
+    border-color: #000000;
+    color: white;
+    transform: scale(1.1);
+}
+
+.task-action-btn.delete:hover {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.task-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateX(4px);
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-name {
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.task-name i {
+    color: #2196F3;
+}
+
+.task-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.task-details span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.task-details i {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.task-delete-btn {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #f44336;
+    transition: all 0.3s ease;
+}
+
+.task-delete-btn:hover {
+    background: #f44336;
+    color: white;
+    transform: scale(1.1);
+}
+
+.no-tasks {
+    text-align: center;
+    color: #999;
+    padding: 2rem;
+    font-style: italic;
+}
+
+.schedule-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 968px) {
+    .calendar-modal-body {
+        grid-template-columns: 1fr;
+    }
+    
+    .calendar-modal-content {
+        width: 98%;
+        max-height: 95vh;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Scrollbar Styling */
+.task-form-container::-webkit-scrollbar,
+.tasks-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.task-form-container::-webkit-scrollbar-track,
+.tasks-list::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 3px;
+}
+
+.task-form-container::-webkit-scrollbar-thumb,
+.tasks-list::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 3px;
+}
+
+.task-form-container::-webkit-scrollbar-thumb:hover,
+.tasks-list::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+}

@@ -1,0 +1,24 @@
+{
+  "device_name": "ElivateOne",
+  "setup_completed": true,
+  "wilaya": "",
+  "timezone": "Africa/Algiers",
+  "zones": [
+    {
+      "id": 1,
+      "name": "Zone 1",
+      "crop_id": 1,
+      "soil_id": 1,
+      "auto_mode": false
+    }
+  ],
+  "schedules": [
+    {
+      "name": "Morning Irrigation",
+      "start_time": "06:00",
+      "duration": 900,
+      "days_of_week": "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Pairing - BAYYTI Smart Irrigation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .pairing-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .pairing-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .pairing-header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .pairing-header p {
+            color: #7f8c8d;
+        }
+        
+        .pairing-step {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .pairing-step h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .device-info {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .device-info strong {
+            color: #2c3e50;
+        }
+        
+        .device-info code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #e74c3c;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-primary:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="pairing-container">
+        <div class="pairing-header">
+            <h1>🌱 Device Pairing</h1>
+            <p>Connect your physical device to the cloud</p>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="pairing-step">
+            <h3>Step 1: Device Detection</h3>
+            <p>Detecting device on local network...</p>
+            <div id="deviceInfo" class="device-info" style="display: none;">
+                <strong>Device ID:</strong> <code id="deviceId">Loading...</code><br>
+                <strong>Status:</strong> <span id="deviceStatus">Checking...</span>
+            </div>
+            <button id="detectBtn" class="btn btn-primary" onclick="detectDevice()">Detect Device</button>
+        </div>
+
+        <div class="pairing-step" id="pairingForm" style="display: none;">
+            <h3>Step 2: Register Device</h3>
+            <form onsubmit="registerDevice(event)">
+                <div class="form-group">
+                    <label for="deviceName">Device Name</label>
+                    <input type="text" id="deviceName" placeholder="e.g., Garden Irrigation System" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="vpsUrl">VPS Server URL</label>
+                    <input type="url" id="vpsUrl" placeholder="https://your-vps.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sessionToken">Session Token</label>
+                    <input type="text" id="sessionToken" placeholder="Your user session token" required>
+                    <small style="color: #7f8c8d;">Get this from your VPS dashboard after logging in</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="registerBtn">
+                    Register Device
+                </button>
+            </form>
+        </div>
+
+        <div class="pairing-step" id="successMessage" style="display: none;">
+            <h3>✅ Pairing Successful!</h3>
+            <p>Your device has been successfully registered with the VPS cloud.</p>
+            <div class="device-info">
+                <strong>Device Name:</strong> <span id="registeredName"></span><br>
+                <strong>Device ID:</strong> <code id="registeredId"></code><br>
+                <strong>Status:</strong> <span style="color: #27ae60;">✓ Registered</span>
+            </div>
+            <button class="btn btn-success" onclick="window.location.href='/'">
+                Go to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentDeviceId = null;
+        
+        // Network Configuration
+        // For LOCAL testing: Use Raspberry Pi IP
+        // For CLOUD production: Use localhost (device is local)
+        const ENVIRONMENT = 'local'; // Change to 'cloud' for production
+        
+        const LOCAL_DEVICE_URL = ENVIRONMENT === 'cloud' 
+            ? 'http://localhost:5000'
+            : 'http://192.168.137.193:5000';
+        
+        const VPS_URL = ENVIRONMENT === 'cloud'
+            ? 'https://cloud.ielivate.com'
+            : 'http://192.168.1.6:3000';
+
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            statusEl.style.display = 'block';
+            
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        async function detectDevice() {
+            const detectBtn = document.getElementById('detectBtn');
+            detectBtn.disabled = true;
+            detectBtn.textContent = 'Detecting...';
+            
+            try {
+                const response = await fetch(`${LOCAL_DEVICE_URL}/device-id`);
+                
+                if (!response.ok) {
+                    throw new Error('Device not found. Make sure the device pairing server is running.');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentDeviceId = data.deviceId;
+                    document.getElementById('deviceId').textContent = data.deviceId;
+                    document.getElementById('deviceStatus').textContent = data.registered ? 'Already Registered' : 'Not Registered';
+                    document.getElementById('deviceInfo').style.display = 'block';
+                    
+                    if (data.registered) {
+                        showStatus('Device is already registered!', 'info');
+                        document.getElementById('pairingForm').style.display = 'none';
+                    } else {
+                        showStatus('Device detected successfully!', 'success');
+                        document.getElementById('pairingForm').style.display = 'block';
+                    }
+                } else {
+                    throw new Error('Failed to get device information');
+                }
+                
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, 'error');
+                console.error('Detection error:', error);
+            } finally {
+                detectBtn.disabled = false;
+                detectBtn.textContent = 'Detect Device';
+            }
+        }
+
+        async function registerDevice(event) {
+            event.preventDefault();
+            
+            const registerBtn = document.getElementById('registerBtn');
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Registering...';
+            
+            try {
+                // Get form values
+                const deviceName = document.getElementById('deviceName').value;
+                const vpsUrl = document.getElementById('vpsUrl').value || VPS_URL;
+                const sessionToken = document.getElementById('sessionToken').value;
+                
+                if (!currentDeviceId) {
+                    throw new Error('No device detected. Please detect device first.');
+                }
+                
+                showStatus('Registering device with VPS...', 'info');
+                
+                // Step 1: Register with VPS
+                const vpsResponse = await fetch(`${vpsUrl}/api/device/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-token': sessionToken
+                    },
+                    body: JSON.stringify({
+                        deviceId: currentDeviceId,
+                        name: deviceName
+                    })
+                });
+                
+                if (!vpsResponse.ok) {
+                    const errorData = await vpsResponse.json();
+                    throw new Error(errorData.error || 'VPS registration failed');
+                }
+                
+                const vpsData = await vpsResponse.json();
+                
+                if (!vpsData.success) {
+                    throw new Error(vpsData.error || 'VPS registration failed');
+                }
+                
+                // Step 2: Update local device with API key
+                const localResponse = await fetch(`${LOCAL_DEVICE_URL}/device-register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        apiKey: vpsData.device.apiKey,
+                        deviceName: deviceName,
+                        ownerId: sessionToken
+                    })
+                });
+                
+                if (!localResponse.ok) {
+                    throw new Error('Failed to update local device');
+                }
+                
+                const localData = await localResponse.json();
+                
+                if (localData.success) {
+                    // Show success message
+                    document.getElementById('registeredName').textContent = deviceName;
+                    document.getElementById('registeredId').textContent = currentDeviceId;
+                    document.getElementById('pairingForm').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    showStatus('Device paired successfully!', 'success');
+                } else {
+                    throw new Error('Local device update failed');
+                }
+                
+            } catch (error) {
+                showStatus(`Registration failed: ${error.message}`, 'error');
+                console.error('Registration error:', error);
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register Device';
+            }
+        }
+
+        // Auto-detect on page load
+        window.addEventListener('load', () => {
+            setTimeout(detectDevice, 500);
+        });
+    </script>
+</body>
+</html>

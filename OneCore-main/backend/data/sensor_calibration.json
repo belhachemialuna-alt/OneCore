@@ -1,0 +1,38 @@
+{
+  "sensor_calibration": {
+    "soil_moisture": {
+      "sensor_type": "capacitive",
+      "min_raw_value": 0,
+      "max_raw_value": 1023,
+      "dry_calibration": 850,
+      "wet_calibration": 350,
+      "offset": 0,
+      "scale_factor": 1.0
+    },
+    "temperature": {
+      "sensor_type": "DHT22",
+      "offset": 0,
+      "scale_factor": 1.0,
+      "accuracy": 0.5
+    },
+    "humidity": {
+      "sensor_type": "DHT22",
+      "offset": 0,
+      "scale_factor": 1.0,
+      "accuracy": 2.0
+    },
+    "flow_meter": {
+      "sensor_type": "YF-S201",
+      "pulses_per_liter": 450,
+      "offset": 0,
+      "scale_factor": 1.0
+    },
+    "pressure": {
+      "sensor_type": "analog",
+      "min_psi": 0,
+      "max_psi": 100,
+      "offset": 0,
+      "scale_factor": 1.0
+    }
+  }
+}

@@ -1,0 +1,626 @@
+/* Enhanced Controls Page Organization */
+
+/* Page Structure Improvements */
+.page-title-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin: 0.5rem 0 0 0;
+    font-weight: 400;
+}
+
+/* Navigation Container */
+.controls-nav-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.control-icon-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.control-icon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    text-align: center;
+}
+
+.control-icon-btn:hover {
+    border-color: #FF0000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15);
+}
+
+.control-icon-btn.active {
+    background: #FF0000;
+    border-color: #FF0000;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.25);
+}
+
+.control-icon-btn i {
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+
+.control-icon-btn.active i {
+    color: white;
+}
+
+.control-icon-btn span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.control-icon-btn.active span {
+    color: white;
+}
+
+/* Tab Content Container */
+.tab-content-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.tab-content {
+    display: none;
+    padding: 2rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Section Titles */
+.section-title {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.section-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title h2 i {
+    font-size: 1.3rem;
+    color: #FF0000;
+}
+
+.section-title p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Settings Grid Improvements */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.setting-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.setting-card:hover {
+    border-color: #FF0000;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.1);
+}
+
+.setting-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.setting-icon {
+    width: 48px;
+    height: 48px;
+    background: #FF0000;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.setting-icon i {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.setting-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.25rem 0;
+}
+
+.setting-header p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #FF0000;
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+}
+
+/* Buttons */
+.btn-primary {
+    background: #FF0000;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary:hover {
+    background: #cc0000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+/* Danger Zone */
+.danger-zone-wrapper {
+    margin-top: 3rem;
+}
+
+.danger-title {
+    border-color: #dc3545;
+}
+
+.danger-title h2 {
+    color: #dc3545;
+}
+
+.danger-title h2 i {
+    color: #dc3545;
+}
+
+.danger-zone-section {
+    background: #fff5f5;
+    border: 2px solid #dc3545;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.danger-actions-simple {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.danger-card-simple {
+    background: white;
+    border: 1px solid #f8d7da;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.danger-card-simple h3 {
+    color: #dc3545;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+}
+
+.danger-card-simple p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.4;
+}
+
+.danger-card-simple .btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.danger-card-simple .btn:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Users Table */
+.users-table {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.table-header {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.users-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.users-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background: #FF0000;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-admin {
+    background: #FF0000;
+    color: white;
+}
+
+.status-active {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.btn-icon:hover {
+    color: #FF0000;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .controls-nav-container {
+        padding: 1rem;
+    }
+    
+    .control-icon-nav {
+        gap: 0.5rem;
+    }
+    
+    .control-icon-btn {
+        min-width: 80px;
+        padding: 0.75rem 1rem;
+    }
+    
+    .control-icon-btn i {
+        font-size: 1.3rem;
+    }
+    
+    .control-icon-btn span {
+        font-size: 0.8rem;
+    }
+    
+    .tab-content {
+        padding: 1.5rem;
+    }
+    
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .setting-card {
+        padding: 1rem;
+    }
+    
+    .setting-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        text-align: left;
+    }
+    
+    .setting-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .danger-actions-simple {
+        grid-template-columns: 1fr;
+    }
+    
+    .users-table {
+        overflow-x: auto;
+    }
+    
+    .users-table table {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title-section {
+        padding: 1rem 0;
+    }
+    
+    .control-icon-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .control-icon-btn {
+        flex-shrink: 0;
+        min-width: 70px;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .tab-content {
+        padding: 1rem;
+    }
+    
+    .section-title h2 {
+        font-size: 1.3rem;
+    }
+    
+    .section-title p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Info Rows */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row span {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.info-row strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Setting Rows for Toggle Switches */
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.setting-row h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.25rem 0;
+}
+
+.setting-row p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: #FF0000;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+input:disabled + .toggle-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Activity Log */
+.activity-log {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item i {
+    color: #FF0000;
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.activity-item div {
+    flex: 1;
+}
+
+.activity-item strong {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.activity-item span {
+    display: block;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.activity-item time {
+    font-size: 0.8rem;
+    color: #999;
+}

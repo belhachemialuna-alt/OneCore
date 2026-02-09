@@ -1,0 +1,168 @@
+{
+  "irrigation_rules": {
+    "general_rules": [
+      {
+        "rule_id": "R001",
+        "name": "Low Moisture Threshold",
+        "condition": "soil_moisture < crop.optimal_moisture_min",
+        "action": "irrigate",
+        "priority": "high",
+        "duration_formula": "(crop.optimal_moisture_max - soil_moisture) * soil.irrigation_frequency_factor * 10"
+      },
+      {
+        "rule_id": "R002",
+        "name": "Optimal Moisture Range",
+        "condition": "soil_moisture >= crop.optimal_moisture_min AND soil_moisture <= crop.optimal_moisture_max",
+        "action": "skip",
+        "priority": "medium",
+        "duration_formula": "0"
+      },
+      {
+        "rule_id": "R003",
+        "name": "High Moisture",
+        "condition": "soil_moisture > crop.optimal_moisture_max",
+        "action": "skip",
+        "priority": "high",
+        "duration_formula": "0"
+      }
+    ],
+    "temperature_adjustments": [
+      {
+        "rule_id": "T001",
+        "name": "High Temperature Increase",
+        "condition": "temperature > crop.ideal_temp_max",
+        "adjustment_factor": 1.2,
+        "description": "Increase irrigation by 20% in high heat"
+      },
+      {
+        "rule_id": "T002",
+        "name": "Low Temperature Decrease",
+        "condition": "temperature < crop.ideal_temp_min",
+        "adjustment_factor": 0.8,
+        "description": "Decrease irrigation by 20% in cold weather"
+      },
+      {
+        "rule_id": "T003",
+        "name": "Extreme Heat",
+        "condition": "temperature > 40",
+        "adjustment_factor": 1.5,
+        "description": "Increase irrigation by 50% in extreme heat"
+      }
+    ],
+    "weather_rules": [
+      {
+        "rule_id": "W001",
+        "name": "Rain Expected",
+        "condition": "rain_probability > 0.7",
+        "action": "skip",
+        "priority": "high",
+        "description": "Skip irrigation if heavy rain expected"
+      },
+      {
+        "rule_id": "W002",
+        "name": "Light Rain Expected",
+        "condition": "rain_probability > 0.3 AND rain_probability <= 0.7",
+        "adjustment_factor": 0.5,
+        "description": "Reduce irrigation by 50% if light rain expected"
+      },
+      {
+        "rule_id": "W003",
+        "name": "High Humidity",
+        "condition": "humidity > 80",
+        "adjustment_factor": 0.9,
+        "description": "Reduce irrigation by 10% in high humidity"
+      }
+    ],
+    "growth_stage_rules": [
+      {
+        "rule_id": "G001",
+        "name": "Seedling Stage",
+        "condition": "growth_stage == 'seedling'",
+        "adjustment_factor": 0.7,
+        "frequency": "daily",
+        "description": "Light frequent irrigation for seedlings"
+      },
+      {
+        "rule_id": "G002",
+        "name": "Flowering Stage",
+        "condition": "growth_stage == 'flowering'",
+        "adjustment_factor": 1.2,
+        "frequency": "daily",
+        "description": "Increased water during flowering"
+      },
+      {
+        "rule_id": "G003",
+        "name": "Fruiting Stage",
+        "condition": "growth_stage == 'fruiting'",
+        "adjustment_factor": 1.3,
+        "frequency": "daily",
+        "description": "Maximum water during fruit development"
+      }
+    ],
+    "safety_rules": [
+      {
+        "rule_id": "S001",
+        "name": "Battery Low",
+        "condition": "battery_voltage < 11.5",
+        "action": "block",
+        "priority": "critical",
+        "message": "Battery too low for irrigation"
+      },
+      {
+        "rule_id": "S002",
+        "name": "Battery Critical",
+        "condition": "battery_voltage < 10.5",
+        "action": "emergency_stop",
+        "priority": "critical",
+        "message": "Critical battery level - all operations stopped"
+      },
+      {
+        "rule_id": "S003",
+        "name": "Leak Detected",
+        "condition": "leak_detected == true",
+        "action": "emergency_stop",
+        "priority": "critical",
+        "message": "Leak detected - emergency shutdown"
+      },
+      {
+        "rule_id": "S004",
+        "name": "Extreme Temperature",
+        "condition": "temperature > 50 OR temperature < 0",
+        "action": "block",
+        "priority": "critical",
+        "message": "Extreme temperature - irrigation blocked"
+      },
+      {
+        "rule_id": "S005",
+        "name": "Daily Water Limit",
+        "condition": "daily_water_used >= max_daily_water",
+        "action": "block",
+        "priority": "high",
+        "message": "Daily water limit reached"
+      }
+    ],
+    "time_based_rules": [
+      {
+        "rule_id": "TB001",
+        "name": "Avoid Midday Irrigation",
+        "condition": "hour >= 11 AND hour <= 15",
+        "adjustment_factor": 0.0,
+        "description": "Avoid irrigation during peak sun hours"
+      },
+      {
+        "rule_id": "TB002",
+        "name": "Optimal Morning Time",
+        "condition": "hour >= 6 AND hour <= 9",
+        "adjustment_factor": 1.0,
+        "description": "Best time for irrigation"
+      },
+      {
+        "rule_id": "TB003",
+        "name": "Evening Irrigation",
+        "condition": "hour >= 17 AND hour <= 20",
+        "adjustment_factor": 0.9,
+        "description": "Good time for irrigation, slight evaporation risk"
+      }
+    ]
+  }
+}

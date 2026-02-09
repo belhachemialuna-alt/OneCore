@@ -1,0 +1,148 @@
+/* Mobile Header Enhancement - Two-Part Design */
+
+/* Mobile Page Title Bar - Black background with page title and icon */
+.mobile-page-title {
+    display: none;
+    background: #000000;
+    color: #FFFFFF;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid #FF0000;
+    position: fixed;
+    top: 60px; /* Increased from 48px to account for proper header height */
+    left: 0;
+    right: 0;
+    z-index: 998; /* Reduced to be below main header */
+    font-family: 'Fira Sans Condensed', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.mobile-page-title-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 100%;
+}
+
+.mobile-page-title-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mobile-page-title-icon i {
+    font-size: 1.2rem;
+    color: #FFFFFF;
+}
+
+.mobile-page-title-icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.mobile-page-title-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Mobile responsive - show mobile title bar on small screens */
+@media (max-width: 768px) {
+    .mobile-page-title {
+        display: block;
+    }
+    
+    /* Adjust body padding to account for both headers */
+    body {
+        padding-top: 108px !important; /* 60px red header + 48px black title bar */
+    }
+    
+    /* Hide desktop page titles on mobile */
+    .page-title-section {
+        display: none;
+    }
+    
+    /* Adjust main content containers */
+    .main-content,
+    .space-main-content,
+    .ai-main-content,
+    .container {
+        padding-top: 1rem;
+    }
+    
+    /* Space layout container adjustment */
+    .space-layout-container {
+        padding-top: 1rem;
+    }
+    
+    /* Hardware page specific adjustments */
+    .main-content-wrapper {
+        padding-top: 1rem;
+    }
+}
+
+/* Specific page icons and titles */
+.mobile-page-title.space-page .mobile-page-title-icon {
+    color: #FFFFFF;
+}
+
+.mobile-page-title.hardware-page .mobile-page-title-icon {
+    color: #FFFFFF;
+}
+
+.mobile-page-title.ai-page .mobile-page-title-icon {
+    color: #FFFFFF;
+}
+
+.mobile-page-title.analytics-page .mobile-page-title-icon {
+    color: #FFFFFF;
+}
+
+/* Animation for smooth appearance */
+.mobile-page-title {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.mobile-page-title.show {
+    transform: translateY(0);
+}
+
+/* Ensure mobile menu button is visible above title bar */
+.mobile-menu-btn {
+    z-index: 1001;
+}
+
+/* Mobile sidebar adjustments */
+@media (max-width: 768px) {
+    .mobile-sidebar {
+        top: 108px; /* Account for both header bars */
+    }
+    
+    /* Ensure the second header bar (mobile page title) is fully visible */
+    .mobile-page-title {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Fix notification panel positioning on mobile */
+    .notification-panel {
+        top: 108px !important;
+        max-height: calc(100vh - 120px) !important;
+    }
+    
+    /* Improve mobile menu button visibility */
+    .mobile-menu-btn {
+        z-index: 1002;
+        position: relative;
+    }
+}

@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAYYTI-B1 Agricultural Simulation - Smart Irrigation Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .status-card {
+            flex: 1;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 1px solid #e1e8ed;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .status-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-online { background: #4CAF50; }
+        .status-offline { background: #f44336; }
+        .status-warning { background: #ff9800; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e1e8ed;
+            transition: transform 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .panel h2 {
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sensor-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .sensor-item:hover {
+            border-color: #667eea;
+            background: #f1f3f4;
+        }
+
+        .sensor-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .sensor-item input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+            color: #2c3e50;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: border-color 0.3s ease;
+        }
+
+        .sensor-item input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .sensor-item input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #36d1dc 0%, #5b86e5 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(54, 209, 220, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(54, 209, 220, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        .decisions-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .decision-item {
+            background: white;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .decision-item:hover {
+            transform: translateX(5px);
+        }
+
+        .decision-item.warning {
+            border-left-color: #f093fb;
+            background: linear-gradient(135deg, #fff 0%, #fef7ff 100%);
+        }
+
+        .decision-item.error {
+            border-left-color: #f5576c;
+            background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+        }
+
+        .decision-item.success {
+            border-left-color: #4CAF50;
+            background: linear-gradient(135deg, #fff 0%, #f0fff4 100%);
+        }
+
+        .decision-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .decision-time {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .decision-type {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .logs-panel {
+            grid-column: 1 / -1;
+            max-height: 350px;
+        }
+
+        .logs-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 2px solid #e9ecef;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+
+        .log-success { color: #4CAF50; }
+        .log-error { color: #f44336; }
+        .log-warning { color: #ff9800; }
+        .log-info { color: #2196F3; }
+
+        .auto-mode {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .auto-mode label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .auto-mode input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .connection-test {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .test-result {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .test-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .test-failed {
+            background: #f44336;
+            color: white;
+        }
+
+        .test-pending {
+            background: #ff9800;
+            color: white;
+        }
+
+        /* Header Styles */
+        .top-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .brand-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            margin-top: 30px;
+            padding-top: 20px;
+            text-align: center;
+            color: #95a5a6;
+        }
+
+        .logo-footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .logo-footer i {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .logo-footer span {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <i class="fas fa-seedling logo-icon"></i>
+                <div class="brand-text">
+                    <h1>BAYYTI-B1</h1>
+                    <p>Smart Agricultural System</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="/hardware.html" class="nav-link">
+                    <i class="fas fa-microchip"></i>
+                    Hardware
+                </a>
+                <a href="/api-keys" class="nav-link">
+                    <i class="fas fa-key"></i>
+                    API Keys
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main Header -->
+        <div class="header">
+            <h1><i class="fas fa-tractor" style="margin-right: 15px; color: #4CAF50;"></i>BAYYTI-B1 Agricultural Simulation</h1>
+            <p><i class="fas fa-chart-line" style="margin-right: 10px;"></i>Smart Irrigation Control with Real-Time Plant Analysis & Valve Management</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-card">
+                <h3>Pi Device</h3>
+                <div class="status-indicator status-online" id="piStatus"></div>
+                <span id="piStatusText">Online</span>
+            </div>
+            <div class="status-card">
+                <h3>Valve System</h3>
+                <div class="status-indicator status-warning" id="valveStatus"></div>
+                <span id="valveStatusText">Standby</span>
+            </div>
+            <div class="status-card">
+                <h3>AI Engine</h3>
+                <div class="status-indicator status-online" id="aiStatus"></div>
+                <span id="aiStatusText">Ready</span>
+            </div>
+            <div class="status-card">
+                <h3>Active Valves</h3>
+                <div style="font-size: 1.5rem; font-weight: bold;" id="activeValvesCount">0</div>
+                <span>of 4</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Agricultural Data Panel -->
+            <div class="panel">
+                <h2><i class="fas fa-leaf" style="margin-right: 10px; color: #4CAF50;"></i>Agricultural Field Simulation</h2>
+                
+                <!-- Plant Type Selection -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #2c3e50;">Select Plant Type:</label>
+                    <select id="plantType" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; background: white;">
+                        <option value="tomatoes"><i class="fas fa-apple-alt"></i> Tomatoes (High Water Need)</option>
+                        <option value="wheat"><i class="fas fa-wheat-awn"></i> Wheat (Medium Water Need)</option>
+                        <option value="lettuce"><i class="fas fa-leaf"></i> Lettuce (High Water Need)</option>
+                        <option value="corn"><i class="fas fa-corn"></i> Corn (Medium Water Need)</option>
+                        <option value="carrots"><i class="fas fa-carrot"></i> Carrots (Low Water Need)</option>
+                        <option value="peppers"><i class="fas fa-pepper-hot"></i> Peppers (Medium Water Need)</option>
+                    </select>
+                </div>
+
+                <div class="sensor-grid">
+                    <div class="sensor-item">
+                        <label>Soil Moisture (%)</label>
+                        <input type="number" id="soilMoisture" value="45" min="0" max="100" placeholder="0-100">
+                        <small style="color: #6c757d;">Optimal: 60-80%</small>
+                    </div>
+                    <div class="sensor-item">
+                        <label>Temperature (°C)</label>
+                        <input type="number" id="temperature" value="24" min="-10" max="50" placeholder="-10 to 50">
+                        <small style="color: #6c757d;">Optimal: 18-25°C</small>
+                    </div>
+                    <div class="sensor-item">
+                        <label>Humidity (%)</label>
+                        <input type="number" id="humidity" value="65" min="0" max="100" placeholder="0-100">
+                        <small style="color: #6c757d;">Optimal: 50-70%</small>
+                    </div>
+                    <div class="sensor-item">
+                        <label>Light Level (lux)</label>
+                        <input type="number" id="lightLevel" value="850" min="0" max="2000" placeholder="0-2000">
+                        <small style="color: #6c757d;">Min: 400 lux</small>
+                    </div>
+                    <div class="sensor-item">
+                        <label>pH Level</label>
+                        <input type="number" id="phLevel" value="6.8" min="0" max="14" step="0.1" placeholder="0-14">
+                        <small style="color: #6c757d;">Optimal: 6.0-7.5</small>
+                    </div>
+                    <div class="sensor-item">
+                        <label>Water Tank (%)</label>
+                        <input type="number" id="waterLevel" value="80" min="0" max="100" placeholder="0-100">
+                        <small style="color: #6c757d;">Min: 20%</small>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="sendSensorData()">Analyze & Control Valves</button>
+                    <button class="btn btn-secondary" onclick="generatePlantScenario()">Generate Plant Scenario</button>
+                    <button class="btn btn-warning" onclick="sendDroughtAlert()">Drought Emergency</button>
+                </div>
+
+                <div class="auto-mode">
+                    <label>
+                        <input type="checkbox" id="autoMode" onchange="toggleAutoMode()">
+                        <span>Auto-send data every 10 seconds</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Valve Control & AI Decisions Panel -->
+            <div class="panel">
+                <h2><i class="fas fa-faucet" style="margin-right: 10px; color: #2196F3;"></i>Valve Control & AI Decisions</h2>
+                
+                <!-- Valve Status Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #e9ecef;">
+                        <h4 style="margin-bottom: 10px; color: #2c3e50;">Zone 1 - North Field</h4>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="status-indicator" id="valve1Status" style="background: #6c757d;"></div>
+                            <span id="valve1Text">Closed</span>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #e9ecef;">
+                        <h4 style="margin-bottom: 10px; color: #2c3e50;">Zone 2 - South Field</h4>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="status-indicator" id="valve2Status" style="background: #6c757d;"></div>
+                            <span id="valve2Text">Closed</span>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #e9ecef;">
+                        <h4 style="margin-bottom: 10px; color: #2c3e50;">Zone 3 - East Field</h4>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="status-indicator" id="valve3Status" style="background: #6c757d;"></div>
+                            <span id="valve3Text">Closed</span>
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #e9ecef;">
+                        <h4 style="margin-bottom: 10px; color: #2c3e50;">Zone 4 - West Field</h4>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="status-indicator" id="valve4Status" style="background: #6c757d;"></div>
+                            <span id="valve4Text">Closed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="decisions-list" id="decisionsList">
+                    <div class="decision-item success">
+                        <div class="decision-header">
+                            <strong>Agricultural System Ready</strong>
+                            <span class="decision-type" style="background: #4CAF50; color: white; padding: 4px 8px; border-radius: 4px;">READY</span>
+                        </div>
+                        <div class="decision-time">System initialized</div>
+                        <p>Smart irrigation system is ready to analyze plant data and control valves based on agricultural requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Panel -->
+        <div class="panel logs-panel">
+            <h2><i class="fas fa-file-alt" style="margin-right: 10px; color: #ff9800;"></i>Communication Logs</h2>
+            <div class="logs-content" id="logsContent">
+                <div class="log-entry log-info">[INFO] Pi Simulation initialized</div>
+                <div class="log-entry log-info">[INFO] Ready to communicate with cloud platform</div>
+                <div class="log-entry log-info">[INFO] Waiting for user interaction...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dataSentCount = 0;
+        let autoModeInterval = null;
+        let deviceId = null;
+        let apiKey = null;
+        let activeValves = 0;
+        
+        // Plant-specific irrigation requirements
+        const plantRequirements = {
+            tomatoes: { minMoisture: 70, maxMoisture: 85, waterNeed: 'high', optimalTemp: [18, 26] },
+            wheat: { minMoisture: 50, maxMoisture: 70, waterNeed: 'medium', optimalTemp: [15, 25] },
+            lettuce: { minMoisture: 75, maxMoisture: 90, waterNeed: 'high', optimalTemp: [10, 20] },
+            corn: { minMoisture: 60, maxMoisture: 80, waterNeed: 'medium', optimalTemp: [20, 30] },
+            carrots: { minMoisture: 40, maxMoisture: 65, waterNeed: 'low', optimalTemp: [15, 22] },
+            peppers: { minMoisture: 55, maxMoisture: 75, waterNeed: 'medium', optimalTemp: [20, 28] }
+        };
+
+        // Initialize the simulation
+        async function initializeSimulation() {
+            addLog('INFO', 'Initializing Agricultural Simulation...');
+            
+            try {
+                // Get device info
+                const deviceResponse = await fetch('/device-id');
+                const deviceData = await deviceResponse.json();
+                deviceId = deviceData.deviceId || deviceData;
+                
+                // Get activation status
+                const statusResponse = await fetch('/api/device/activation-status');
+                const statusData = await statusResponse.json();
+                
+                if (statusData.success && statusData.apiKey) {
+                    apiKey = statusData.apiKey;
+                    addLog('SUCCESS', `Agricultural system authenticated: ${deviceId.substring(0, 16)}...`);
+                    addLog('SUCCESS', `Valve control API key loaded: ${apiKey.substring(0, 8)}...`);
+                    updateStatus('piStatus', 'online', 'Authenticated');
+                } else {
+                    addLog('WARNING', 'Device not activated - using simulation mode');
+                    updateStatus('piStatus', 'warning', 'Simulation Mode');
+                }
+                
+                // Initialize valve system
+                updateStatus('valveStatus', 'online', 'Ready');
+                addLog('SUCCESS', 'Valve control system initialized');
+                
+            } catch (error) {
+                addLog('ERROR', `Initialization failed: ${error.message}`);
+                updateStatus('piStatus', 'offline', 'Error');
+            }
+        }
+
+        // Test connection to cloud platform
+        async function testConnection() {
+            const resultElement = document.getElementById('connectionResult');
+            resultElement.textContent = 'Testing...';
+            resultElement.className = 'test-result test-pending';
+            
+            try {
+                // Test Next.js cloud platform
+                const cloudResponse = await fetch('http://localhost:3000', { mode: 'no-cors' });
+                updateStatus('cloudStatus', 'online', 'Connected');
+                resultElement.textContent = 'Connection OK';
+                resultElement.className = 'test-result test-success';
+                addLog('SUCCESS', 'Cloud platform connection established');
+                
+            } catch (error) {
+                updateStatus('cloudStatus', 'offline', 'Disconnected');
+                resultElement.textContent = 'Connection Failed';
+                resultElement.className = 'test-result test-failed';
+                addLog('ERROR', `Cloud connection failed: ${error.message}`);
+            }
+        }
+
+        // Send sensor data and analyze for valve control
+        async function sendSensorData() {
+            const plantType = document.getElementById('plantType').value;
+            const sensorData = {
+                deviceId: deviceId,
+                timestamp: new Date().toISOString(),
+                plantType: plantType,
+                sensors: {
+                    soilMoisture: parseFloat(document.getElementById('soilMoisture').value),
+                    temperature: parseFloat(document.getElementById('temperature').value),
+                    humidity: parseFloat(document.getElementById('humidity').value),
+                    lightLevel: parseFloat(document.getElementById('lightLevel').value),
+                    phLevel: parseFloat(document.getElementById('phLevel').value),
+                    waterLevel: parseFloat(document.getElementById('waterLevel').value)
+                },
+                apiKey: apiKey
+            };
+
+            addLog('INFO', `Analyzing ${plantType} field conditions...`);
+            
+            try {
+                // Send to local API first
+                const response = await fetch('/api/simulation/send-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(sensorData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    dataSentCount++;
+                    addLog('SUCCESS', `Agricultural data analyzed (Analysis #${dataSentCount})`);
+                    
+                    // Analyze and control valves based on plant requirements
+                    setTimeout(() => {
+                        analyzeAndControlValves(sensorData.sensors, plantType);
+                    }, 1500);
+                    
+                } else {
+                    addLog('ERROR', `Failed to analyze data: ${result.error}`);
+                }
+                
+            } catch (error) {
+                addLog('ERROR', `Network error: ${error.message}`);
+            }
+        }
+
+        // Analyze agricultural conditions and control valves
+        function analyzeAndControlValves(sensors, plantType) {
+            const requirements = plantRequirements[plantType];
+            let decisions = [];
+            let valvesToOpen = [];
+            
+            // Analyze soil moisture for specific plant type
+            if (sensors.soilMoisture < requirements.minMoisture) {
+                const urgency = sensors.soilMoisture < (requirements.minMoisture - 20) ? 'CRITICAL' : 'HIGH';
+                const zones = determineIrrigationZones(sensors.soilMoisture, requirements);
+                
+                decisions.push({
+                    type: 'VALVE_CONTROL',
+                    priority: urgency,
+                    action: `Open valves in ${zones.join(', ')} for ${plantType}`,
+                    reason: `${plantType.charAt(0).toUpperCase() + plantType.slice(1)} soil moisture critically low (${sensors.soilMoisture}% < ${requirements.minMoisture}%)`,
+                    valves: zones
+                });
+                
+                valvesToOpen = zones;
+            } else if (sensors.soilMoisture > requirements.maxMoisture) {
+                decisions.push({
+                    type: 'VALVE_CONTROL',
+                    priority: 'MEDIUM',
+                    action: 'Close all valves - soil oversaturated',
+                    reason: `${plantType.charAt(0).toUpperCase() + plantType.slice(1)} soil moisture too high (${sensors.soilMoisture}% > ${requirements.maxMoisture}%)`,
+                    valves: []
+                });
+                valvesToOpen = [];
+            }
+            
+            // Check water tank level
+            if (sensors.waterLevel < 20) {
+                decisions.push({
+                    type: 'MAINTENANCE',
+                    priority: 'CRITICAL',
+                    action: 'STOP ALL IRRIGATION - Refill water tank immediately',
+                    reason: `Water tank critically low (${sensors.waterLevel}%)`,
+                    valves: []
+                });
+                valvesToOpen = [];
+            }
+            
+            // Temperature analysis for plant type
+            const [minTemp, maxTemp] = requirements.optimalTemp;
+            if (sensors.temperature < minTemp || sensors.temperature > maxTemp) {
+                const tempAction = sensors.temperature < minTemp ? 'reduce irrigation frequency' : 'increase irrigation frequency';
+                decisions.push({
+                    type: 'TEMPERATURE_ADJUSTMENT',
+                    priority: 'MEDIUM',
+                    action: `Temperature compensation: ${tempAction}`,
+                    reason: `Temperature (${sensors.temperature}°C) outside optimal range for ${plantType} (${minTemp}-${maxTemp}°C)`
+                });
+            }
+            
+            // pH analysis
+            if (sensors.phLevel < 6.0 || sensors.phLevel > 7.5) {
+                decisions.push({
+                    type: 'pH_ADJUSTMENT',
+                    priority: 'MEDIUM',
+                    action: 'Adjust nutrient solution pH',
+                    reason: `pH level (${sensors.phLevel}) outside optimal range for healthy plant growth`
+                });
+            }
+            
+            // If conditions are optimal
+            if (decisions.length === 0) {
+                decisions.push({
+                    type: 'STATUS',
+                    priority: 'LOW',
+                    action: 'Maintain current irrigation schedule',
+                    reason: `All parameters optimal for ${plantType} growth`
+                });
+            }
+            
+            // Execute valve control
+            controlValves(valvesToOpen);
+            
+            // Display decisions
+            decisions.forEach(decision => {
+                addDecision(decision);
+                addLog('VALVE_CONTROL', `${decision.type}: ${decision.action}`);
+            });
+        }
+        
+        // Determine which irrigation zones need water based on conditions
+        function determineIrrigationZones(soilMoisture, requirements) {
+            const zones = [];
+            
+            if (soilMoisture < requirements.minMoisture - 20) {
+                // Critical - all zones
+                zones.push('Zone 1', 'Zone 2', 'Zone 3', 'Zone 4');
+            } else if (soilMoisture < requirements.minMoisture - 10) {
+                // High priority - main zones
+                zones.push('Zone 1', 'Zone 2', 'Zone 3');
+            } else if (soilMoisture < requirements.minMoisture) {
+                // Medium priority - primary zones
+                zones.push('Zone 1', 'Zone 2');
+            }
+            
+            return zones;
+        }
+        
+        // Control valve states
+        function controlValves(zonesToOpen) {
+            const zones = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+            activeValves = 0;
+            
+            zones.forEach((zone, index) => {
+                const valveNum = index + 1;
+                const statusElement = document.getElementById(`valve${valveNum}Status`);
+                const textElement = document.getElementById(`valve${valveNum}Text`);
+                
+                if (zonesToOpen.includes(zone)) {
+                    statusElement.style.background = '#4CAF50';
+                    textElement.textContent = 'OPEN - Irrigating';
+                    activeValves++;
+                    addLog('VALVE_OPEN', `${zone} valve opened for irrigation`);
+                } else {
+                    statusElement.style.background = '#6c757d';
+                    textElement.textContent = 'Closed';
+                }
+            });
+            
+            // Update valve system status
+            document.getElementById('activeValvesCount').textContent = activeValves;
+            
+            if (activeValves > 0) {
+                updateStatus('valveStatus', 'online', 'Irrigating');
+                addLog('SUCCESS', `${activeValves} valves activated for irrigation`);
+            } else {
+                updateStatus('valveStatus', 'warning', 'Standby');
+            }
+        }
+
+        // Add AI decision to the display
+        function addDecision(decision) {
+            const decisionsList = document.getElementById('decisionsList');
+            const decisionElement = document.createElement('div');
+            
+            let priorityClass = '';
+            if (decision.priority === 'HIGH') priorityClass = 'error';
+            else if (decision.priority === 'MEDIUM') priorityClass = 'warning';
+            
+            decisionElement.className = `decision-item ${priorityClass}`;
+            decisionElement.innerHTML = `
+                <div class="decision-header">
+                    <strong>${decision.action}</strong>
+                    <span class="decision-type">${decision.type}</span>
+                </div>
+                <div class="decision-time">${new Date().toLocaleTimeString()}</div>
+                <p>${decision.reason}</p>
+            `;
+            
+            decisionsList.insertBefore(decisionElement, decisionsList.firstChild);
+            
+            // Keep only last 10 decisions
+            while (decisionsList.children.length > 10) {
+                decisionsList.removeChild(decisionsList.lastChild);
+            }
+        }
+
+        // Generate realistic plant scenario data
+        function generatePlantScenario() {
+            const plantType = document.getElementById('plantType').value;
+            const requirements = plantRequirements[plantType];
+            
+            // Generate realistic data based on plant type
+            const scenarios = ['optimal', 'dry', 'wet', 'hot', 'cold'];
+            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            
+            switch(scenario) {
+                case 'optimal':
+                    document.getElementById('soilMoisture').value = Math.floor(Math.random() * (requirements.maxMoisture - requirements.minMoisture) + requirements.minMoisture);
+                    document.getElementById('temperature').value = Math.floor(Math.random() * (requirements.optimalTemp[1] - requirements.optimalTemp[0]) + requirements.optimalTemp[0]);
+                    document.getElementById('humidity').value = Math.floor(Math.random() * 20 + 50);
+                    addLog('INFO', `Generated optimal conditions for ${plantType}`);
+                    break;
+                case 'dry':
+                    document.getElementById('soilMoisture').value = Math.floor(Math.random() * 30 + 10);
+                    document.getElementById('temperature').value = Math.floor(Math.random() * 10 + 25);
+                    document.getElementById('humidity').value = Math.floor(Math.random() * 20 + 30);
+                    addLog('WARNING', `Generated dry conditions for ${plantType}`);
+                    break;
+                case 'wet':
+                    document.getElementById('soilMoisture').value = Math.floor(Math.random() * 15 + 85);
+                    document.getElementById('temperature').value = Math.floor(Math.random() * 8 + 18);
+                    document.getElementById('humidity').value = Math.floor(Math.random() * 20 + 75);
+                    addLog('INFO', `Generated wet conditions for ${plantType}`);
+                    break;
+                case 'hot':
+                    document.getElementById('soilMoisture').value = Math.floor(Math.random() * 30 + 30);
+                    document.getElementById('temperature').value = Math.floor(Math.random() * 10 + 35);
+                    document.getElementById('humidity').value = Math.floor(Math.random() * 20 + 40);
+                    addLog('WARNING', `Generated hot conditions for ${plantType}`);
+                    break;
+                case 'cold':
+                    document.getElementById('soilMoisture').value = Math.floor(Math.random() * 40 + 40);
+                    document.getElementById('temperature').value = Math.floor(Math.random() * 10 + 5);
+                    document.getElementById('humidity').value = Math.floor(Math.random() * 30 + 60);
+                    addLog('INFO', `Generated cold conditions for ${plantType}`);
+                    break;
+            }
+            
+            // Common values
+            document.getElementById('lightLevel').value = Math.floor(Math.random() * 1500 + 300);
+            document.getElementById('phLevel').value = (Math.random() * 3 + 5.5).toFixed(1);
+            document.getElementById('waterLevel').value = Math.floor(Math.random() * 60 + 40);
+        }
+
+        // Send drought emergency alert
+        function sendDroughtAlert() {
+            const plantType = document.getElementById('plantType').value;
+            
+            document.getElementById('soilMoisture').value = 8;
+            document.getElementById('temperature').value = 45;
+            document.getElementById('humidity').value = 15;
+            document.getElementById('waterLevel').value = 12;
+            document.getElementById('lightLevel').value = 1800;
+            document.getElementById('phLevel').value = 7.8;
+            
+            addLog('CRITICAL', `DROUGHT EMERGENCY: Critical conditions for ${plantType} detected`);
+            setTimeout(() => sendSensorData(), 500);
+        }
+
+        // Toggle auto mode
+        function toggleAutoMode() {
+            const autoMode = document.getElementById('autoMode').checked;
+            
+            if (autoMode) {
+                autoModeInterval = setInterval(() => {
+                    generatePlantScenario();
+                    setTimeout(sendSensorData, 1000);
+                }, 10000);
+                addLog('INFO', 'Auto-mode enabled (10s interval)');
+            } else {
+                if (autoModeInterval) {
+                    clearInterval(autoModeInterval);
+                    autoModeInterval = null;
+                }
+                addLog('INFO', 'Auto-mode disabled');
+            }
+        }
+
+        // Update status indicators
+        function updateStatus(elementId, status, text) {
+            const indicator = document.getElementById(elementId);
+            const textElement = document.getElementById(elementId.replace('Status', 'StatusText'));
+            
+            indicator.className = `status-indicator status-${status}`;
+            if (textElement) textElement.textContent = text;
+        }
+
+        // Add log entry
+        function addLog(type, message) {
+            const logsContent = document.getElementById('logsContent');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            
+            let logClass = 'log-info';
+            if (type === 'SUCCESS') logClass = 'log-success';
+            else if (type === 'ERROR') logClass = 'log-error';
+            else if (type === 'WARNING') logClass = 'log-warning';
+            else if (type === 'AI_DECISION') logClass = 'log-success';
+            
+            logEntry.className = `log-entry ${logClass}`;
+            logEntry.textContent = `[${timestamp}] [${type}] ${message}`;
+            
+            logsContent.insertBefore(logEntry, logsContent.firstChild);
+            
+            // Keep only last 50 log entries
+            while (logsContent.children.length > 50) {
+                logsContent.removeChild(logsContent.lastChild);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeSimulation);
+    </script>
+</body>
+</html>

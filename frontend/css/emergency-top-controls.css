@@ -1,0 +1,347 @@
+/* Emergency Top Controls Styling */
+
+/* Emergency Quick Controls Section */
+.emergency-quick-controls {
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 0, 0, 0.2);
+}
+
+.quick-controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* Emergency Control Cards */
+.emergency-control-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.emergency-control-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Control Header */
+.control-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+}
+
+.control-header i {
+    font-size: 2.5rem;
+    color: #4CAF50;
+}
+
+.control-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.control-info p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+/* Valve Quick Control */
+.valve-quick-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.valve-status-compact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.valve-icon-small {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #DC3545;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.valve-icon-small.open {
+    background: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+.valve-info-compact h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: white;
+}
+
+.valve-state-compact {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #DC3545;
+    margin: 0;
+}
+
+.valve-state-compact.open {
+    color: #4CAF50;
+}
+
+.valve-actions-compact {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.emergency-btn-compact {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-family: 'Mulish', sans-serif;
+    min-width: 80px;
+    white-space: nowrap;
+}
+
+.emergency-btn-compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.emergency-btn-compact.open-valve {
+    background: #4CAF50;
+    color: white;
+}
+
+.emergency-btn-compact.open-valve:hover {
+    background: #388e3c;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.emergency-btn-compact.close-valve {
+    background: #2196F3;
+    color: white;
+}
+
+.emergency-btn-compact.close-valve:hover {
+    background: #1976d2;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.emergency-btn-compact.emergency-stop {
+    background: #DC3545;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.emergency-btn-compact.emergency-stop:hover {
+    background: #c62828;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+/* Pressure Quick Monitor */
+.pressure-quick-monitor {
+    text-align: center;
+}
+
+.quick-monitor-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.quick-monitor-header i {
+    font-size: 1.5rem;
+    color: #2196F3;
+}
+
+.quick-monitor-header h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.pressure-display-compact {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.pressure-value-compact {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FF0000;
+}
+
+.pressure-unit-compact {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.pressure-status-compact {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .quick-controls-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .valve-quick-control {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .valve-actions-compact {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .emergency-quick-controls {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .emergency-control-card {
+        padding: 1rem;
+    }
+    
+    .control-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+    
+    .control-header i {
+        font-size: 2rem;
+    }
+    
+    .control-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    .control-info p {
+        font-size: 0.85rem;
+    }
+    
+    .valve-actions-compact {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .emergency-btn-compact {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .pressure-value-compact {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .emergency-quick-controls {
+        padding: 1rem;
+    }
+    
+    .emergency-control-card {
+        padding: 0.75rem;
+    }
+    
+    .valve-icon-small {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .valve-info-compact h4 {
+        font-size: 0.9rem;
+    }
+    
+    .valve-state-compact {
+        font-size: 1rem;
+    }
+    
+    .emergency-btn-compact {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+        min-width: 70px;
+    }
+    
+    .pressure-value-compact {
+        font-size: 1.8rem;
+    }
+}
+
+/* Animation for valve state changes */
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+    }
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+}
+
+/* Smooth transitions for all interactive elements */
+.emergency-control-card * {
+    transition: all 0.3s ease;
+}
+
+/* Focus states for accessibility */
+.emergency-btn-compact:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .emergency-control-card {
+        border: 2px solid white;
+    }
+    
+    .emergency-btn-compact {
+        border: 1px solid white;
+    }
+}

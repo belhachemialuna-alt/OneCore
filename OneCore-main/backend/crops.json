@@ -1,0 +1,282 @@
+{
+  "olive": {
+    "min_moisture": 15,
+    "optimal_moisture": 25,
+    "max_moisture": 45,
+    "water_per_day_liters": 15,
+    "root_depth_cm": 100
+  },
+  "date_palm": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 55,
+    "water_per_day_liters": 50,
+    "root_depth_cm": 120
+  },
+  "orange": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 20,
+    "root_depth_cm": 70
+  },
+  "lemon": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 18,
+    "root_depth_cm": 70
+  },
+  "mandarin": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 18,
+    "root_depth_cm": 70
+  },
+  "fig": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 12,
+    "root_depth_cm": 80
+  },
+  "pomegranate": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 14,
+    "root_depth_cm": 80
+  },
+  "apple": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 22,
+    "root_depth_cm": 80
+  },
+  "pear": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 20,
+    "root_depth_cm": 80
+  },
+  "apricot": {
+    "min_moisture": 22,
+    "optimal_moisture": 32,
+    "max_moisture": 55,
+    "water_per_day_liters": 16,
+    "root_depth_cm": 70
+  },
+  "peach": {
+    "min_moisture": 22,
+    "optimal_moisture": 32,
+    "max_moisture": 55,
+    "water_per_day_liters": 18,
+    "root_depth_cm": 70
+  },
+  "almond": {
+    "min_moisture": 15,
+    "optimal_moisture": 25,
+    "max_moisture": 45,
+    "water_per_day_liters": 10,
+    "root_depth_cm": 90
+  },
+  "wheat": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 5,
+    "root_depth_cm": 60
+  },
+  "barley": {
+    "min_moisture": 18,
+    "optimal_moisture": 28,
+    "max_moisture": 45,
+    "water_per_day_liters": 4,
+    "root_depth_cm": 60
+  },
+  "corn": {
+    "min_moisture": 25,
+    "optimal_moisture": 40,
+    "max_moisture": 65,
+    "water_per_day_liters": 8,
+    "root_depth_cm": 60
+  },
+  "sorghum": {
+    "min_moisture": 18,
+    "optimal_moisture": 28,
+    "max_moisture": 45,
+    "water_per_day_liters": 4,
+    "root_depth_cm": 60
+  },
+  "alfalfa": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 7,
+    "root_depth_cm": 100
+  },
+  "tomato": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 2.5,
+    "root_depth_cm": 40
+  },
+  "potato": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 3.5,
+    "root_depth_cm": 40
+  },
+  "onion": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 2,
+    "root_depth_cm": 30
+  },
+  "garlic": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 55,
+    "water_per_day_liters": 1.8,
+    "root_depth_cm": 30
+  },
+  "carrot": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 2.5,
+    "root_depth_cm": 35
+  },
+  "pepper": {
+    "min_moisture": 25,
+    "optimal_moisture": 40,
+    "max_moisture": 65,
+    "water_per_day_liters": 3,
+    "root_depth_cm": 40
+  },
+  "chili": {
+    "min_moisture": 25,
+    "optimal_moisture": 40,
+    "max_moisture": 65,
+    "water_per_day_liters": 2.8,
+    "root_depth_cm": 40
+  },
+  "eggplant": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 3.5,
+    "root_depth_cm": 45
+  },
+  "zucchini": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 3.5,
+    "root_depth_cm": 45
+  },
+  "cucumber": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 3.8,
+    "root_depth_cm": 45
+  },
+  "lettuce": {
+    "min_moisture": 35,
+    "optimal_moisture": 50,
+    "max_moisture": 75,
+    "water_per_day_liters": 1.5,
+    "root_depth_cm": 25
+  },
+  "spinach": {
+    "min_moisture": 35,
+    "optimal_moisture": 50,
+    "max_moisture": 75,
+    "water_per_day_liters": 1.5,
+    "root_depth_cm": 25
+  },
+  "cabbage": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 3,
+    "root_depth_cm": 40
+  },
+  "mint": {
+    "min_moisture": 35,
+    "optimal_moisture": 50,
+    "max_moisture": 75,
+    "water_per_day_liters": 1.8,
+    "root_depth_cm": 30
+  },
+  "coriander": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 1.5,
+    "root_depth_cm": 30
+  },
+  "parsley": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 1.5,
+    "root_depth_cm": 30
+  },
+  "basil": {
+    "min_moisture": 30,
+    "optimal_moisture": 45,
+    "max_moisture": 70,
+    "water_per_day_liters": 1.5,
+    "root_depth_cm": 30
+  },
+  "thyme": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 1,
+    "root_depth_cm": 30
+  },
+  "chickpea": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 2,
+    "root_depth_cm": 50
+  },
+  "lentil": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 2,
+    "root_depth_cm": 50
+  },
+  "fava_bean": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 3,
+    "root_depth_cm": 50
+  },
+  "green_bean": {
+    "min_moisture": 25,
+    "optimal_moisture": 35,
+    "max_moisture": 60,
+    "water_per_day_liters": 2.8,
+    "root_depth_cm": 50
+  },
+  "sunflower": {
+    "min_moisture": 20,
+    "optimal_moisture": 30,
+    "max_moisture": 50,
+    "water_per_day_liters": 3,
+    "root_depth_cm": 70
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "system_limits": {
+    "battery": {
+      "min_voltage": 11.5,
+      "critical_voltage": 10.5,
+      "max_voltage": 14.4,
+      "nominal_voltage": 12.0
+    },
+    "irrigation": {
+      "max_duration_seconds": 1800,
+      "min_duration_seconds": 60,
+      "max_daily_water_liters": 100,
+      "max_consecutive_irrigations": 5,
+      "min_interval_seconds": 1800
+    },
+    "temperature": {
+      "min_operating": 0,
+      "max_operating": 50,
+      "optimal_min": 15,
+      "optimal_max": 35
+    },
+    "soil_moisture": {
+      "absolute_min": 10,
+      "absolute_max": 95,
+      "general_min": 30,
+      "general_max": 80
+    },
+    "zones": {
+      "max_zones": 8,
+      "default_zones": 1
+    },
+    "network": {
+      "wifi_timeout_seconds": 30,
+      "api_timeout_seconds": 10,
+      "max_retry_attempts": 3
+    }
+  }
+}

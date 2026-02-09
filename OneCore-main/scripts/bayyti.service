@@ -1,0 +1,25 @@
+[Unit]
+Description=BAYYTI Smart Irrigation System - API Server
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/OneCore/backend
+Environment="PYTHONUNBUFFERED=1"
+Environment="ENABLE_GPIO=true"
+Environment="PATH=/home/pi/OneCore/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/home/pi/OneCore/venv/bin/python3 /home/pi/OneCore/backend/api_server.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Restart conditions
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

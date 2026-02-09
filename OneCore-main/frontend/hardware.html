@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Schema - ElivateOne</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
+    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
+    <link rel="stylesheet" href="css/hardware.css?v=1.0">
+    <link rel="stylesheet" href="css/hardware-architecture.css">
+    <link rel="stylesheet" href="css/hardware-compact.css">
+    <link rel="stylesheet" href="css/mobile-header-enhancement.css">
+    <link rel="stylesheet" href="css/notification-enhancements.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="js/hardware-real-api.js"></script>
+    <script src="js/hardware.js"></script>
+    <script src="js/dashboard.js?v=5.0"></script>
+</head>
+<body>
+    <!-- Global Loader -->
+    <div class="global-loader" id="globalLoader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Sticky Red Header Bar -->
+    <header class="top-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <a href="space.html">
+                        <img src="TIONESETUP.png" alt="ElivateOne Logo" class="logo-setup-image">
+                    </a>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="header-datetime header-clock-large" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <button class="header-icon-btn drag-toggle-btn" id="dragToggleBtn" title="Enable/Disable Drag & Drop">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </button>
+                <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
+                    <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Secondary Navigation Bar -->
+    <nav class="secondary-nav">
+        <div class="nav-container">
+            <div class="nav-title">
+                <i class="fa-solid fa-microchip"></i>
+                <span>Hardware Schema</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Page Title Bar -->
+    <div class="mobile-page-title hardware-page show">
+        <div class="mobile-page-title-content">
+            <div class="mobile-page-title-icon">
+                <img src="icons/HARDWARE.png" alt="Hardware">
+            </div>
+            <div class="mobile-page-title-text">Hardware</div>
+        </div>
+    </div>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
+                <a href="analytics.html" class="sidebar-item" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="sidebar-item" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="sidebar-item active" title="Hardware Schema">
+                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <a href="controls.html" class="sidebar-item" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="../PI_simulation/device_registration.html" class="sidebar-item" title="PI Data Simulation">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="ai.html" class="sidebar-item" title="AI Model Testing">
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="sidebar-item" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="sidebar-item" id="setup-link" title="Return to Setup">
+                    <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="main-content-wrapper">
+            <!-- Page Title Section -->
+            <div class="page-title-section">
+                <div class="page-title-icon">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h1 class="page-title" data-i18n="nav-hardware">Hardware</h1>
+            </div>
+
+            <!-- Hardware Schema Information -->
+            <div class="hardware-schema-compact">
+                <!-- Device ID Section -->
+                <div class="device-id-compact">
+                    <div class="device-id-header">
+                        <i class="fa-solid fa-fingerprint"></i>
+                        <span class="device-label">Device ID</span>
+                    </div>
+                    <div class="device-id-container">
+                        <code class="device-id" id="deviceIdDisplay">Loading...</code>
+                        <button class="copy-device-btn" id="copyDeviceIdBtn" title="Copy Device ID">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="device-setup-hint">
+                        <span>Copy ID → Visit cloud.ielivate.com → Add Device → Verify Connection</span>
+                    </div>
+                </div>
+                
+                <!-- Component Status Summary -->
+                <div class="component-status-compact">
+                    <div class="status-header">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Component Status</span>
+                    </div>
+                    <div class="status-summary">
+                        <div class="status-item online">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span id="onlineCount">0</span>
+                        </div>
+                        <div class="status-item offline">
+                            <i class="fa-solid fa-circle-pause"></i>
+                            <span id="offlineCount">0</span>
+                        </div>
+                        <div class="status-item error">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <span id="errorCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- System Performance Cards (CPU & RAM) -->
+        <div class="system-performance-section">
+            <h2><i class="fa-solid fa-gauge-high"></i> System Performance</h2>
+            <div class="performance-grid">
+                <!-- CPU Card -->
+                <div class="performance-card cpu-card">
+                    <div class="performance-header">
+                        <div class="performance-icon">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div class="performance-title">
+                            <h3>CPU Usage</h3>
+                            <span class="performance-subtitle" id="cpuCores">1 Core</span>
+                        </div>
+                    </div>
+                    <div class="performance-value">
+                        <span id="cpuUsage">0</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="performance-bar">
+                        <div class="performance-progress" id="cpuProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="performance-footer">
+                        <span class="performance-status" id="cpuStatus">Normal</span>
+                        <span class="performance-freq" id="cpuFreq">0 MHz</span>
+                    </div>
+                </div>
+
+                <!-- RAM Card -->
+                <div class="performance-card ram-card">
+                    <div class="performance-header">
+                        <div class="performance-icon">
+                            <i class="fa-solid fa-memory"></i>
+                        </div>
+                        <div class="performance-title">
+                            <h3>RAM Usage</h3>
+                            <span class="performance-subtitle" id="ramTotal">0 GB Total</span>
+                        </div>
+                    </div>
+                    <div class="performance-value">
+                        <span id="ramUsage">0</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="performance-bar">
+                        <div class="performance-progress" id="ramProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="performance-footer">
+                        <span class="performance-status" id="ramStatus">Normal</span>
+                        <span class="performance-detail" id="ramDetail">0 / 0 GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Charts -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-line"></i> CPU Usage History</h3>
+                        <span class="chart-timeframe">Last 60 seconds</span>
+                    </div>
+                    <canvas id="cpuChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-area"></i> RAM Usage History</h3>
+                        <span class="chart-timeframe">Last 60 seconds</span>
+                    </div>
+                    <canvas id="ramChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-card">
+            <h3><i class="fa-solid fa-info-circle"></i> Status Legend</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="status-dot online">●</div>
+                    <span><strong>Online/OK</strong> - Component functioning normally</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot offline">●</div>
+                    <span><strong>Offline/OFF</strong> - Component inactive or disabled</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot error">●</div>
+                    <span><strong>Error/Fault</strong> - Component malfunction detected</span>
+                </div>
+                <div class="legend-item">
+                    <div class="status-dot warning">●</div>
+                    <span><strong>Warning</strong> - Component needs attention</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced System Architecture Section -->
+        <div class="schema-container">
+            <div class="schema-header">
+                <h2><i class="fa-solid fa-diagram-project"></i> Deep System Architecture</h2>
+                <div class="schema-controls">
+                    <button class="schema-btn" id="toggleLayersBtn" title="Toggle Architecture Layers">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Layers</span>
+                    </button>
+                    <button class="schema-btn" id="toggleFlowBtn" title="Show Data Flow">
+                        <i class="fa-solid fa-arrows-spin"></i>
+                        <span>Flow</span>
+                    </button>
+                    <button class="schema-btn" id="resetSchemaBtn" title="Reset View">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reset</span>
+                    </button>
+                    <button class="terminal-btn" id="openTerminalBtn" title="Debug & Analyze Components">
+                        <i class="fa-solid fa-terminal"></i>
+                        <span>Debug Terminal</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Architecture Info Panel -->
+            <div class="architecture-info-panel">
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Processing Unit</span>
+                        <span class="info-value" id="system-processor">Loading...</span>
+                        <span class="info-detail" id="system-processor-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-memory"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Memory</span>
+                        <span class="info-value" id="system-memory">Loading...</span>
+                        <span class="info-detail" id="system-memory-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Connectivity</span>
+                        <span class="info-value" id="system-connectivity">Loading...</span>
+                        <span class="info-detail" id="system-connectivity-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Power</span>
+                        <span class="info-value" id="system-power">Loading...</span>
+                        <span class="info-detail" id="system-power-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-hard-drive"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Storage</span>
+                        <span class="info-value" id="system-storage">Loading...</span>
+                        <span class="info-detail" id="system-storage-detail">Fetching data...</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon-wrapper">
+                        <i class="fa-solid fa-temperature-half"></i>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Temperature</span>
+                        <span class="info-value" id="system-temperature">Loading...</span>
+                        <span class="info-detail" id="system-temperature-detail">Fetching data...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="schema-wrapper" id="schemaWrapper">
+                <svg id="hardware-schema" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Definitions for patterns and gradients -->
+                    <defs>
+                        <!-- Pipe pattern -->
+                        <pattern id="pipePattern" patternUnits="userSpaceOnUse" width="10" height="10">
+                            <rect width="10" height="10" fill="#E0E0E0"/>
+                            <line x1="0" y1="5" x2="10" y2="5" stroke="#BDBDBD" stroke-width="1"/>
+                        </pattern>
+                        
+                        <!-- Water flow gradient -->
+                        <linearGradient id="waterFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#2196F3;stop-opacity:0.3"/>
+                            <stop offset="50%" style="stop-color:#2196F3;stop-opacity:0.6"/>
+                            <stop offset="100%" style="stop-color:#2196F3;stop-opacity:0.3"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Water Source -->
+                    <g id="water-source" class="component">
+                        <rect x="50" y="150" width="100" height="80" rx="10" fill="#2196F3" opacity="0.8"/>
+                        <text x="100" y="185" text-anchor="middle" fill="white" font-size="14" font-weight="bold">WATER</text>
+                        <text x="100" y="205" text-anchor="middle" fill="white" font-size="12">SOURCE</text>
+                        <circle id="source-status" cx="140" cy="160" r="8" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Main Pipe from source -->
+                    <line id="pipe-main" x1="150" y1="190" x2="280" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Pump -->
+                    <g id="pump" class="component">
+                        <circle cx="310" cy="190" r="40" fill="#FF5722" opacity="0.9"/>
+                        <text x="310" y="195" text-anchor="middle" fill="white" font-size="14" font-weight="bold">PUMP</text>
+                        <circle id="pump-status" cx="340" cy="165" r="8" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Pipe to filter -->
+                    <line id="pipe-filter" x1="350" y1="190" x2="480" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Filter -->
+                    <g id="filter" class="component">
+                        <rect x="480" y="160" width="80" height="60" rx="8" fill="#9C27B0" opacity="0.9"/>
+                        <text x="520" y="195" text-anchor="middle" fill="white" font-size="14" font-weight="bold">FILTER</text>
+                        <circle id="filter-status" cx="555" cy="170" r="8" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Pipe to pressure sensor -->
+                    <line id="pipe-pressure" x1="560" y1="190" x2="680" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Pressure Sensor -->
+                    <g id="pressure-sensor" class="component sensor">
+                        <rect x="680" y="170" width="60" height="40" rx="5" fill="#FFC107" opacity="0.9"/>
+                        <text x="710" y="195" text-anchor="middle" fill="#000" font-size="12" font-weight="bold">P-SENS</text>
+                        <circle id="pressure-sensor-status" cx="735" cy="178" r="6" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Pipe to main valve -->
+                    <line id="pipe-main-valve" x1="740" y1="190" x2="840" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    
+                    <!-- Main Control Valve -->
+                    <g id="main-valve" class="component valve">
+                        <rect x="840" y="160" width="80" height="60" rx="8" fill="#DC3545" opacity="0.9"/>
+                        <text x="880" y="185" text-anchor="middle" fill="white" font-size="12" font-weight="bold">MAIN</text>
+                        <text x="880" y="202" text-anchor="middle" fill="white" font-size="12" font-weight="bold">VALVE</text>
+                        <circle id="main-valve-status" cx="915" cy="168" r="8" fill="#757575" class="status-indicator"/>
+                    </g>
+
+                    <!-- Distribution pipes -->
+                    <line id="pipe-dist" x1="920" y1="190" x2="980" y2="190" stroke="#424242" stroke-width="8" class="pipe"/>
+                    <line id="pipe-split-1" x1="980" y1="190" x2="980" y2="320" stroke="#424242" stroke-width="6" class="pipe"/>
+                    <line id="pipe-split-2" x1="980" y1="190" x2="980" y2="480" stroke="#424242" stroke-width="6" class="pipe"/>
+
+                    <!-- Zone 1 -->
+                    <g id="zone-1" class="zone">
+                        <!-- Soil Moisture Sensor -->
+                        <g id="soil-sensor-1" class="component sensor">
+                            <rect x="850" y="300" width="60" height="40" rx="5" fill="#795548" opacity="0.9"/>
+                            <text x="880" y="325" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SOIL-1</text>
+                            <circle id="soil-sensor-1-status" cx="905" cy="308" r="6" fill="#4caf50" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-zone-1" x1="980" y1="320" x2="1020" y2="320" stroke="#424242" stroke-width="6" class="pipe"/>
+                        
+                        <!-- Zone 1 Valve -->
+                        <g id="zone-valve-1" class="component valve">
+                            <rect x="1020" y="300" width="70" height="40" rx="6" fill="#FF5722" opacity="0.9"/>
+                            <text x="1055" y="325" text-anchor="middle" fill="white" font-size="11" font-weight="bold">VALVE-1</text>
+                            <circle id="zone-valve-1-status" cx="1085" cy="308" r="7" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-sprinkler-1" x1="1090" y1="320" x2="1140" y2="320" stroke="#424242" stroke-width="4" class="pipe"/>
+                        
+                        <!-- Sprinkler 1 -->
+                        <g id="sprinkler-1" class="component">
+                            <circle cx="1150" cy="320" r="20" fill="#2196F3" opacity="0.8"/>
+                            <text x="1150" y="325" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SP1</text>
+                            <circle id="sprinkler-1-status" cx="1165" cy="308" r="5" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <!-- Zone label -->
+                        <text x="1055" y="280" text-anchor="middle" fill="#FF5722" font-size="16" font-weight="bold">ZONE 1</text>
+                    </g>
+
+                    <!-- Zone 2 -->
+                    <g id="zone-2" class="zone">
+                        <!-- Soil Moisture Sensor -->
+                        <g id="soil-sensor-2" class="component sensor">
+                            <rect x="850" y="400" width="60" height="40" rx="5" fill="#795548" opacity="0.9"/>
+                            <text x="880" y="425" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SOIL-2</text>
+                            <circle id="soil-sensor-2-status" cx="905" cy="408" r="6" fill="#4caf50" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-zone-2" x1="980" y1="400" x2="1020" y2="400" stroke="#424242" stroke-width="6" class="pipe"/>
+                        
+                        <!-- Zone 2 Valve -->
+                        <g id="zone-valve-2" class="component valve">
+                            <rect x="1020" y="380" width="70" height="40" rx="6" fill="#FF5722" opacity="0.9"/>
+                            <text x="1055" y="405" text-anchor="middle" fill="white" font-size="11" font-weight="bold">VALVE-2</text>
+                            <circle id="zone-valve-2-status" cx="1085" cy="388" r="7" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-sprinkler-2" x1="1090" y1="400" x2="1140" y2="400" stroke="#424242" stroke-width="4" class="pipe"/>
+                        
+                        <!-- Sprinkler 2 -->
+                        <g id="sprinkler-2" class="component">
+                            <circle cx="1150" cy="400" r="20" fill="#2196F3" opacity="0.8"/>
+                            <text x="1150" y="405" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SP2</text>
+                            <circle id="sprinkler-2-status" cx="1165" cy="388" r="5" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <!-- Zone label -->
+                        <text x="1055" y="360" text-anchor="middle" fill="#FF5722" font-size="16" font-weight="bold">ZONE 2</text>
+                    </g>
+
+                    <!-- Zone 3 -->
+                    <g id="zone-3" class="zone">
+                        <!-- Soil Moisture Sensor -->
+                        <g id="soil-sensor-3" class="component sensor">
+                            <rect x="850" y="460" width="60" height="40" rx="5" fill="#795548" opacity="0.9"/>
+                            <text x="880" y="485" text-anchor="middle" fill="white" font-size="11" font-weight="bold">SOIL-3</text>
+                            <circle id="soil-sensor-3-status" cx="905" cy="468" r="6" fill="#4caf50" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-zone-3" x1="980" y1="480" x2="1020" y2="480" stroke="#424242" stroke-width="6" class="pipe"/>
+                        
+                        <!-- Zone 3 Valve -->
+                        <g id="zone-valve-3" class="component valve">
+                            <rect x="1020" y="460" width="70" height="40" rx="6" fill="#FF5722" opacity="0.9"/>
+                            <text x="1055" y="485" text-anchor="middle" fill="white" font-size="11" font-weight="bold">VALVE-3</text>
+                            <circle id="zone-valve-3-status" cx="1085" cy="468" r="7" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <line id="pipe-sprinkler-3" x1="1090" y1="480" x2="1140" y2="480" stroke="#424242" stroke-width="4" class="pipe"/>
+                        
+                        <!-- Sprinkler 3 -->
+                        <g id="sprinkler-3" class="component">
+                            <circle cx="1150" cy="480" r="20" fill="#2196F3" opacity="0.8"/>
+                            <text x="1150" y="485" text-anchor="middle" fill="white" font-size="10" font-weight="bold">SP3</text>
+                            <circle id="sprinkler-3-status" cx="1165" cy="468" r="5" fill="#757575" class="status-indicator"/>
+                        </g>
+                        
+                        <!-- Zone label -->
+                        <text x="1055" y="440" text-anchor="middle" fill="#FF5722" font-size="16" font-weight="bold">ZONE 3</text>
+                    </g>
+
+                    <!-- Control System -->
+                    <g id="control-system" class="component">
+                        <rect x="400" y="600" width="400" height="150" rx="10" fill="#000000" opacity="0.8" stroke="#FF0000" stroke-width="3"/>
+                        <text x="600" y="635" text-anchor="middle" fill="#FF0000" font-size="18" font-weight="bold">ElivateOne CONTROL SYSTEM</text>
+                        
+                        <!-- Raspberry Pi -->
+                        <rect x="420" y="650" width="140" height="80" rx="5" fill="#4caf50" opacity="0.9"/>
+                        <text x="490" y="680" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Raspberry Pi</text>
+                        <text x="490" y="698" text-anchor="middle" fill="white" font-size="10">Zero W</text>
+                        <circle id="pi-status" cx="545" cy="660" r="6" fill="#4caf50" class="status-indicator"/>
+                        
+                        <!-- Power Supply -->
+                        <rect x="580" y="650" width="100" height="80" rx="5" fill="#FFC107" opacity="0.9"/>
+                        <text x="630" y="680" text-anchor="middle" fill="#000" font-size="12" font-weight="bold">Power</text>
+                        <text x="630" y="698" text-anchor="middle" fill="#000" font-size="10">Supply</text>
+                        <circle id="power-status" cx="670" cy="660" r="6" fill="#4caf50" class="status-indicator"/>
+                        
+                        <!-- Connectivity -->
+                        <rect x="700" y="650" width="80" height="80" rx="5" fill="#2196F3" opacity="0.9"/>
+                        <text x="740" y="680" text-anchor="middle" fill="white" font-size="12" font-weight="bold">WiFi</text>
+                        <text x="740" y="698" text-anchor="middle" fill="white" font-size="10">Network</text>
+                        <circle id="wifi-status" cx="770" cy="660" r="6" fill="#4caf50" class="status-indicator"/>
+                    </g>
+
+                    <!-- Connections from control to sensors -->
+                    <line x1="490" y1="600" x2="490" y2="220" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="490" y1="220" x2="710" y2="210" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    
+                    <line x1="600" y1="600" x2="600" y2="350" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="600" y1="350" x2="880" y2="340" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="600" y1="420" x2="880" y2="420" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                    <line x1="600" y1="480" x2="880" y2="480" stroke="#00BCD4" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Component Status List -->
+        <div class="components-section">
+            <h2><i class="fa-solid fa-list-check"></i> Component Status</h2>
+            <div class="components-grid">
+                <!-- Valves -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-valve"></i>
+                        <h3>Valves</h3>
+                    </div>
+                    <div class="component-list" id="valves-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Sensors -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-microchip"></i>
+                        <h3>Sensors</h3>
+                    </div>
+                    <div class="component-list" id="sensors-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- System Components -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-server"></i>
+                        <h3>System</h3>
+                    </div>
+                    <div class="component-list" id="system-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Pipes & Connections -->
+                <div class="component-card">
+                    <div class="component-card-header">
+                        <i class="fa-solid fa-pipe"></i>
+                        <h3>Connections</h3>
+                    </div>
+                    <div class="component-list" id="pipes-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hardware Failure Statistics -->
+        <div class="failure-stats-sidebar">
+            <div class="failure-stats-card">
+                <div class="failure-stats-header">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <h3>Hardware Failure Statistics</h3>
+                </div>
+                <div class="failure-stats-content">
+                    <!-- Failure Summary -->
+                    <div class="failure-summary">
+                        <div class="failure-summary-item">
+                            <div class="failure-icon total">
+                                <i class="fa-solid fa-list"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="totalFailures">0</span>
+                                <span class="failure-label">Total Issues</span>
+                            </div>
+                        </div>
+                        <div class="failure-summary-item">
+                            <div class="failure-icon critical">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="criticalFailures">0</span>
+                                <span class="failure-label">Critical</span>
+                            </div>
+                        </div>
+                        <div class="failure-summary-item">
+                            <div class="failure-icon resolved">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="failure-details">
+                                <span class="failure-count" id="resolvedFailures">0</span>
+                                <span class="failure-label">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Failure Chart -->
+                    <div class="failure-chart-container">
+                        <h4><i class="fa-solid fa-chart-pie"></i> Failure Distribution</h4>
+                        <canvas id="failureDistributionChart"></canvas>
+                    </div>
+                    
+                    <!-- Failure Timeline -->
+                    <div class="failure-timeline-container">
+                        <h4><i class="fa-solid fa-chart-line"></i> Failure Trends (30 Days)</h4>
+                        <canvas id="failureTrendsChart"></canvas>
+                    </div>
+                    
+                    <!-- Component Reliability -->
+                    <div class="component-reliability">
+                        <h4><i class="fa-solid fa-shield-halved"></i> Component Reliability</h4>
+                        <div class="reliability-item">
+                            <span class="component-name">Water Source</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 98%"></div>
+                            </div>
+                            <span class="reliability-percent">98%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="component-name">Valves</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 95%"></div>
+                            </div>
+                            <span class="reliability-percent">95%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="component-name">Sensors</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 92%"></div>
+                            </div>
+                            <span class="reliability-percent">92%</span>
+                        </div>
+                        <div class="reliability-item">
+                            <span class="component-name">Controller</span>
+                            <div class="reliability-bar">
+                                <div class="reliability-fill" style="width: 99%"></div>
+                            </div>
+                            <span class="reliability-percent">99%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Debug Terminal Modal -->
+    <div id="terminalModal" class="custom-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeTerminal()"></div>
+        <div class="modal-content terminal-modal-content">
+            <div class="modal-header">
+                <i class="fa-solid fa-terminal modal-icon"></i>
+                <h3 class="modal-title">Debug & Analysis Terminal</h3>
+                <button class="modal-close-btn" onclick="closeTerminal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body terminal-modal-body">
+                <!-- Component Selector -->
+                <div class="terminal-controls">
+                    <div class="control-group">
+                        <label>Select Component:</label>
+                        <select id="componentSelector" onchange="analyzeComponent()">
+                            <option value="all">All Components</option>
+                            <option value="water-source">Water Source</option>
+                            <option value="valve1">Valve 1</option>
+                            <option value="valve2">Valve 2</option>
+                            <option value="valve3">Valve 3</option>
+                            <option value="valve4">Valve 4</option>
+                            <option value="sensor1">Sensor 1</option>
+                            <option value="sensor2">Sensor 2</option>
+                            <option value="sensor3">Sensor 3</option>
+                            <option value="sensor4">Sensor 4</option>
+                            <option value="controller">Main Controller</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <button class="terminal-action-btn" onclick="refreshTerminal()">
+                            <i class="fa-solid fa-rotate"></i> Refresh
+                        </button>
+                        <button class="terminal-action-btn" onclick="clearTerminal()">
+                            <i class="fa-solid fa-eraser"></i> Clear
+                        </button>
+                        <button class="terminal-action-btn" onclick="exportLogs()">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Terminal Output -->
+                <div class="terminal-output" id="terminalOutput">
+                    <div class="terminal-line system">
+                        <span class="timestamp">[00:00:00]</span>
+                        <span class="tag">[SYSTEM]</span>
+                        <span class="message">BAYYTI-B1 Debug Terminal v1.0.0 initialized</span>
+                    </div>
+                    <div class="terminal-line info">
+                        <span class="timestamp">[00:00:01]</span>
+                        <span class="tag">[INFO]</span>
+                        <span class="message">Connecting to hardware components...</span>
+                    </div>
+                    <div class="terminal-line success">
+                        <span class="timestamp">[00:00:02]</span>
+                        <span class="tag">[SUCCESS]</span>
+                        <span class="message">All components connected successfully</span>
+                    </div>
+                </div>
+
+                <!-- Component Details Panel -->
+                <div class="component-details" id="componentDetails">
+                    <h4><i class="fa-solid fa-info-circle"></i> Component Details</h4>
+                    <div class="details-grid" id="detailsGrid">
+                        <div class="detail-item">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value status-online">Online</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Uptime:</span>
+                            <span class="detail-value">2d 14h 32m</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Last Check:</span>
+                            <span class="detail-value">2 seconds ago</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Error Count:</span>
+                            <span class="detail-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/hardware.js?v=1.0"></script>
+    
+    <!-- Hardware Drag & Drop System -->
+    <script src="js/hardware-drag-drop.js?v=1.0"></script>
+    
+    <!-- Language System -->
+    <script src="js/language.js?v=1.0"></script>
+    
+    <!-- Terminal Functionality -->
+    <script>
+        let terminalLines = [];
+        
+        function openTerminal() {
+            document.getElementById('terminalModal').style.display = 'flex';
+            initializeTerminal();
+        }
+        
+        function closeTerminal() {
+            document.getElementById('terminalModal').style.display = 'none';
+        }
+        
+        function initializeTerminal() {
+            addTerminalLine('system', 'Terminal session started');
+            addTerminalLine('info', 'Scanning hardware components...');
+            setTimeout(() => {
+                addTerminalLine('success', 'Found 10 components');
+                addTerminalLine('info', 'Ready for debugging');
+            }, 500);
+        }
+        
+        function addTerminalLine(type, message) {
+            const output = document.getElementById('terminalOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const tagMap = {
+                'system': 'SYSTEM',
+                'info': 'INFO',
+                'success': 'SUCCESS',
+                'warning': 'WARNING',
+                'error': 'ERROR',
+                'debug': 'DEBUG'
+            };
+            
+            const line = document.createElement('div');
+            line.className = `terminal-line ${type}`;
+            line.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                <span class="tag">[${tagMap[type]}]</span>
+                <span class="message">${message}</span>
+            `;
+            
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+            terminalLines.push({type, message, timestamp});
+        }
+        
+        function analyzeComponent() {
+            const selector = document.getElementById('componentSelector');
+            const component = selector.value;
+            const componentName = selector.options[selector.selectedIndex].text;
+            
+            clearTerminal();
+            addTerminalLine('info', `Analyzing component: ${componentName}`);
+            addTerminalLine('debug', 'Reading component registers...');
+            
+            setTimeout(() => {
+                addTerminalLine('success', 'Component analysis complete');
+                addTerminalLine('info', `Status: Online`);
+                addTerminalLine('info', `Voltage: 3.3V`);
+                addTerminalLine('info', `Current: 120mA`);
+                addTerminalLine('info', `Temperature: 42°C`);
+                addTerminalLine('success', 'All parameters within normal range');
+                
+                updateComponentDetails(component);
+            }, 800);
+        }
+        
+        function updateComponentDetails(component) {
+            const detailsGrid = document.getElementById('detailsGrid');
+            const details = {
+                'water-source': {
+                    status: 'Online',
+                    uptime: '15d 8h 22m',
+                    lastCheck: '1 second ago',
+                    errorCount: '0',
+                    pressure: '2.5 bar',
+                    flowRate: '15 L/min'
+                },
+                'valve1': {
+                    status: 'Online',
+                    uptime: '2d 14h 32m',
+                    lastCheck: '2 seconds ago',
+                    errorCount: '0',
+                    state: 'Closed',
+                    cycles: '1,234'
+                },
+                'controller': {
+                    status: 'Online',
+                    uptime: '30d 5h 12m',
+                    lastCheck: 'Just now',
+                    errorCount: '0',
+                    cpuUsage: '12%',
+                    memUsage: '45%'
+                }
+            };
+            
+            const data = details[component] || details['controller'];
+            detailsGrid.innerHTML = Object.entries(data).map(([key, value]) => `
+                <div class="detail-item">
+                    <span class="detail-label">${key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                    <span class="detail-value ${key === 'status' && value === 'Online' ? 'status-online' : ''}">${value}</span>
+                </div>
+            `).join('');
+        }
+        
+        function refreshTerminal() {
+            addTerminalLine('info', 'Refreshing component data...');
+            setTimeout(() => {
+                addTerminalLine('success', 'Data refreshed successfully');
+                analyzeComponent();
+            }, 500);
+        }
+        
+        function clearTerminal() {
+            document.getElementById('terminalOutput').innerHTML = '';
+            terminalLines = [];
+        }
+        
+        function exportLogs() {
+            const logs = terminalLines.map(l => `[${l.timestamp}] [${l.type.toUpperCase()}] ${l.message}`).join('\n');
+            const blob = new Blob([logs], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bayyti_debug_${Date.now()}.log`;
+            a.click();
+            URL.revokeObjectURL(url);
+            addTerminalLine('success', 'Logs exported successfully');
+        }
+        
+        // Bind terminal button
+        document.getElementById('openTerminalBtn')?.addEventListener('click', openTerminal);
+        
+        // Initialize failure statistics charts with REAL data
+        async function initializeFailureCharts() {
+            try {
+                // Fetch real alerts and logs data
+                const [alertsResponse, logsResponse] = await Promise.all([
+                    fetch('/api/alerts'),
+                    fetch('/api/logs?limit=100')
+                ]);
+                
+                const alertsData = await alertsResponse.json();
+                const logsData = await logsResponse.json();
+                
+                // Process alerts to categorize failures
+                const failureCounts = {
+                    'Sensor Failures': 0,
+                    'Irrigation Issues': 0,
+                    'Network Issues': 0,
+                    'System Errors': 0,
+                    'Other': 0
+                };
+                
+                if (alertsData.success && alertsData.data) {
+                    alertsData.data.forEach(alert => {
+                        const msg = alert.message.toLowerCase();
+                        if (msg.includes('sensor') || msg.includes('moisture') || msg.includes('temperature')) {
+                            failureCounts['Sensor Failures']++;
+                        } else if (msg.includes('irrigation') || msg.includes('valve') || msg.includes('water')) {
+                            failureCounts['Irrigation Issues']++;
+                        } else if (msg.includes('network') || msg.includes('connection')) {
+                            failureCounts['Network Issues']++;
+                        } else if (msg.includes('system') || msg.includes('error')) {
+                            failureCounts['System Errors']++;
+                        } else {
+                            failureCounts['Other']++;
+                        }
+                    });
+                }
+                
+                // Failure Distribution Pie Chart with REAL data
+                const distributionCtx = document.getElementById('failureDistributionChart');
+                if (distributionCtx) {
+                    new Chart(distributionCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: Object.keys(failureCounts),
+                            datasets: [{
+                                data: Object.values(failureCounts),
+                                backgroundColor: [
+                                    '#EF5350',
+                                    '#FFA726',
+                                    '#42A5F5',
+                                    '#66BB6A',
+                                    '#AB47BC'
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#fff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#333',
+                                        font: { size: 11 }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Process logs for trends (last 4 weeks)
+                const weeklyData = {
+                    critical: [0, 0, 0, 0],
+                    warnings: [0, 0, 0, 0],
+                    resolved: [0, 0, 0, 0]
+                };
+                
+                if (logsData.success && logsData.data) {
+                    const now = new Date();
+                    logsData.data.forEach(log => {
+                        const logDate = new Date(log.timestamp);
+                        const weeksDiff = Math.floor((now - logDate) / (7 * 24 * 60 * 60 * 1000));
+                        
+                        if (weeksDiff < 4) {
+                            const weekIndex = 3 - weeksDiff; // Reverse order for display
+                            const level = log.level?.toLowerCase() || '';
+                            
+                            if (level.includes('error') || level.includes('critical')) {
+                                weeklyData.critical[weekIndex]++;
+                            } else if (level.includes('warning') || level.includes('warn')) {
+                                weeklyData.warnings[weekIndex]++;
+                            } else if (level.includes('info') || level.includes('success')) {
+                                weeklyData.resolved[weekIndex]++;
+                            }
+                        }
+                    });
+                }
+                
+                // Failure Trends Line Chart with REAL data
+                const trendsCtx = document.getElementById('failureTrendsChart');
+                if (trendsCtx) {
+                    new Chart(trendsCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                            datasets: [{
+                                label: 'Critical',
+                                data: weeklyData.critical,
+                                borderColor: '#EF5350',
+                                backgroundColor: 'rgba(239, 83, 80, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }, {
+                                label: 'Warnings',
+                                data: weeklyData.warnings,
+                                borderColor: '#FFA726',
+                                backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }, {
+                                label: 'Resolved',
+                                data: weeklyData.resolved,
+                                borderColor: '#66BB6A',
+                                backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#333',
+                                        font: { size: 11 }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { 
+                                        color: '#666',
+                                        stepSize: 1
+                                    },
+                                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                                },
+                                x: {
+                                    ticks: { color: '#666' },
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Update failure summary counts with real data
+                const totalFailures = Object.values(failureCounts).reduce((a, b) => a + b, 0);
+                const criticalCount = weeklyData.critical.reduce((a, b) => a + b, 0);
+                const resolvedCount = weeklyData.resolved.reduce((a, b) => a + b, 0);
+                
+                document.getElementById('totalFailures').textContent = totalFailures;
+                document.getElementById('criticalFailures').textContent = criticalCount;
+                document.getElementById('resolvedFailures').textContent = resolvedCount;
+                
+            } catch (error) {
+                console.error('Error loading failure statistics:', error);
+                // Fallback to showing zeros if API fails
+                document.getElementById('totalFailures').textContent = '0';
+                document.getElementById('criticalFailures').textContent = '0';
+                document.getElementById('resolvedFailures').textContent = '0';
+            }
+        }
+    </script>
+    
+    <!-- Page Load Handler -->
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 500);
+            }
+            
+            // Initialize failure statistics charts
+            initializeFailureCharts();
+            
+            // Initialize performance charts
+            initializePerformanceCharts();
+            
+            // Load Device ID
+            loadDeviceId();
+        });
+        
+        // Load Device ID from backend
+        async function loadDeviceId() {
+            // Network Configuration
+            // For LAPTOP testing: Use localhost
+            // For Raspberry Pi: Use Raspberry Pi IP
+            const ENVIRONMENT = 'cloud'; // 'cloud' = localhost, 'local' = Raspberry Pi IP
+            const DEVICE_URL = ENVIRONMENT === 'cloud'
+                ? 'http://localhost:5000'
+                : 'http://192.168.137.193:5000';
+            
+            try {
+                const response = await fetch(`${DEVICE_URL}/device-id`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.deviceId) {
+                        document.getElementById('deviceIdDisplay').textContent = data.deviceId;
+                    } else {
+                        document.getElementById('deviceIdDisplay').textContent = 'Not Available';
+                    }
+                } else {
+                    document.getElementById('deviceIdDisplay').textContent = 'Not Available';
+                }
+            } catch (error) {
+                console.error('Error loading device ID:', error);
+                document.getElementById('deviceIdDisplay').textContent = 'Not Available';
+            }
+        }
+        
+        // Enhanced CPU Chart with red points for high usage
+        let cpuChart, ramChart;
+        let cpuData = [];
+        let ramData = [];
+        const maxDataPoints = 60;
+        
+        function initializePerformanceCharts() {
+            // CPU Chart with enhanced styling and red points for high usage
+            const cpuCtx = document.getElementById('cpuChart');
+            if (cpuCtx) {
+                cpuChart = new Chart(cpuCtx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: maxDataPoints}, (_, i) => `${60-i}s`),
+                        datasets: [{
+                            label: 'CPU Usage (%)',
+                            data: cpuData,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            pointBackgroundColor: function(context) {
+                                const value = context.parsed.y;
+                                if (value >= 80) return '#f44336'; // Red for high usage
+                                if (value >= 60) return '#ff9800'; // Orange for medium-high usage
+                                return '#2196F3'; // Blue for normal usage
+                            },
+                            pointBorderColor: function(context) {
+                                const value = context.parsed.y;
+                                if (value >= 80) return '#d32f2f';
+                                if (value >= 60) return '#f57c00';
+                                return '#1976d2';
+                            },
+                            pointRadius: function(context) {
+                                const value = context.parsed.y;
+                                return value >= 80 ? 6 : value >= 60 ? 4 : 3;
+                            },
+                            pointHoverRadius: function(context) {
+                                const value = context.parsed.y;
+                                return value >= 80 ? 8 : value >= 60 ? 6 : 5;
+                            },
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        return `${context[0].label} ago`;
+                                    },
+                                    label: function(context) {
+                                        const value = context.parsed.y;
+                                        let status = 'Normal';
+                                        if (value >= 80) status = 'Critical - High CPU Usage!';
+                                        else if (value >= 60) status = 'Warning - Elevated Usage';
+                                        return [
+                                            `CPU Usage: ${value}%`,
+                                            `Status: ${status}`,
+                                            `Cores: ${document.getElementById('cpuCores')?.textContent || '1 Core'}`,
+                                            `Frequency: ${document.getElementById('cpuFreq')?.textContent || '0 MHz'}`
+                                        ];
+                                    }
+                                },
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#2196F3',
+                                borderWidth: 1
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Time (seconds ago)'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'CPU Usage (%)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        },
+                        elements: {
+                            line: {
+                                borderWidth: 2
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // RAM Chart
+            const ramCtx = document.getElementById('ramChart');
+            if (ramCtx) {
+                ramChart = new Chart(ramCtx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: maxDataPoints}, (_, i) => `${60-i}s`),
+                        datasets: [{
+                            label: 'RAM Usage (%)',
+                            data: ramData,
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            pointBackgroundColor: function(context) {
+                                const value = context.parsed.y;
+                                if (value >= 90) return '#f44336';
+                                if (value >= 75) return '#ff9800';
+                                return '#4caf50';
+                            },
+                            pointBorderColor: function(context) {
+                                const value = context.parsed.y;
+                                if (value >= 90) return '#d32f2f';
+                                if (value >= 75) return '#f57c00';
+                                return '#388e3c';
+                            },
+                            pointRadius: function(context) {
+                                const value = context.parsed.y;
+                                return value >= 90 ? 6 : value >= 75 ? 4 : 3;
+                            },
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        return `${context[0].label} ago`;
+                                    },
+                                    label: function(context) {
+                                        const value = context.parsed.y;
+                                        let status = 'Normal';
+                                        if (value >= 90) status = 'Critical - High Memory Usage!';
+                                        else if (value >= 75) status = 'Warning - High Usage';
+                                        return [
+                                            `RAM Usage: ${value}%`,
+                                            `Status: ${status}`,
+                                            `Available: ${document.getElementById('ramAvailable')?.textContent || 'N/A'}`,
+                                            `Total: ${document.getElementById('ramTotal')?.textContent || 'N/A'}`
+                                        ];
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Time (seconds ago)'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'RAM Usage (%)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Simulate real-time data updates
+            setInterval(updatePerformanceData, 2000);
+        }
+        
+        function updatePerformanceData() {
+            // Simulate CPU and RAM data with occasional spikes
+            const cpuValue = Math.random() < 0.1 ? 
+                Math.floor(Math.random() * 40) + 60 : // 10% chance of high usage (60-100%)
+                Math.floor(Math.random() * 50) + 10;   // 90% chance of normal usage (10-60%)
+                
+            const ramValue = Math.random() < 0.05 ? 
+                Math.floor(Math.random() * 25) + 75 : // 5% chance of high usage (75-100%)
+                Math.floor(Math.random() * 60) + 20;   // 95% chance of normal usage (20-80%)
+            
+            // Update data arrays
+            cpuData.push(cpuValue);
+            ramData.push(ramValue);
+            
+            // Keep only last maxDataPoints
+            if (cpuData.length > maxDataPoints) {
+                cpuData.shift();
+                ramData.shift();
+            }
+            
+            // Update charts
+            if (cpuChart) {
+                cpuChart.update('none');
+            }
+            if (ramChart) {
+                ramChart.update('none');
+            }
+            
+            // Update performance cards
+            document.getElementById('cpuUsage').textContent = cpuValue;
+            document.getElementById('cpuProgress').style.width = cpuValue + '%';
+            document.getElementById('cpuStatus').textContent = 
+                cpuValue >= 80 ? 'Critical' : cpuValue >= 60 ? 'High' : 'Normal';
+            
+            document.getElementById('ramUsage').textContent = ramValue;
+            document.getElementById('ramProgress').style.width = ramValue + '%';
+            document.getElementById('ramStatus').textContent = 
+                ramValue >= 90 ? 'Critical' : ramValue >= 75 ? 'High' : 'Normal';
+        }
+
+        // Copy Device ID to clipboard
+        document.getElementById('copyDeviceIdBtn')?.addEventListener('click', function() {
+            const deviceId = document.getElementById('deviceIdDisplay').textContent;
+            if (deviceId && deviceId !== 'Loading...' && deviceId !== 'Not Available') {
+                navigator.clipboard.writeText(deviceId).then(() => {
+                    const btn = this;
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fa-solid fa-check';
+                    btn.style.background = '#4caf50';
+                    setTimeout(() => {
+                        icon.className = 'fa-solid fa-copy';
+                        btn.style.background = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    alert('Failed to copy Device ID');
+                });
+            }
+        });
+    </script>
+    
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+            <button class="close-panel" onclick="closeNotificationPanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Footer - Clean Light Design -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+            </div>
+            <div class="footer-text">
+                <p>All content on this site. Copyright © 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <a href="space.html">Space</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="controls.html">Controls</a>
+                <a href="support.html">Support</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

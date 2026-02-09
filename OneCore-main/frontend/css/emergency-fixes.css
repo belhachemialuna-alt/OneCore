@@ -1,0 +1,205 @@
+/* Emergency Page Layout Fixes */
+
+/* Fix for missing no-alerts styling */
+.no-alerts {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 2px dashed #e0e0e0;
+    color: #666;
+}
+
+.no-alerts i {
+    font-size: 3rem;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.no-alerts h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.no-alerts p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Fix chart container heights */
+.chart-card canvas {
+    height: 300px !important;
+    max-height: 300px;
+}
+
+#valveTimelineChart {
+    height: 250px !important;
+}
+
+#pressureHistoryChart,
+#flowHistoryChart,
+#dailySummaryChart,
+#statusPieChart {
+    height: 200px !important;
+}
+
+/* Fix control card layout */
+.control-card {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.valve-control {
+    min-height: 500px;
+}
+
+/* Fix pressure monitor styling */
+.pressure-monitor,
+.flow-monitor {
+    text-align: center;
+    padding: 2rem;
+}
+
+.pressure-display,
+.flow-display {
+    margin: 2rem 0;
+}
+
+/* Fix valve icon colors */
+.valve-icon {
+    background: #e0e0e0 !important;
+    color: #666 !important;
+}
+
+.valve-icon.open {
+    background: #4CAF50 !important;
+    color: white !important;
+    animation: pulse 2s infinite;
+}
+
+.valve-icon.closed {
+    background: #DC3545 !important;
+    color: white !important;
+}
+
+/* Fix valve state text colors */
+.valve-state {
+    color: #666;
+}
+
+.valve-state.open {
+    color: #4CAF50 !important;
+}
+
+.valve-state.closed {
+    color: #DC3545 !important;
+}
+
+/* Fix border colors for dark cards */
+.valve-status {
+    border-bottom-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Fix health card icons */
+.health-icon {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #4CAF50 !important;
+}
+
+/* Fix health progress bars */
+.health-bar {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.health-progress {
+    background: linear-gradient(90deg, #4CAF50, #66BB6A) !important;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Fix alert card spacing */
+.alerts-grid {
+    min-height: 100px;
+}
+
+/* Fix chart section spacing */
+.chart-section,
+.charts-grid {
+    margin-bottom: 3rem;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+/* Fix mobile responsiveness */
+@media (max-width: 768px) {
+    .control-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chart-card {
+        padding: 1.5rem;
+    }
+    
+    .control-card {
+        padding: 1.5rem;
+        min-height: auto;
+    }
+    
+    .valve-control {
+        min-height: auto;
+    }
+    
+    .valve-status {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .valve-actions {
+        margin-top: 1rem;
+    }
+}
+
+/* Fix button hover states */
+.emergency-btn:active {
+    transform: translateY(0);
+}
+
+/* Fix chart controls */
+.chart-controls {
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.chart-btn {
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Fix export button positioning */
+.chart-export-btn {
+    flex-shrink: 0;
+}
+
+/* Ensure proper spacing for all sections */
+.main-content > section {
+    margin-bottom: 3rem;
+}
+
+.main-content > section:last-child {
+    margin-bottom: 2rem;
+}

@@ -1,0 +1,112 @@
+{
+  "soil_types": [
+    {
+      "id": 1,
+      "name": "Sandy Soil",
+      "name_ar": "تربة رملية",
+      "description": "Drains quickly, low water retention",
+      "water_retention": "low",
+      "drainage_rate": "fast",
+      "field_capacity": 0.10,
+      "wilting_point": 0.04,
+      "irrigation_frequency_factor": 1.5,
+      "water_holding_capacity": "6-12%",
+      "characteristics": [
+        "Quick drainage",
+        "Low nutrient retention",
+        "Requires frequent irrigation",
+        "Good for root crops"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Clay Soil",
+      "name_ar": "تربة طينية",
+      "description": "Drains slowly, high water retention",
+      "water_retention": "high",
+      "drainage_rate": "slow",
+      "field_capacity": 0.40,
+      "wilting_point": 0.20,
+      "irrigation_frequency_factor": 0.6,
+      "water_holding_capacity": "35-45%",
+      "characteristics": [
+        "Slow drainage",
+        "High nutrient retention",
+        "Less frequent irrigation needed",
+        "Risk of waterlogging"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Loam Soil",
+      "name_ar": "تربة طميية",
+      "description": "Balanced drainage and retention",
+      "water_retention": "medium",
+      "drainage_rate": "moderate",
+      "field_capacity": 0.25,
+      "wilting_point": 0.12,
+      "irrigation_frequency_factor": 1.0,
+      "water_holding_capacity": "20-30%",
+      "characteristics": [
+        "Ideal for most crops",
+        "Balanced water retention",
+        "Good nutrient availability",
+        "Moderate irrigation needs"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Sandy Loam",
+      "name_ar": "طمي رملي",
+      "description": "Good drainage with moderate retention",
+      "water_retention": "medium-low",
+      "drainage_rate": "moderate-fast",
+      "field_capacity": 0.18,
+      "wilting_point": 0.08,
+      "irrigation_frequency_factor": 1.2,
+      "water_holding_capacity": "15-22%",
+      "characteristics": [
+        "Good drainage",
+        "Moderate water retention",
+        "Easy to work with",
+        "Suitable for many crops"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Clay Loam",
+      "name_ar": "طمي طيني",
+      "description": "Good retention with adequate drainage",
+      "water_retention": "medium-high",
+      "drainage_rate": "moderate-slow",
+      "field_capacity": 0.32,
+      "wilting_point": 0.16,
+      "irrigation_frequency_factor": 0.8,
+      "water_holding_capacity": "28-38%",
+      "characteristics": [
+        "Good water retention",
+        "Adequate drainage",
+        "High fertility",
+        "Requires careful irrigation timing"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Silty Soil",
+      "name_ar": "تربة غرينية",
+      "description": "Fine particles, good fertility",
+      "water_retention": "medium-high",
+      "drainage_rate": "moderate",
+      "field_capacity": 0.28,
+      "wilting_point": 0.14,
+      "irrigation_frequency_factor": 0.9,
+      "water_holding_capacity": "25-35%",
+      "characteristics": [
+        "Fine texture",
+        "Good fertility",
+        "Moderate drainage",
+        "Can compact easily"
+      ]
+    }
+  ]
+}

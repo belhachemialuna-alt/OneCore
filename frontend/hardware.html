@@ -13,10 +13,13 @@
     <link rel="stylesheet" href="css/dashboard.css?v=5.0">
     <link rel="stylesheet" href="css/hardware.css?v=1.0">
     <link rel="stylesheet" href="css/hardware-architecture.css">
+    <link rel="stylesheet" href="css/hardware-compact.css">
     <link rel="stylesheet" href="css/mobile-header-enhancement.css">
     <link rel="stylesheet" href="css/notification-enhancements.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="js/hardware-real-api.js"></script>
+    <script src="js/hardware.js"></script>
     <script src="js/dashboard.js?v=5.0"></script>
 </head>
 <body>
@@ -28,7 +31,7 @@
         </div>
     </div>
 
-    <!-- Sticky Red Header Bar -->
+    <!-- Red Header Bar -->
     <header class="top-header">
         <div class="header-container">
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
@@ -37,7 +40,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="TIONESETUP.png" alt="ElivateOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -71,7 +74,7 @@
                 <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
-                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                <a href="hardware.html" class="header-icon-btn active" title="Hardware Schema">
                     <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
@@ -98,6 +101,16 @@
             </div>
         </div>
     </header>
+
+    <!-- Secondary Navigation Bar -->
+    <nav class="secondary-nav">
+        <div class="nav-container">
+            <div class="nav-title">
+                <i class="fa-solid fa-microchip"></i>
+                <span>Hardware Schema</span>
+            </div>
+        </div>
+    </nav>
 
     <!-- Mobile Page Title Bar -->
     <div class="mobile-page-title hardware-page show">
@@ -168,94 +181,42 @@
             </div>
 
             <!-- Hardware Schema Information -->
-            <div class="hardware-info-section">
-                <div class="hardware-info-card">
-                    <div class="info-header">
-                        <div class="info-icon">
-                            <i class="fa-solid fa-microchip"></i>
-                        </div>
-                        <h3>Hardware Schema</h3>
+            <div class="hardware-schema-compact">
+                <!-- Device ID Section -->
+                <div class="device-id-compact">
+                    <div class="device-id-header">
+                        <i class="fa-solid fa-fingerprint"></i>
+                        <span class="device-label">Device ID</span>
                     </div>
-                    
-                    <!-- Step-by-Step Device ID Setup Guide -->
-                    <div class="setup-guide-section">
-                        <div class="guide-header">
-                            <i class="fa-solid fa-route"></i>
-                            <h4>Device ID Setup Guide</h4>
-                        </div>
-                        <div class="setup-steps">
-                            <div class="setup-step-item">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h5>Copy Your Device ID</h5>
-                                    <p>Click the copy button next to your Device ID below</p>
-                                </div>
-                            </div>
-                            <div class="setup-step-item">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h5>Visit Cloud Portal</h5>
-                                    <p>Go to <strong>cloud.ielivate.com</strong> and login to your account</p>
-                                </div>
-                            </div>
-                            <div class="setup-step-item">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h5>Link Device</h5>
-                                    <p>Paste the Device ID in the "Add Device" section</p>
-                                </div>
-                            </div>
-                            <div class="setup-step-item">
-                                <div class="step-number">4</div>
-                                <div class="step-content">
-                                    <h5>Verify Connection</h5>
-                                    <p>Wait for the green status indicator to confirm linking</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="device-id-container">
+                        <code class="device-id" id="deviceIdDisplay">Loading...</code>
+                        <button class="copy-device-btn" id="copyDeviceIdBtn" title="Copy Device ID">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
                     </div>
-                    
-                    <div class="device-info">
-                        <div class="device-id-section">
-                            <div class="device-id-header">
-                                <i class="fa-solid fa-fingerprint"></i>
-                                <span class="device-label">Your Device ID</span>
-                            </div>
-                            <div class="device-id-container">
-                                <code class="device-id" id="deviceIdDisplay">Loading...</code>
-                                <button class="copy-device-btn" id="copyDeviceIdBtn" title="Copy Device ID">
-                                    <i class="fa-solid fa-copy"></i>
-                                    <span>Copy</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="device-id-hint">
-                            <i class="fa-solid fa-cloud"></i>
-                            <span>This unique identifier connects your TiOne device to the cloud platform for remote monitoring and control.</span>
-                        </div>
+                    <div class="device-setup-hint">
+                        <span>Copy ID → Visit cloud.ielivate.com → Add Device → Verify Connection</span>
                     </div>
                 </div>
                 
-                <!-- Component Status -->
-                <div class="component-status-card">
+                <!-- Component Status Summary -->
+                <div class="component-status-compact">
                     <div class="status-header">
-                        <div class="status-icon">
-                            <i class="fa-solid fa-list-check"></i>
-                        </div>
-                        <h3>Component Status</h3>
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Component Status</span>
                     </div>
-                    <div class="status-items">
+                    <div class="status-summary">
                         <div class="status-item online">
                             <i class="fa-solid fa-circle-check"></i>
-                            <span><strong id="onlineCount">0</strong> Online</span>
+                            <span id="onlineCount">0</span>
                         </div>
                         <div class="status-item offline">
                             <i class="fa-solid fa-circle-pause"></i>
-                            <span><strong id="offlineCount">0</strong> Offline</span>
+                            <span id="offlineCount">0</span>
                         </div>
                         <div class="status-item error">
                             <i class="fa-solid fa-circle-xmark"></i>
-                            <span><strong id="errorCount">0</strong> Error</span>
+                            <span id="errorCount">0</span>
                         </div>
                     </div>
                 </div>
@@ -1514,14 +1475,21 @@
         </div>
     </div>
 
-    <!-- Simplified Footer -->
+    <!-- Footer - Clean Light Design -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
                 <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>&copy; 2024-2026 TiOne Smart Irrigation System. All rights reserved.</p>
+                <p>All content on this site. Copyright © 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Dashboard</a>
+                <a href="space.html">Space</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="controls.html">Controls</a>
+                <a href="support.html">Support</a>
             </div>
         </div>
     </footer>
