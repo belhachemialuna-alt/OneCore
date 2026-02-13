@@ -15,12 +15,14 @@
     <link rel="stylesheet" href="css/hardware-architecture.css">
     <link rel="stylesheet" href="css/hardware-compact.css">
     <link rel="stylesheet" href="css/mobile-header-enhancement.css">
-    <link rel="stylesheet" href="css/notification-enhancements.css">
+    <link rel="stylesheet" href="css/hardware.css?v=2.0">
+    <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="js/hardware-real-api.js"></script>
     <script src="js/hardware.js"></script>
     <script src="js/dashboard.js?v=5.0"></script>
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
 </head>
 <body>
     <!-- Global Loader -->
@@ -109,6 +111,21 @@
                 <i class="fa-solid fa-microchip"></i>
                 <span>Hardware Schema</span>
             </div>
+            <div class="nav-search">
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Search options, controls, settings..." class="search-input">
+                    <button type="button" id="search-btn" class="search-btn" title="Search">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-results" id="search-results" style="display: none;">
+                    <div class="search-loading" id="search-loading" style="display: none;">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Searching...</span>
+                    </div>
+                    <div class="search-content" id="search-content"></div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -132,6 +149,12 @@
                 </button>
             </div>
             <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <button class="sidebar-item" id="updateBtnMobile" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
                 <a href="space.html" class="sidebar-item" title="Space Dashboard">
                     <i class="fa-solid fa-rocket"></i>
                 </a>
@@ -142,12 +165,12 @@
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="sidebar-item active" title="Hardware Schema">
-                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
+                    <i class="fa-solid fa-cpu"></i>
                 </a>
                 <a href="controls.html" class="sidebar-item" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
-                <a href="../PI_simulation/device_registration.html" class="sidebar-item" title="PI Data Simulation">
+                <a href="PI_simulation.html" class="sidebar-item" title="Pi Simulation - IoT Data Exchange">
                     <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="sidebar-item" title="AI Model Testing">
@@ -159,8 +182,8 @@
                 <a href="faq.html" class="sidebar-item" title="FAQ">
                     <i class="fa-solid fa-book"></i>
                 </a>
-                <a href="#" class="sidebar-item" id="setup-link" title="Return to Setup">
-                    <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
+                <a href="#" class="sidebar-item" id="setup-link-mobile" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -843,6 +866,9 @@
     <!-- Language System -->
     <script src="js/language.js?v=1.0"></script>
     
+    <!-- Global Search Functionality -->
+    <script src="js/global-search.js?v=1.0"></script>
+    
     <!-- Terminal Functionality -->
     <script>
         let terminalLines = [];
@@ -1493,5 +1519,7 @@
             </div>
         </div>
     </footer>
+    <!-- Enhanced Notification System -->
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
 </body>
 </html>

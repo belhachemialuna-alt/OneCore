@@ -13,6 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css?v=4.0">
     <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="css/faq-redesign.css">
+    <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
+    <link rel="stylesheet" href="css/mobile-header-enhancement.css?v=2.0">
+    <link rel="stylesheet" href="css/mobile-header-fix.css?v=2.0">
+    <link rel="stylesheet" href="css/language-switch.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -32,7 +37,9 @@
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    <a href="space.html">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                    </a>
                 </div>
             </div>
             <div class="header-center">
@@ -44,21 +51,92 @@
                 </div>
             </div>
             <div class="header-right">
-                <a href="index.html" class="header-icon-btn" title="Dashboard">
-                    <i class="fa-solid fa-gauge"></i>
-                </a>
-                <a href="space.html" class="header-icon-btn" title="Space Dashboard">
-                    <i class="fa-solid fa-rocket"></i>
-                </a>
-                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications" onclick="notificationSystem.togglePanel()">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <button class="header-icon-btn drag-toggle-btn" id="dragToggleBtn" title="Enable/Disable Drag & Drop">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </button>
+                <a href="analytics.html" class="header-icon-btn" title="View Analytics Dashboard">
                     <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="support.html" class="header-icon-btn" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
                 </a>
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <button class="header-icon-btn" id="languageBtn" title="Switch Language">
+                    <img src="icons/language.png" alt="Language" style="width: 20px; height: 20px; object-fit: contain;">
+                </button>
+                <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
+                    <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Page Title Bar -->
+    <div class="mobile-page-title faq-page show" id="mobilePageTitle">
+        <div class="mobile-page-title-content">
+            <div class="mobile-page-title-icon">
+                <i class="fa-solid fa-book"></i>
+            </div>
+            <div class="mobile-page-title-text">FAQ</div>
+        </div>
+    </div>
+
+    <!-- Secondary Navigation Bar -->
+    <nav class="secondary-nav">
+        <div class="nav-container">
+            <div class="nav-title">
+                <i class="fa-solid fa-book"></i>
+                <span>FAQ</span>
+            </div>
+            <div class="nav-search">
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Search options, controls, settings..." class="search-input">
+                    <button type="button" id="search-btn" class="search-btn" title="Search">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-results" id="search-results" style="display: none;">
+                    <div class="search-loading" id="search-loading" style="display: none;">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Searching...</span>
+                    </div>
+                    <div class="search-content" id="search-content"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Mobile Sidebar Menu -->
     <div class="mobile-sidebar" id="mobile-sidebar">
@@ -93,92 +171,138 @@
     <div class="faq-container">
         <div class="faq-header">
             <div class="faq-header-icon">
-                <i class="fa-solid fa-circle-question"></i>
+                <i class="fa-solid fa-book"></i>
             </div>
-            <h1>Frequently Asked Questions</h1>
-            <p>Find answers to common questions about BAYYTI-B1 Smart Irrigation System</p>
+            <h1>TiOne Smart Irrigation FAQ</h1>
+            <p>Everything you need to know about our advanced irrigation system - from setup to optimization</p>
         </div>
 
         <!-- Search Bar -->
         <div class="faq-search">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="faq-search-input" placeholder="Search for questions...">
+            <input type="text" id="faq-search-input" placeholder="Search FAQ topics, features, troubleshooting...">
         </div>
 
         <!-- FAQ Categories -->
         <div class="faq-categories">
-            <button class="category-btn active" data-category="all">All</button>
-            <button class="category-btn" data-category="general">General</button>
-            <button class="category-btn" data-category="setup">Setup</button>
-            <button class="category-btn" data-category="operation">Operation</button>
+            <button class="category-btn active" data-category="all">All Topics</button>
+            <button class="category-btn" data-category="getting-started">Getting Started</button>
+            <button class="category-btn" data-category="features">Features</button>
+            <button class="category-btn" data-category="installation">Installation</button>
             <button class="category-btn" data-category="troubleshooting">Troubleshooting</button>
-            <button class="category-btn" data-category="maintenance">Maintenance</button>
             <button class="category-btn" data-category="advanced">Advanced</button>
+            <button class="category-btn" data-category="billing">Billing & Plans</button>
         </div>
 
         <!-- FAQ Items -->
         <div class="faq-list" id="faq-list">
-            <!-- General Questions -->
-            <div class="faq-item" data-category="general">
+            <!-- Getting Started -->
+            <div class="faq-item" data-category="getting-started">
                 <div class="faq-question">
-                    <h3>What is BAYYTI-B1?</h3>
+                    <h3>What is TiOne Smart Irrigation System?</h3>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>BAYYTI-B1 is an advanced smart irrigation system powered by AI technology. It optimizes water usage, reduces waste, and boosts crop yields through intelligent automation and real-time monitoring.</p>
-                </div>
-            </div>
-
-            <div class="faq-item" data-category="general">
-                <div class="faq-question">
-                    <h3>What are the main features?</h3>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>Key features include:</p>
+                    <p><strong>TiOne</strong> is a comprehensive smart irrigation platform that combines AI-driven automation, real-time monitoring, and advanced analytics to optimize water usage and maximize crop yields.</p>
+                    <p>Our system integrates seamlessly with existing infrastructure and provides:</p>
                     <ul>
-                        <li>Real-time soil moisture monitoring</li>
-                        <li>AI-powered irrigation recommendations</li>
-                        <li>Automated scheduling</li>
-                        <li>Weather integration</li>
-                        <li>Remote control via web interface</li>
-                        <li>Water usage analytics</li>
+                        <li>Intelligent water scheduling based on weather and soil conditions</li>
+                        <li>Real-time sensor monitoring and alerts</li>
+                        <li>Advanced analytics and reporting dashboard</li>
+                        <li>Mobile and web-based control interfaces</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Setup Questions -->
-            <div class="faq-item" data-category="setup">
+            <div class="faq-item" data-category="getting-started">
                 <div class="faq-question">
-                    <h3>How do I set up the system?</h3>
+                    <h3>How do I get started with TiOne?</h3>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>Setup is simple:</p>
+                    <p>Getting started is simple:</p>
                     <ol>
-                        <li>Connect the hardware components (sensors, valves, controller)</li>
-                        <li>Power on the system</li>
-                        <li>Access the web interface at http://localhost:5000</li>
-                        <li>Follow the setup wizard to configure your zones and preferences</li>
-                        <li>Calibrate sensors and test valves</li>
+                        <li><strong>Initial Setup:</strong> Complete the system configuration wizard</li>
+                        <li><strong>Device Pairing:</strong> Connect your sensors and control devices</li>
+                        <li><strong>Zone Configuration:</strong> Define your irrigation zones and schedules</li>
+                        <li><strong>Calibration:</strong> Run initial sensor calibration and testing</li>
+                    </ol>
+                    <p>Our setup wizard guides you through each step with detailed instructions and real-time validation.</p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="faq-item" data-category="features">
+                <div class="faq-question">
+                    <h3>What are the core features of TiOne?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Core Platform Features:</strong></p>
+                    <ul>
+                        <li><strong>AI Decision Engine:</strong> Machine learning algorithms for optimal irrigation timing</li>
+                        <li><strong>Real-time Monitoring:</strong> Continuous sensor data collection and analysis</li>
+                        <li><strong>Weather Integration:</strong> Automatic adjustments based on weather forecasts</li>
+                        <li><strong>Mobile & Web Control:</strong> Full system control from any device</li>
+                        <li><strong>Advanced Analytics:</strong> Comprehensive reporting and insights</li>
+                        <li><strong>Emergency Management:</strong> Instant alerts and automated responses</li>
+                        <li><strong>Multi-zone Support:</strong> Manage multiple irrigation areas independently</li>
+                        <li><strong>Historical Tracking:</strong> Long-term data analysis and trends</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" data-category="features">
+                <div class="faq-question">
+                    <h3>How does the AI decision engine work?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our AI engine analyzes multiple data sources to make intelligent irrigation decisions:</p>
+                    <ul>
+                        <li><strong>Soil Conditions:</strong> Moisture levels, temperature, and pH readings</li>
+                        <li><strong>Weather Data:</strong> Current conditions, forecasts, and historical patterns</li>
+                        <li><strong>Crop Requirements:</strong> Plant-specific water needs and growth stages</li>
+                        <li><strong>System Performance:</strong> Equipment efficiency and water pressure data</li>
+                    </ul>
+                    <p>The system continuously learns from your specific environment to improve accuracy over time.</p>
+                </div>
+            </div>
+
+            <!-- Installation -->
+            <div class="faq-item" data-category="installation">
+                <div class="faq-question">
+                    <h3>What's included in the installation process?</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Professional Installation Includes:</strong></p>
+                    <ol>
+                        <li><strong>Site Assessment:</strong> Evaluation of your irrigation needs and infrastructure</li>
+                        <li><strong>Sensor Placement:</strong> Strategic positioning of soil and environmental sensors</li>
+                        <li><strong>Control Unit Setup:</strong> Installation and configuration of the main controller</li>
+                        <li><strong>Network Configuration:</strong> WiFi setup and cloud connectivity</li>
+                        <li><strong>Zone Mapping:</strong> Definition of irrigation zones and schedules</li>
+                        <li><strong>System Testing:</strong> Comprehensive testing of all components</li>
+                        <li><strong>Training:</strong> Hands-on training for system operation</li>
                     </ol>
                 </div>
             </div>
 
-            <div class="faq-item" data-category="setup">
+            <div class="faq-item" data-category="installation">
                 <div class="faq-question">
-                    <h3>What sensors are required?</h3>
+                    <h3>Can I install the system myself?</h3>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>The system supports multiple sensor types:</p>
+                    <p>While professional installation is recommended, <strong>DIY installation</strong> is possible for technically inclined users:</p>
                     <ul>
-                        <li>Soil moisture sensors (required)</li>
-                        <li>Temperature sensors (recommended)</li>
-                        <li>Humidity sensors (optional)</li>
-                        <li>pH sensors (optional)</li>
-                        <li>Light sensors (optional)</li>
+                        <li><strong>DIY Kit:</strong> Includes detailed installation guide and video tutorials</li>
+                        <li><strong>Support:</strong> 24/7 technical support during installation</li>
+                        <li><strong>Remote Setup:</strong> Our team can assist with remote configuration</li>
+                        <li><strong>Validation:</strong> System health check after self-installation</li>
                     </ul>
+                    <p><em>Note: Professional installation includes warranty coverage and ongoing support.</em></p>
                 </div>
             </div>
 
@@ -211,42 +335,45 @@
                 </div>
             </div>
 
-            <!-- Troubleshooting Questions -->
-            <div class="faq-item" data-category="troubleshooting">
+            <!-- Advanced -->
+            <div class="faq-item" data-category="advanced">
                 <div class="faq-question">
-                    <h3>Why are my sensors showing incorrect readings?</h3>
+                    <h3>Can I integrate TiOne with other smart home systems?</h3>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>Common causes and solutions:</p>
+                    <p><strong>Smart Home Integration:</strong></p>
                     <ul>
-                        <li><strong>Calibration:</strong> Recalibrate sensors from the Hardware page</li>
-                        <li><strong>Placement:</strong> Ensure sensors are properly inserted in soil</li>
-                        <li><strong>Connections:</strong> Check wiring and connections</li>
-                        <li><strong>Interference:</strong> Move sensors away from metal objects</li>
+                        <li><strong>Home Assistant:</strong> Full integration with local home automation</li>
+                        <li><strong>Google Home/Alexa:</strong> Voice control and status updates</li>
+                        <li><strong>IFTTT:</strong> Custom automation triggers and actions</li>
+                        <li><strong>Webhook API:</strong> Custom integrations with third-party systems</li>
+                        <li><strong>MQTT Support:</strong> IoT device communication protocol</li>
                     </ul>
+                    <p>Our open API allows developers to create custom integrations and automations.</p>
                 </div>
             </div>
 
-            <div class="faq-item" data-category="troubleshooting">
+            <div class="faq-item" data-category="advanced">
                 <div class="faq-question">
-                    <h3>The valve won't open/close. What should I do?</h3>
+                    <h3>What data analytics and reporting are available?</h3>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer">
-                    <p>Troubleshooting steps:</p>
-                    <ol>
-                        <li>Check power supply to the valve</li>
-                        <li>Verify valve wiring connections</li>
-                        <li>Test valve manually (if possible)</li>
-                        <li>Check for blockages or debris</li>
-                        <li>Review system logs for error messages</li>
-                        <li>Use Emergency Stop if needed, then restart</li>
-                    </ol>
+                    <p><strong>Comprehensive Analytics Include:</strong></p>
+                    <ul>
+                        <li><strong>Water Usage Reports:</strong> Daily, weekly, monthly consumption analysis</li>
+                        <li><strong>Efficiency Metrics:</strong> Water savings and optimization performance</li>
+                        <li><strong>Crop Health Indicators:</strong> Soil conditions and plant stress monitoring</li>
+                        <li><strong>Weather Impact Analysis:</strong> Correlation between weather and irrigation needs</li>
+                        <li><strong>Cost Analysis:</strong> Water bill impact and ROI calculations</li>
+                        <li><strong>Predictive Insights:</strong> AI-generated recommendations for optimization</li>
+                    </ul>
+                    <p>All reports can be exported in PDF, CSV, or accessed via our REST API.</p>
                 </div>
             </div>
 
-            <!-- Maintenance Questions -->
+            <!-- Maintenance -->
             <div class="faq-item" data-category="maintenance">
                 <div class="faq-question">
                     <h3>How often should I maintain the system?</h3>
@@ -443,7 +570,7 @@
         </div>
     </div>
 
-    <!-- Footer - Clean Light Design -->
+    <!-- Footer - Enhanced with Social Icons and Legal Links -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
@@ -459,10 +586,61 @@
                 <a href="controls.html">Controls</a>
                 <a href="support.html">Support</a>
             </div>
+            <div class="footer-social">
+                <div class="social-title">Follow Us</div>
+                <div class="social-icons">
+                    <a href="#" class="social-link" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-legal">
+                <div class="legal-title">Legal</div>
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <a href="#" class="legal-link">Terms of Service</a>
+                    <a href="#" class="legal-link">Cookie Policy</a>
+                    <a href="#" class="legal-link">GDPR Compliance</a>
+                </div>
+            </div>
         </div>
     </footer>
 
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+            <button class="close-panel" onclick="notificationSystem.togglePanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+
     <script src="js/dashboard.js"></script>
     <script src="js/faq.js"></script>
+    
+    <!-- Global Search Functionality -->
+    <script src="js/global-search.js?v=1.0"></script>
+    
+    <!-- Enhanced Notification System -->
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
+    
+    <!-- Language Switch System -->
+    <script src="js/language-switch.js"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@
     padding: 0.75rem 1rem;
     border-bottom: 2px solid #FF0000;
     position: fixed;
-    top: 60px; /* Increased from 48px to account for proper header height */
+    top: 48px; /* Updated to match standardized header height */
     left: 0;
     right: 0;
     z-index: 998; /* Reduced to be below main header */
@@ -62,7 +62,7 @@
     
     /* Adjust body padding to account for both headers */
     body {
-        padding-top: 108px !important; /* 60px red header + 48px black title bar */
+        padding-top: 96px !important; /* 48px red header + 48px black title bar */
     }
     
     /* Hide desktop page titles on mobile */
@@ -106,6 +106,20 @@
     color: #FFFFFF;
 }
 
+/* FAQ Page - Red background instead of black */
+.mobile-page-title.faq-page {
+    background: #FF0000;
+    border-bottom: 2px solid #CC0000;
+}
+
+.mobile-page-title.faq-page .mobile-page-title-icon {
+    color: #FFFFFF;
+}
+
+.mobile-page-title.faq-page .mobile-page-title-text {
+    color: #FFFFFF;
+}
+
 /* Animation for smooth appearance */
 .mobile-page-title {
     transform: translateY(-100%);
@@ -124,7 +138,7 @@
 /* Mobile sidebar adjustments */
 @media (max-width: 768px) {
     .mobile-sidebar {
-        top: 108px; /* Account for both header bars */
+        top: 96px; /* Account for both header bars */
     }
     
     /* Ensure the second header bar (mobile page title) is fully visible */
@@ -136,8 +150,8 @@
     
     /* Fix notification panel positioning on mobile */
     .notification-panel {
-        top: 108px !important;
-        max-height: calc(100vh - 120px) !important;
+        top: 96px !important;
+        max-height: calc(100vh - 108px) !important;
     }
     
     /* Improve mobile menu button visibility */

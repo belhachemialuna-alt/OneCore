@@ -16,7 +16,10 @@
     <link rel="stylesheet" href="css/emergency-mobile.css">
     <link rel="stylesheet" href="css/emergency-fixes.css">
     <link rel="stylesheet" href="css/emergency-top-controls.css">
-    <link rel="stylesheet" href="css/mobile-header-enhancement.css">
+    <link rel="stylesheet" href="css/emergency-header-fix.css?v=1.0">
+    <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
+    <link rel="stylesheet" href="css/mobile-header-enhancement.css?v=2.0">
+    <link rel="stylesheet" href="css/language-switch.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 </head>
@@ -55,7 +58,7 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span class="alert-counter" id="alertCounter">0</span>
                 </button>
-                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications" onclick="notificationSystem.togglePanel()">
                     <i class="fa-solid fa-bell"></i>
                     <span class="notification-badge" id="notificationBadge">0</span>
                 </button>
@@ -87,6 +90,9 @@
                 <a href="faq.html" class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
                 </a>
+                <button class="header-icon-btn" id="languageBtn" title="Switch Language">
+                    <img src="icons/language.png" alt="Language" style="width: 20px; height: 20px; object-fit: contain;">
+                </button>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
@@ -97,12 +103,37 @@
         </div>
     </header>
 
+    <!-- Mobile Page Title Bar -->
+    <div class="mobile-page-title emergency-page show" id="mobilePageTitle">
+        <div class="mobile-page-title-content">
+            <div class="mobile-page-title-icon">
+                <i class="fa-solid fa-fire-extinguisher"></i>
+            </div>
+            <div class="mobile-page-title-text">Emergency Controls</div>
+        </div>
+    </div>
+
     <!-- Secondary Navigation Bar -->
     <nav class="secondary-nav">
         <div class="nav-container">
             <div class="nav-title">
                 <i class="fa-solid fa-fire-extinguisher"></i>
                 <span>Emergency Controls</span>
+            </div>
+            <div class="nav-search">
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Search options, controls, settings..." class="search-input">
+                    <button type="button" id="search-btn" class="search-btn" title="Search">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-results" id="search-results" style="display: none;">
+                    <div class="search-loading" id="search-loading" style="display: none;">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Searching...</span>
+                    </div>
+                    <div class="search-content" id="search-content"></div>
+                </div>
             </div>
         </div>
     </nav>
@@ -111,14 +142,15 @@
     <div class="mobile-sidebar" id="mobile-sidebar">
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
         <div class="sidebar-content">
-            <div class="sidebar-header">
-                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
             <nav class="sidebar-nav">
                 <a href="index.html" class="sidebar-item" title="Dashboard">
                     <i class="fa-solid fa-gauge"></i>
+                </a>
+                <button class="sidebar-item" id="updateBtnMobile" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
                 </a>
                 <a href="analytics.html" class="sidebar-item" title="Analytics">
                     <i class="fa-solid fa-chart-line"></i>
@@ -127,13 +159,25 @@
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
-                    <i class="fa-solid fa-microchip"></i>
+                    <i class="fa-solid fa-cpu"></i>
                 </a>
                 <a href="controls.html" class="sidebar-item" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
+                <a href="PI_simulation.html" class="sidebar-item" title="Pi Simulation - IoT Data Exchange">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="ai.html" class="sidebar-item" title="AI Model Testing">
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
                 <a href="support.html" class="sidebar-item" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="sidebar-item" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="sidebar-item" id="setup-link-mobile" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -381,7 +425,7 @@
         </section>
     </div>
 
-    <!-- Footer - Clean Light Design -->
+    <!-- Footer - Enhanced with Social Icons and Legal Links -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
@@ -396,6 +440,35 @@
                 <a href="analytics.html">Analytics</a>
                 <a href="controls.html">Controls</a>
                 <a href="support.html">Support</a>
+            </div>
+            <div class="footer-social">
+                <div class="social-title">Follow Us</div>
+                <div class="social-icons">
+                    <a href="#" class="social-link" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-legal">
+                <div class="legal-title">Legal</div>
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <a href="#" class="legal-link">Terms of Service</a>
+                    <a href="#" class="legal-link">Cookie Policy</a>
+                    <a href="#" class="legal-link">GDPR Compliance</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -432,6 +505,9 @@
     <!-- Language System -->
     <script src="js/language.js?v=1.0"></script>
     
+    <!-- Global Search Functionality -->
+    <script src="js/global-search.js?v=1.0"></script>
+    
     <!-- Page Load Handler -->
     <script>
         window.addEventListener('load', function() {
@@ -443,5 +519,11 @@
             }
         });
     </script>
+    
+    <!-- Enhanced Notification System -->
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
+    
+    <!-- Language Switch System -->
+    <script src="js/language-switch.js"></script>
 </body>
 </html>

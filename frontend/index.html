@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css?v=4.0">
+    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
+    <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
+    <link rel="stylesheet" href="css/mobile-header-fix.css">
     <link rel="stylesheet" href="css/irrigation-sidebar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -38,7 +41,9 @@
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="logosetup.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    <a href="space.html">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                    </a>
                 </div>
             </div>
             <div class="header-center">
@@ -54,7 +59,7 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span class="alert-counter" id="alertCounter">0</span>
                 </button>
-                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications" onclick="notificationSystem.togglePanel()">
                     <i class="fa-solid fa-bell"></i>
                     <span class="notification-badge" id="notificationBadge">0</span>
                 </button>
@@ -106,6 +111,21 @@
                 <i class="fa-solid fa-gauge"></i>
                 <span>Dashboard</span>
             </div>
+            <div class="nav-search">
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Search options, controls, settings..." class="search-input">
+                    <button type="button" id="search-btn" class="search-btn" title="Search">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-results" id="search-results" style="display: none;">
+                    <div class="search-loading" id="search-loading" style="display: none;">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Searching...</span>
+                    </div>
+                    <div class="search-content" id="search-content"></div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -122,6 +142,9 @@
                 <a href="index.html" class="sidebar-item active" title="Dashboard">
                     <i class="fa-solid fa-gauge"></i>
                 </a>
+                <button class="sidebar-item" id="updateBtnMobile" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
                 <a href="space.html" class="sidebar-item" title="Space Dashboard">
                     <i class="fa-solid fa-rocket"></i>
                 </a>
@@ -132,7 +155,7 @@
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
-                    <i class="fa-solid fa-microchip"></i>
+                    <i class="fa-solid fa-cpu"></i>
                 </a>
                 <a href="controls.html" class="sidebar-item" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
@@ -145,6 +168,12 @@
                 </a>
                 <a href="support.html" class="sidebar-item" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="sidebar-item" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="sidebar-item" id="setup-link-mobile" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -744,6 +773,9 @@
     <!-- Language System -->
     <script src="js/language.js?v=1.0"></script>
     
+    <!-- Global Search Functionality -->
+    <script src="js/global-search.js?v=1.0"></script>
+    
     <!-- Page Load Handler -->
     <script>
         // Show loader on page load
@@ -756,5 +788,21 @@
             }
         });
     </script>
+    
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+            <button class="close-panel" onclick="notificationSystem.togglePanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+    
+    <!-- Enhanced Notification System -->
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
 </body>
 </html>

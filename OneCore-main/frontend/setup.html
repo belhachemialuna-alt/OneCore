@@ -12,9 +12,126 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/setup.css?v=4.0">
     <link rel="stylesheet" href="css/setup-mobile-enhanced.css">
+    <link rel="stylesheet" href="css/mobile-header-enhancement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Red Header Bar -->
+    <header class="top-header">
+        <div class="header-container">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="header-left">
+                <div class="logo logo-setup-container">
+                    <a href="space.html">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                    </a>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="header-datetime header-clock-large" id="header-datetime">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="header-time">--:--</span>
+                    <span class="datetime-separator">•</span>
+                    <span id="header-date">--- --, ----</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="alertBtn" title="Alerts & Warnings">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="alert-counter" id="alertCounter">0</span>
+                </button>
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+                <button class="header-icon-btn" id="updateBtnMain" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="update-indicator" id="updateIndicator"></span>
+                </button>
+                <a href="index.html" class="header-icon-btn" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="header-icon-btn" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="header-icon-btn" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="header-icon-btn" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
+                    <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
+                </a>
+                <a href="support.html" class="header-icon-btn" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="header-icon-btn" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup" style="background: rgba(220, 53, 69, 0.2);">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <button class="header-icon-btn reboot-btn" id="rebootBtn" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Page Title Bar -->
+    <div class="mobile-page-title setup-page show" id="mobile-page-title">
+        <div class="mobile-page-title-content">
+            <div class="mobile-page-title-icon">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+            <div class="mobile-page-title-text">Setup Wizard</div>
+        </div>
+    </div>
+
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close Menu">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <a href="analytics.html" class="sidebar-item" title="Analytics">
+                    <i class="fa-solid fa-chart-line"></i>
+                </a>
+                <a href="emergency.html" class="sidebar-item" title="Emergency Controls">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </a>
+                <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
+                    <i class="fa-solid fa-microchip"></i>
+                </a>
+                <a href="controls.html" class="sidebar-item" title="User & System Controls">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="support.html" class="sidebar-item" title="Support">
+                    <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="#" class="sidebar-item active" title="Setup">
+                    <i class="fa-solid fa-sliders"></i>
+                </a>
+                <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </nav>
+        </div>
+    </div>
+
     <div class="setup-container">
         <div class="setup-header">
             <div class="logo">
@@ -52,29 +169,29 @@
             <!-- Step 1: Welcome -->
             <div class="setup-step active" id="step-1">
                 <div class="welcome-image-container">
-                    <img src="welcome.png" alt="Welcome to TiOne" class="welcome-image" style="max-width: 180px; height: auto;">
+                    <img src="welcome.png" alt="Welcome to TiOne" class="welcome-image" style="max-width: 140px; height: auto;">
                 </div>
                 <h1 style="font-size: 2.5rem; font-weight: 700;">Welcome to TiOne</h1>
                 <p class="subtitle" style="font-size: 1.1rem;">Smart Irrigation System with AI Decision Making</p>
                 
                 <div class="feature-grid">
                     <div class="feature-item">
-                        <i class="fa-solid fa-droplet"></i>
+                        <img src="icons/wateroptimization.png" alt="Water Optimization" class="feature-icon-black" style="width: 48px; height: 48px;">
                         <h3>Water Optimization</h3>
                         <p>Save up to 40% water with intelligent irrigation</p>
                     </div>
                     <div class="feature-item">
-                        <i class="fa-solid fa-solar-panel"></i>
+                        <img src="icons/solarpowered.png" alt="Solar Powered" class="feature-icon-black" style="width: 48px; height: 48px;">
                         <h3>Solar Powered</h3>
                         <p>Eco-friendly operation with battery backup</p>
                     </div>
                     <div class="feature-item">
-                        <i class="fa-solid fa-brain" style="font-size: 48px; color: #2196F3;"></i>
+                        <img src="icons/Descions.png" alt="AI Decisions" class="feature-icon-black" style="width: 48px; height: 48px;">
                         <h3>AI Decisions</h3>
                         <p>Smart irrigation based on crop and soil needs</p>
                     </div>
                     <div class="feature-item">
-                        <i class="fa-solid fa-mobile-screen"></i>
+                        <img src="icons/Remoteaccess.png" alt="Remote Control" class="feature-icon-black" style="width: 48px; height: 48px;">
                         <h3>Remote Control</h3>
                         <p>Monitor and control from anywhere</p>
                     </div>
@@ -438,5 +555,65 @@
     </div>
 
     <script src="js/setup.js"></script>
+
+    <!-- Mobile Header JavaScript -->
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const sidebarClose = document.getElementById('sidebar-close');
+
+            // Open mobile menu
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileSidebar.classList.add('active');
+                });
+            }
+
+            // Close mobile menu
+            function closeMobileMenu() {
+                mobileSidebar.classList.remove('active');
+            }
+
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', closeMobileMenu);
+            }
+
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeMobileMenu);
+            }
+
+            // Update header time
+            function updateHeaderTime() {
+                const now = new Date();
+                const timeElement = document.getElementById('header-time');
+                const dateElement = document.getElementById('header-date');
+
+                if (timeElement) {
+                    const timeString = now.toLocaleTimeString('en-US', {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    timeElement.textContent = timeString;
+                }
+
+                if (dateElement) {
+                    const dateString = now.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    dateElement.textContent = dateString;
+                }
+            }
+
+            // Update time immediately and then every second
+            updateHeaderTime();
+            setInterval(updateHeaderTime, 1000);
+        });
+    </script>
 </body>
 </html>

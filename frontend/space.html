@@ -16,7 +16,13 @@
     <link rel="stylesheet" href="css/system-performance.css">
     <link rel="stylesheet" href="css/schedule-modal.css">
     <link rel="stylesheet" href="css/calendar-modal.css">
-    <link rel="stylesheet" href="css/irrigation-config-modal.css">
+    <link rel="stylesheet" href="css/space.css?v=5.0">
+    <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
+    <link rel="stylesheet" href="css/mobile-header-enhancement.css?v=2.0">
+    <link rel="stylesheet" href="css/mobile-header-fix.css?v=2.0">
+    <link rel="stylesheet" href="css/pdf-export-styles.css?v=1.0">
+    <link rel="stylesheet" href="css/professional-chat.css">
+    <link rel="stylesheet" href="css/language-switch.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -105,6 +111,9 @@
                 <a href="faq.html" class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
                 </a>
+                <button class="header-icon-btn" id="languageBtn" title="Switch Language">
+                    <img src="icons/language.png" alt="Language" style="width: 20px; height: 20px; object-fit: contain;">
+                </button>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
                     <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
@@ -115,12 +124,37 @@
         </div>
     </header>
 
+    <!-- Mobile Page Title Bar -->
+    <div class="mobile-page-title space-page show" id="mobilePageTitle">
+        <div class="mobile-page-title-content">
+            <div class="mobile-page-title-icon">
+                <i class="fa-solid fa-rocket"></i>
+            </div>
+            <div class="mobile-page-title-text">Space Dashboard</div>
+        </div>
+    </div>
+
     <!-- Secondary Navigation Bar -->
     <nav class="secondary-nav">
         <div class="nav-container">
             <div class="nav-title">
                 <i class="fa-solid fa-rocket"></i>
                 <span>Space Dashboard</span>
+            </div>
+            <div class="nav-search">
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Search options, controls, settings..." class="search-input">
+                    <button type="button" id="search-btn" class="search-btn" title="Search">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+                <div class="search-results" id="search-results" style="display: none;">
+                    <div class="search-loading" id="search-loading" style="display: none;">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Searching...</span>
+                    </div>
+                    <div class="search-content" id="search-content"></div>
+                </div>
             </div>
         </div>
     </nav>
@@ -138,6 +172,9 @@
                 <a href="index.html" class="sidebar-item" title="Dashboard">
                     <i class="fa-solid fa-gauge"></i>
                 </a>
+                <button class="sidebar-item" id="updateBtnMobile" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
                 <a href="space.html" class="sidebar-item active" title="Space Dashboard">
                     <i class="fa-solid fa-rocket"></i>
                 </a>
@@ -148,16 +185,25 @@
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
-                    <i class="fa-solid fa-microchip"></i>
+                    <i class="fa-solid fa-cpu"></i>
                 </a>
                 <a href="controls.html" class="sidebar-item" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
+                </a>
+                <a href="PI_simulation.html" class="sidebar-item" title="Pi Simulation - IoT Data Exchange">
+                    <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="sidebar-item" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="support.html" class="sidebar-item" title="Support">
                     <i class="fa-solid fa-circle-question"></i>
+                </a>
+                <a href="faq.html" class="sidebar-item" title="FAQ">
+                    <i class="fa-solid fa-book"></i>
+                </a>
+                <a href="#" class="sidebar-item" id="setup-link-mobile" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -260,6 +306,9 @@
                     </button>
                     <button class="tasks-action-btn" id="update-schedule-btn" title="Update Schedules">
                         <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button class="tasks-action-btn" id="export-pdf-btn" title="Export Schedules to PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
                     </button>
                 </div>
             </div>
@@ -1054,66 +1103,158 @@
         </div>
     </div>
 
-    <!-- Irrigation Assistant Chat Modal -->
+    <!-- Professional AI Assistant Chat Modal -->
     <div id="irrigationChatModal" class="custom-modal" style="display: none;">
         <div class="modal-overlay" onclick="closeIrrigationChat()"></div>
-        <div class="modal-content chat-modal-content">
-            <div class="modal-header">
-                <i class="fa-solid fa-comments modal-icon"></i>
-                <h3 class="modal-title">Irrigation Assistant</h3>
-                <button class="modal-close-btn" onclick="closeIrrigationChat()">
-                    <i class="fa-solid fa-times"></i>
-                </button>
+        <div class="modal-content professional-chat-modal">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="chat-icon">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="chat-logo">
+                    </div>
+                    <div class="chat-title-section">
+                        <h3 class="chat-title">Context-aware agricultural assistance with our logo</h3>
+                        <div class="chat-subtitle">AI-powered irrigation management</div>
+                    </div>
+                </div>
+                <div class="chat-header-right">
+                    <div class="model-selector-container">
+                        <label for="modelSelect" class="model-label">AI Model:</label>
+                        <select id="modelSelect" class="model-select">
+                            <option value="anthropic/claude-3-5-sonnet-20241022">Claude 3.5 Sonnet (Best for Analysis)</option>
+                            <option value="openai/gpt-4o-2024-11-20">GPT-4o (Versatile)</option>
+                            <option value="google/gemini-pro-1.5">Gemini Pro 1.5 (Technical)</option>
+                            <option value="meta-llama/llama-3.1-70b-instruct">Llama 3.1 70B (Agricultural)</option>
+                            <option value="mistralai/mistral-large-2407">Mistral Large (Specialized)</option>
+                        </select>
+                    </div>
+                    <button class="chat-close-btn" onclick="closeIrrigationChat()">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
             </div>
-            <div class="modal-body chat-modal-body">
-                <div class="chat-container">
+            
+            <div class="chat-body">
+                <div class="context-panel">
+                    <div class="context-header">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <span>System Context</span>
+                        <button class="context-toggle" onclick="toggleContextPanel()">
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="context-content" id="contextContent">
+                        <div class="context-item">
+                            <strong>Current Zone:</strong> <span id="currentZone">Zone 1</span>
+                        </div>
+                        <div class="context-item">
+                            <strong>Soil Moisture:</strong> <span id="soilMoisture">65%</span>
+                        </div>
+                        <div class="context-item">
+                            <strong>Weather:</strong> <span id="weatherCondition">Sunny, 24°C</span>
+                        </div>
+                        <div class="context-item">
+                            <strong>Last Watering:</strong> <span id="lastWatering">2 hours ago</span>
+                        </div>
+                        <div class="context-item">
+                            <strong>Crop Type:</strong> <span id="cropType">Mixed Vegetables</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-messages-container">
                     <div class="chat-messages" id="chatMessages">
-                        <div class="chat-message bot-message">
+                        <div class="chat-message assistant-message">
                             <div class="message-avatar">
-                                <i class="fa-solid fa-robot"></i>
+                                <i class="fa-solid fa-leaf"></i>
                             </div>
                             <div class="message-content">
-                                <div class="message-text">
-                                    Hello! I'm your irrigation assistant. I can help you with scheduling questions like:
-                                    <ul>
-                                        <li>What's the best schedule for my crops?</li>
-                                        <li>How often should I water my plants?</li>
-                                        <li>What's the optimal irrigation duration?</li>
-                                        <li>When should I adjust my watering schedule?</li>
-                                    </ul>
-                                    Ask me anything about irrigation scheduling!
+                                <div class="message-header">
+                                    <span class="message-sender">AI Plant Expert</span>
+                                    <span class="message-model" id="currentModel">Claude 3.5 Sonnet</span>
                                 </div>
-                                <div class="message-time">Just now</div>
+                                <div class="message-text">
+                                    Hello! I'm your AI agricultural assistant with access to your system's real-time data. I can provide context-aware advice on:
+                                    <br><br>
+                                    • <strong>Irrigation scheduling</strong> based on soil moisture and weather
+                                    • <strong>Plant care recommendations</strong> for your specific crops
+                                    • <strong>Problem diagnosis</strong> using sensor data
+                                    • <strong>Optimization strategies</strong> for water and energy efficiency
+                                    <br><br>
+                                    What would you like to know about your irrigation system?
+                                </div>
+                                <div class="message-time">${new Date().toLocaleTimeString()}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="chat-quick-questions">
-                        <div class="quick-question-header">Quick Questions:</div>
-                        <div class="quick-questions-grid">
-                            <button class="quick-question-btn" onclick="askQuickQuestion('What is the best schedule for vegetables?')">
-                                <i class="fa-solid fa-leaf"></i>
-                                Best schedule for vegetables?
-                            </button>
-                            <button class="quick-question-btn" onclick="askQuickQuestion('How much water do my plants need daily?')">
-                                <i class="fa-solid fa-droplet"></i>
-                                Daily water requirements?
-                            </button>
-                            <button class="quick-question-btn" onclick="askQuickQuestion('When should I water during hot weather?')">
-                                <i class="fa-solid fa-sun"></i>
-                                Hot weather watering?
-                            </button>
-                            <button class="quick-question-btn" onclick="askQuickQuestion('How to adjust schedule for different seasons?')">
-                                <i class="fa-solid fa-calendar-alt"></i>
-                                Seasonal adjustments?
-                            </button>
-                        </div>
+                </div>
+                
+                <div class="quick-actions-panel">
+                    <div class="quick-actions-header">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Quick Actions</span>
                     </div>
-                    <div class="chat-input-container">
-                        <div class="chat-input-wrapper">
-                            <input type="text" id="chatInput" placeholder="Ask about irrigation scheduling..." maxlength="200">
-                            <button class="chat-send-btn" onclick="sendChatMessage()">
-                                <i class="fa-solid fa-paper-plane"></i>
-                            </button>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="askContextualQuestion('schedule')">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <div class="action-content">
+                                <span class="action-title">Optimize Schedule</span>
+                                <span class="action-desc">Based on current conditions</span>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="askContextualQuestion('diagnosis')">
+                            <i class="fa-solid fa-stethoscope"></i>
+                            <div class="action-content">
+                                <span class="action-title">Diagnose Issues</span>
+                                <span class="action-desc">Analyze sensor data</span>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="askContextualQuestion('weather')">
+                            <i class="fa-solid fa-cloud-sun"></i>
+                            <div class="action-content">
+                                <span class="action-title">Weather Adjustments</span>
+                                <span class="action-desc">Adapt to forecast</span>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="askContextualQuestion('efficiency')">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <div class="action-content">
+                                <span class="action-title">Efficiency Tips</span>
+                                <span class="action-desc">Save water & energy</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="chat-input-section">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <textarea id="chatInput" placeholder="Ask me anything about your plants, irrigation, or system optimization..." rows="1"></textarea>
+                            <div class="input-actions">
+                                <button class="attachment-btn" title="Include system data">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                </button>
+                                <button class="send-btn" onclick="sendChatMessage()" id="sendBtn">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-footer">
+                            <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                                <span class="typing-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </span>
+                                <span class="typing-text">AI is thinking...</span>
+                            </div>
+                            <div class="input-info">
+                                <span class="context-indicator">
+                                    <i class="fa-solid fa-database"></i>
+                                    System data included
+                                </span>
+                                <span class="model-indicator" id="modelIndicator">Claude 3.5 Sonnet</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1753,11 +1894,16 @@
         // Load saved layout on page load
         loadDashboardLayout();
         
-        // Chat functionality
+        // Professional Chat functionality with OpenRouter integration
+        let currentModel = 'anthropic/claude-3-5-sonnet-20241022';
+        let contextPanelExpanded = true;
+        
         function openIrrigationChat() {
             const modal = document.getElementById('irrigationChatModal');
             if (modal) {
                 modal.style.display = 'flex';
+                updateSystemContext();
+                initializeChatInput();
             }
         }
         
@@ -1768,49 +1914,218 @@
             }
         }
         
-        function askQuickQuestion(question) {
+        function toggleContextPanel() {
+            const contextContent = document.getElementById('contextContent');
+            const toggleBtn = document.querySelector('.context-toggle i');
+            
+            contextPanelExpanded = !contextPanelExpanded;
+            
+            if (contextPanelExpanded) {
+                contextContent.style.display = 'block';
+                toggleBtn.className = 'fa-solid fa-chevron-up';
+            } else {
+                contextContent.style.display = 'none';
+                toggleBtn.className = 'fa-solid fa-chevron-down';
+            }
+        }
+        
+        function updateSystemContext() {
+            // Update context with real system data
+            document.getElementById('currentZone').textContent = 'Zone 1';
+            document.getElementById('soilMoisture').textContent = '65%';
+            document.getElementById('weatherCondition').textContent = 'Sunny, 24°C';
+            document.getElementById('lastWatering').textContent = '2 hours ago';
+            document.getElementById('cropType').textContent = 'Mixed Vegetables';
+        }
+        
+        function initializeChatInput() {
+            const textarea = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            // Auto-resize textarea
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                
+                // Enable/disable send button
+                sendBtn.disabled = !this.value.trim();
+                sendBtn.style.opacity = this.value.trim() ? '1' : '0.5';
+            });
+            
+            // Model selection change
+            const modelSelect = document.getElementById('modelSelect');
+            modelSelect.addEventListener('change', function() {
+                currentModel = this.value;
+                const modelName = this.options[this.selectedIndex].text.split(' (')[0];
+                document.getElementById('modelIndicator').textContent = modelName;
+                document.getElementById('currentModel').textContent = modelName;
+            });
+        }
+        
+        function askContextualQuestion(type) {
+            let question = '';
+            const systemContext = getSystemContext();
+            
+            switch(type) {
+                case 'schedule':
+                    question = `Based on my current soil moisture (${systemContext.soilMoisture}) and weather conditions (${systemContext.weather}), what's the optimal irrigation schedule for my ${systemContext.cropType}?`;
+                    break;
+                case 'diagnosis':
+                    question = `Please analyze my system data: Soil moisture: ${systemContext.soilMoisture}, Last watering: ${systemContext.lastWatering}, Weather: ${systemContext.weather}. Are there any issues I should address?`;
+                    break;
+                case 'weather':
+                    question = `Given the current weather conditions (${systemContext.weather}), how should I adjust my irrigation schedule for ${systemContext.cropType}?`;
+                    break;
+                case 'efficiency':
+                    question = `How can I optimize water and energy efficiency for my ${systemContext.cropType} given current conditions: ${systemContext.soilMoisture} soil moisture, ${systemContext.weather}?`;
+                    break;
+            }
+            
+            sendMessage(question, true);
+        }
+        
+        function getSystemContext() {
+            return {
+                zone: document.getElementById('currentZone').textContent,
+                soilMoisture: document.getElementById('soilMoisture').textContent,
+                weather: document.getElementById('weatherCondition').textContent,
+                lastWatering: document.getElementById('lastWatering').textContent,
+                cropType: document.getElementById('cropType').textContent
+            };
+        }
+        
+        async function sendChatMessage() {
+            const textarea = document.getElementById('chatInput');
+            const message = textarea.value.trim();
+            if (!message) return;
+            
+            await sendMessage(message, false);
+            textarea.value = '';
+            textarea.style.height = 'auto';
+        }
+        
+        async function sendMessage(message, isContextual) {
             const chatMessages = document.getElementById('chatMessages');
-            const userMessage = document.createElement('div');
-            userMessage.className = 'chat-message user-message';
-            userMessage.innerHTML = `
+            const typingIndicator = document.getElementById('typingIndicator');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            // Add user message
+            const userMessage = createUserMessage(message);
+            chatMessages.appendChild(userMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Show typing indicator
+            typingIndicator.style.display = 'flex';
+            sendBtn.disabled = true;
+            
+            try {
+                // Prepare context for AI
+                const systemContext = getSystemContext();
+                const contextPrompt = `
+System Context:
+- Current Zone: ${systemContext.zone}
+- Soil Moisture: ${systemContext.soilMoisture}
+- Weather: ${systemContext.weather}
+- Last Watering: ${systemContext.lastWatering}
+- Crop Type: ${systemContext.cropType}
+
+You are an expert agricultural AI assistant specializing in irrigation and plant care. Use the above system context to provide specific, actionable advice. Focus on practical recommendations based on the current conditions.
+
+User Question: ${message}`;
+
+                // Call OpenRouter API
+                const response = await callOpenRouterAPI(contextPrompt);
+                
+                // Add AI response
+                const aiMessage = createAIMessage(response);
+                chatMessages.appendChild(aiMessage);
+                
+            } catch (error) {
+                console.error('Chat error:', error);
+                const errorMessage = createAIMessage('I apologize, but I encountered an error processing your request. Please try again or check your API configuration.');
+                chatMessages.appendChild(errorMessage);
+            } finally {
+                typingIndicator.style.display = 'none';
+                sendBtn.disabled = false;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+        
+        async function callOpenRouterAPI(prompt) {
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${getOpenRouterAPIKey()}`,
+                    'Content-Type': 'application/json',
+                    'X-Title': 'TiOne Irrigation Assistant'
+                },
+                body: JSON.stringify({
+                    model: currentModel,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You are an expert agricultural AI assistant specializing in smart irrigation systems, plant care, and agricultural optimization. Provide practical, actionable advice based on real-time system data.'
+                        },
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 1000
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`OpenRouter API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+        
+        function getOpenRouterAPIKey() {
+            // In production, this should be stored securely on the backend
+            return localStorage.getItem('openrouter_api_key') || 'your-api-key-here';
+        }
+        
+        function createUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message user-message';
+            messageDiv.innerHTML = `
                 <div class="message-avatar">
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="message-content">
-                    <div class="message-text">${question}</div>
+                    <div class="message-header">
+                        <span class="message-sender">You</span>
+                    </div>
+                    <div class="message-text">${message}</div>
                     <div class="message-time">${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
-            chatMessages.appendChild(userMessage);
-            
-            // Simulate bot response
-            setTimeout(() => {
-                const botResponse = getBotResponse(question);
-                const botMessage = document.createElement('div');
-                botMessage.className = 'chat-message bot-message';
-                botMessage.innerHTML = `
-                    <div class="message-avatar">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div class="message-content">
-                        <div class="message-text">${botResponse}</div>
-                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
-                    </div>
-                `;
-                chatMessages.appendChild(botMessage);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
-            
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
         }
         
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (!message) return;
+        function createAIMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message assistant-message';
+            const modelName = document.getElementById('modelSelect').options[document.getElementById('modelSelect').selectedIndex].text.split(' (')[0];
             
-            askQuickQuestion(message);
-            input.value = '';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-sender">AI Plant Expert</span>
+                        <span class="message-model">${modelName}</span>
+                    </div>
+                    <div class="message-text">${message}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+            return messageDiv;
         }
         
         function getBotResponse(question) {
@@ -1858,6 +2173,196 @@
             }
         });
         
+        // Global Search Functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('global-search');
+            const searchBtn = document.getElementById('search-btn');
+            const searchResults = document.getElementById('search-results');
+            const searchContent = document.getElementById('search-content');
+            const searchLoading = document.getElementById('search-loading');
+            
+            if (!searchInput || !searchBtn) return;
+            
+            let searchTimeout;
+            
+            // Search button click
+            searchBtn.addEventListener('click', performSearch);
+            
+            // Enter key search
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Live search as user types (with debounce)
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                
+                if (query.length >= 2) {
+                    searchTimeout = setTimeout(() => {
+                        performSearch();
+                    }, 300);
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            });
+            
+            // Hide results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-search')) {
+                    searchResults.style.display = 'none';
+                }
+            });
+            
+            async function performSearch() {
+                const query = searchInput.value.trim();
+                if (!query) return;
+                
+                searchResults.style.display = 'block';
+                searchLoading.style.display = 'block';
+                searchContent.innerHTML = '';
+                
+                try {
+                    // Backend search API call
+                    const response = await fetch('/api/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query: query })
+                    });
+                    
+                    const data = await response.json();
+                    displaySearchResults(data.results || []);
+                } catch (error) {
+                    console.error('Search error:', error);
+                    // Fallback to frontend-only search
+                    const fallbackResults = performFrontendSearch(query);
+                    displaySearchResults(fallbackResults);
+                } finally {
+                    searchLoading.style.display = 'none';
+                }
+            }
+            
+            function performFrontendSearch(query) {
+                const results = [];
+                const lowerQuery = query.toLowerCase();
+                
+                // Search through common options and pages
+                const searchItems = [
+                    {
+                        title: 'AI Decision Engine',
+                        description: 'Configure AI settings and decision parameters',
+                        path: 'ai.html',
+                        keywords: ['ai', 'decision', 'artificial', 'intelligence', 'smart', 'automation']
+                    },
+                    {
+                        title: 'Hardware Configuration',
+                        description: 'Hardware setup and sensor configuration',
+                        path: 'hardware.html',
+                        keywords: ['hardware', 'sensor', 'configuration', 'setup', 'device']
+                    },
+                    {
+                        title: 'User Controls',
+                        description: 'System controls and user management',
+                        path: 'controls.html',
+                        keywords: ['control', 'user', 'settings', 'management', 'permissions']
+                    },
+                    {
+                        title: 'Analytics Dashboard',
+                        description: 'Performance analytics and data visualization',
+                        path: 'analytics.html',
+                        keywords: ['analytics', 'data', 'charts', 'performance', 'statistics']
+                    },
+                    {
+                        title: 'Emergency Controls',
+                        description: 'Emergency shutdown and safety controls',
+                        path: 'emergency.html',
+                        keywords: ['emergency', 'safety', 'shutdown', 'stop', 'alert']
+                    },
+                    {
+                        title: 'Water Optimization',
+                        description: 'Water usage optimization and efficiency settings',
+                        path: 'space.html#water',
+                        keywords: ['water', 'optimization', 'efficiency', 'usage', 'conservation']
+                    },
+                    {
+                        title: 'Solar Power Management',
+                        description: 'Solar power configuration and monitoring',
+                        path: 'space.html#solar',
+                        keywords: ['solar', 'power', 'energy', 'battery', 'renewable']
+                    },
+                    {
+                        title: 'Remote Access',
+                        description: 'Remote monitoring and control access',
+                        path: 'device-link.html',
+                        keywords: ['remote', 'access', 'monitoring', 'connection', 'mobile']
+                    },
+                    {
+                        title: 'Device Pairing',
+                        description: 'Pair and link new devices',
+                        path: 'device-pairing.html',
+                        keywords: ['device', 'pairing', 'link', 'connect', 'setup']
+                    },
+                    {
+                        title: 'Support & Help',
+                        description: 'Help documentation and support',
+                        path: 'support.html',
+                        keywords: ['support', 'help', 'documentation', 'assistance', 'faq']
+                    }
+                ];
+                
+                searchItems.forEach(item => {
+                    const titleMatch = item.title.toLowerCase().includes(lowerQuery);
+                    const descMatch = item.description.toLowerCase().includes(lowerQuery);
+                    const keywordMatch = item.keywords.some(keyword => keyword.includes(lowerQuery));
+                    
+                    if (titleMatch || descMatch || keywordMatch) {
+                        results.push(item);
+                    }
+                });
+                
+                return results;
+            }
+            
+            function displaySearchResults(results) {
+                if (results.length === 0) {
+                    searchContent.innerHTML = '<div class="search-no-results">No results found. Try different keywords.</div>';
+                    return;
+                }
+                
+                searchContent.innerHTML = results.map(item => `
+                    <div class="search-item" onclick="navigateToResult('${item.path}')">
+                        <div class="search-item-title">${item.title}</div>
+                        <div class="search-item-description">${item.description}</div>
+                        <div class="search-item-path">${item.path}</div>
+                    </div>
+                `).join('');
+            }
+            
+            window.navigateToResult = function(path) {
+                searchResults.style.display = 'none';
+                searchInput.value = '';
+                
+                if (path.includes('#')) {
+                    const [page, anchor] = path.split('#');
+                    if (page === 'space.html' && window.location.pathname.includes('space.html')) {
+                        // Same page, just scroll to anchor
+                        const element = document.getElementById(anchor);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    } else {
+                        window.location.href = path;
+                    }
+                } else {
+                    window.location.href = path;
+                }
+            }
+        }
+
         // Initialize chat functionality with proper error handling
         function initializeChatFunctionality() {
             try {
@@ -1879,10 +2384,49 @@
             }
         }
         
+        // Initialize notification system functionality
+        function initializeNotificationSystem() {
+            try {
+                const notificationBtn = document.getElementById('notificationBtn');
+                if (notificationBtn && window.notificationSystem) {
+                    // Ensure click handler is properly attached
+                    notificationBtn.addEventListener('click', () => {
+                        window.notificationSystem.togglePanel();
+                    });
+                    console.log('Space page notification system initialized');
+                    
+                    // Add a test notification to verify system works
+                    setTimeout(() => {
+                        window.notificationSystem.addNotification(
+                            'Notification system is now working! Click the bell icon to view notifications.',
+                            'success',
+                            { autoClose: true, duration: 8000 }
+                        );
+                    }, 2000);
+                } else {
+                    console.warn('Notification system not ready, retrying...');
+                    setTimeout(initializeNotificationSystem, 200);
+                }
+            } catch (error) {
+                console.error('Error initializing notification system:', error);
+            }
+        }
+
         // Initialize everything with delay to ensure DOM is ready
         setTimeout(() => {
             initializeChatFunctionality();
+            initializeSearch();
+            initializeNotificationSystem();
         }, 100);
     </script>
+    
+    <!-- Enhanced Notification System -->
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
+    
+    <!-- PDF Export System -->
+    <script src="js/pdf-export.js?v=1.0"></script>
+    
+    <!-- Language Switch System -->
+    <script src="js/language-switch.js"></script>
 </body>
 </html>

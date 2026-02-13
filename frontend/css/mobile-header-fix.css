@@ -1,0 +1,225 @@
+/* Mobile Header Logo Fix - Universal Solution */
+
+/* Fix mobile header logo visibility and spacing issues */
+@media (max-width: 768px) {
+    /* Main header container adjustments */
+    .top-header {
+        height: 48px !important;
+        min-height: 48px !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: #FF0000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-container {
+        height: 48px !important;
+        min-height: 48px !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Mobile menu button positioning */
+    .mobile-menu-btn {
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1002;
+        width: 32px;
+        height: 32px;
+        background: rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 6px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    /* Logo container - positioned at top right */
+    .header-left {
+        position: absolute;
+        right: 8px;
+        top: 0;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        z-index: 1001;
+    }
+
+    .logo-setup-container {
+        background: #000000 !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        padding: 0 12px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        min-width: 80px;
+        max-width: 120px;
+    }
+
+    .logo-setup-container a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    .logo-setup-image {
+        height: auto !important;
+        max-height: 28px !important;
+        width: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Header center - datetime positioning */
+    .header-center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999;
+        max-width: calc(100% - 160px); /* Account for menu button and logo */
+    }
+
+    .header-datetime {
+        font-size: 0.75rem !important;
+        white-space: nowrap;
+        overflow: visible !important;
+        text-overflow: clip;
+        display: flex !important;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    /* Hide header right navigation on mobile */
+    .header-right {
+        display: none !important;
+    }
+
+    /* Secondary nav adjustments - hide on mobile when mobile page title exists */
+    .secondary-nav {
+        display: none !important;
+    }
+
+    /* Body padding adjustment */
+    body {
+        padding-top: 96px !important; /* 48px main header + 48px mobile page title */
+    }
+
+    /* Mobile page title adjustments */
+    .mobile-page-title {
+        top: 48px !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 0 1rem !important;
+    }
+
+    /* Notification panel positioning */
+    .notification-panel {
+        top: 96px !important;
+        max-height: calc(100vh - 108px) !important;
+    }
+
+    /* Mobile sidebar positioning */
+    .mobile-sidebar {
+        top: 96px !important;
+    }
+
+    /* Main content containers */
+    .main-content,
+    .space-main-content,
+    .ai-main-content,
+    .container,
+    .faq-container {
+        padding-top: 1rem !important;
+        margin-top: 0 !important;
+    }
+
+    /* Space layout specific */
+    .space-layout-container {
+        padding-top: 1rem !important;
+    }
+
+    /* Hardware page specific */
+    .main-content-wrapper {
+        padding-top: 1rem !important;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .header-datetime {
+        font-size: 0.7rem !important;
+    }
+    
+    .header-datetime .datetime-separator,
+    #header-date {
+        display: none !important;
+    }
+
+    .logo-setup-container {
+        min-width: 70px !important;
+        padding: 0 8px !important;
+    }
+
+    .logo-setup-image {
+        max-height: 24px !important;
+    }
+
+    .mobile-menu-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .header-datetime {
+        font-size: 0.7rem !important;
+    }
+    
+    .logo-setup-container {
+        min-width: 70px !important;
+    }
+}
+
+/* Fix for pages with specific CSS conflicts */
+.top-header .header-container .header-left .logo-setup-container {
+    background: #000000 !important;
+    position: relative !important;
+}
+
+/* Ensure logo is always visible */
+.logo-setup-image {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+/* Fix any z-index conflicts */
+.header-left,
+.logo-setup-container,
+.logo-setup-image {
+    z-index: inherit !important;
+}

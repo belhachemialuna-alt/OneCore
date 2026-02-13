@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=News+Cycle:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css?v=5.0">
+    <link rel="stylesheet" href="css/dashboard.css?v=6.0">
     <link rel="stylesheet" href="css/space.css?v=2.0">
     <link rel="stylesheet" href="css/loader.css">
     <link rel="stylesheet" href="css/system-performance.css">
@@ -121,6 +121,14 @@
             <div class="nav-title">
                 <i class="fa-solid fa-rocket"></i>
                 <span>Space Dashboard</span>
+            </div>
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" id="dashboard-search" placeholder="Search irrigation zones, schedules, logs..." class="search-input">
+                    <button class="search-btn" id="search-btn" title="Search Dashboard">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -1879,9 +1887,87 @@
             }
         }
         
+        // Dashboard Search Functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('dashboard-search');
+            const searchBtn = document.getElementById('search-btn');
+            
+            if (!searchInput || !searchBtn) return;
+            
+            function performSearch() {
+                const query = searchInput.value.trim().toLowerCase();
+                if (!query) return;
+                
+                // Clear previous highlights
+                clearSearchHighlights();
+                
+                let resultsFound = 0;
+                
+                // Search through various dashboard elements
+                const searchableElements = [
+                    // Zone cards
+                    ...document.querySelectorAll('.zone-card'),
+                    // Schedule items
+                    ...document.querySelectorAll('.schedule-item'),
+                    // Sensor data cards
+                    ...document.querySelectorAll('.sensor-card'),
+                    // System alerts
+                    ...document.querySelectorAll('.alert-item'),
+                    // Activity log items
+                    ...document.querySelectorAll('.activity-item'),
+                    // Performance metrics
+                    ...document.querySelectorAll('.metric-card')
+                ];
+                
+                searchableElements.forEach(element => {
+                    const text = element.textContent.toLowerCase();
+                    if (text.includes(query)) {
+                        element.style.outline = '2px solid #FF0000';
+                        element.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        resultsFound++;
+                    }
+                });
+                
+                // Show notification with results
+                if (resultsFound > 0) {
+                    showNotification(`Found ${resultsFound} result(s) for "${query}"`, 'success');
+                } else {
+                    showNotification(`No results found for "${query}"`, 'warning');
+                }
+                
+                // Auto-clear highlights after 5 seconds
+                setTimeout(clearSearchHighlights, 5000);
+            }
+            
+            function clearSearchHighlights() {
+                document.querySelectorAll('[style*="outline"]').forEach(element => {
+                    element.style.outline = '';
+                    element.style.backgroundColor = '';
+                });
+            }
+            
+            // Event listeners
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Clear search on escape
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    this.value = '';
+                    clearSearchHighlights();
+                }
+            });
+        }
+        
         // Initialize everything with delay to ensure DOM is ready
         setTimeout(() => {
             initializeChatFunctionality();
+            initializeSearch();
         }, 100);
     </script>
 </body>

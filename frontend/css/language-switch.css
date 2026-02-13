@@ -1,0 +1,63 @@
+/* Language Switch Notification Styles */
+.language-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.language-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.language-notification i {
+    font-size: 1.1rem;
+}
+
+/* Language button hover effect */
+.header-icon-btn#languageBtn {
+    position: relative;
+    overflow: hidden;
+}
+
+.header-icon-btn#languageBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.1) 0%, rgba(204, 0, 0, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.header-icon-btn#languageBtn:hover::before {
+    opacity: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .language-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        font-size: 0.85rem;
+        padding: 10px 16px;
+    }
+}

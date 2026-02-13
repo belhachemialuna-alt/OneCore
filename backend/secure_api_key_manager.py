@@ -59,8 +59,22 @@ class SecureAPIKeyManager:
     
     def _get_hardware_identifier(self) -> str:
         """
-        Get unique hardware identifier combining multiple sources
-        Works on both Windows/Linux and Raspberry Pi
+        Get unique hardware identifier using enhanced fingerprinting.
+        Ensures consistency with device identity module.
+        """
+        try:
+            # Use enhanced fingerprinting for consistency
+            from enhanced_hardware_fingerprint import get_enhanced_hardware_fingerprint
+            return get_enhanced_hardware_fingerprint()
+        except ImportError:
+            # Fallback to original method if enhanced module not available
+            print("⚠️ Enhanced fingerprinting not available in secure_api_key_manager, using fallback")
+            return self._get_hardware_identifier_fallback()
+    
+    def _get_hardware_identifier_fallback(self) -> str:
+        """
+        Fallback hardware identifier method (original implementation).
+        Used only if enhanced fingerprinting module is not available.
         """
         identifiers = []
         

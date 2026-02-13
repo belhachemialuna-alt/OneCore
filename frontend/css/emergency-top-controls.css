@@ -12,9 +12,10 @@
 
 .quick-controls-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: 2rem;
-    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* Emergency Control Cards */
@@ -214,6 +215,38 @@
 .pressure-status-compact {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.6);
+}
+
+/* PC View Optimization */
+@media (min-width: 1024px) {
+    .emergency-quick-controls {
+        margin: 0 auto 2rem auto;
+        max-width: 1400px;
+    }
+    
+    .quick-controls-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        max-width: none;
+    }
+    
+    .emergency-control-card {
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .valve-quick-control {
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+    }
+    
+    .valve-actions-compact {
+        flex-direction: row;
+        gap: 1rem;
+    }
 }
 
 /* Mobile Responsiveness */

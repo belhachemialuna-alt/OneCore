@@ -492,11 +492,24 @@ h1 {
     display: inline-block;
     width: 80px !important;
     height: 80px !important;
-    padding: 16px;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    border-radius: 16px;
-    border: 3px solid #2196F3;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(33, 150, 243, 0.2));
+    transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.feature-icon-black {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover .feature-icon-black {
+    opacity: 1;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3)) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+    transform: scale(1.05);
 }
 
 .feature-item h3 {
@@ -1320,15 +1333,416 @@ h1 {
     font-size: 0.875rem !important;
     padding: 0.5rem 1rem !important;
     border-radius: 8px !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 2px/* Optimize for 100% zoom - reduce overall scale */ 8px rgba(108, 117, 125, 0.3) !important;
-    margin-right: 1rem !important;
-    min-width: auto !important;
-    width: auto !important;
-    flex: 0 0 auto !important;
-    cursor: pointer !important;
-    user-select: none !important;
-    outline: none !important;
+}
+
+/* Mobile Header Styles - Cloned from Emergency Page */
+.top-header {
+    background: #FF0000;
+    color: white;
+    padding: 0;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: none;
+}
+
+.header-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 60px;
+    position: relative;
+}
+
+.header-left {
+    display: flex;
+    align-items: stretch;
+}
+
+.header-left .logo {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.header-center {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+}
+
+.logo-setup-container {
+    background: transparent;
+    height: 100%;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    min-width: 120px;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+.mobile-menu-btn:hover {
+    opacity: 0.8;
+}
+
+.mobile-menu-btn:active {
+    opacity: 0.6;
+}
+
+.header-datetime {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+}
+
+.header-clock-large {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    gap: 0.5rem !important;
+    color: #FFFFFF !important;
+}
+
+.header-clock-large i {
+    font-size: 1rem !important;
+    color: #FFFFFF;
+}
+
+.header-clock-large #header-time {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.header-clock-large #header-date {
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.95;
+}
+
+.header-clock-large .datetime-separator {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.header-icon-btn {
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    height: 60px;
+    width: 48px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.header-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.header-icon-btn:active {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.header-icon-btn.reboot-btn {
+    background: rgba(220, 53, 69, 0.3);
+}
+
+.header-icon-btn.reboot-btn:hover {
+    background: rgba(220, 53, 69, 0.5);
+}
+
+.header-icon-btn img {
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.header-icon-btn:hover img {
+    filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+}
+
+.alert-counter,
+.notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #f44336;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.update-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: #f44336;
+    border-radius: 50%;
+    display: none;
+    animation: pulse-indicator 2s infinite;
+    box-shadow: 0 0 6px rgba(244, 67, 54, 0.8);
+}
+
+.update-indicator.active {
+    display: block;
+}
+
+@keyframes pulse-indicator {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.3);
+    }
+}
+
+/* Mobile Sidebar Menu */
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    display: none;
+    pointer-events: none;
+}
+
+.mobile-sidebar.active {
+    display: block;
+    pointer-events: all;
+}
+
+.sidebar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-sidebar.active .sidebar-overlay {
+    opacity: 1;
+}
+
+.sidebar-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 100%;
+    background: #FF0000;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 1002;
+    padding-top: 60px;
+}
+
+.mobile-sidebar.active .sidebar-content {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.75rem;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    border-radius: 0;
+}
+
+.sidebar-close:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    background: transparent;
+    border: none;
+    border-left: 4px solid transparent;
+    cursor: pointer;
+}
+
+.sidebar-item i {
+    font-size: 1.5rem;
+    width: auto;
+    text-align: center;
+    color: white;
+}
+
+.sidebar-item:hover {
+    background: rgba(0, 0, 0, 0.2);
+    border-left-color: #FFFFFF;
+    color: white;
+}
+
+.sidebar-item.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-left-color: #FFFFFF;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .top-header {
+        display: block;
+        height: 60px;
+    }
+    
+    body {
+        padding-top: 108px !important;
+    }
+    
+    .setup-container {
+        margin-top: 0;
+        transform: none;
+        max-width: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
+    
+    .mobile-sidebar {
+        top: 108px;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    /* Override desktop logo styles for mobile */
+    .header-left .logo {
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .header-right {
+        display: none;
+    }
+    
+    .header-center {
+        display: none;
+    }
+    
+    .header-left {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .logo-setup-container {
+        min-width: auto;
+        padding: 0 1rem;
+        background: transparent !important;
+    }
+    
+    /* Ensure logo image is properly sized on mobile */
+    .logo-setup-container .logo-setup-image {
+        height: 36px;
+        max-height: 36px;
+        width: auto;
+        object-fit: contain;
+    }
 }
 
 .reset-setup-btn:hover {

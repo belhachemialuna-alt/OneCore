@@ -11,7 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css?v=5.0">
-    <link rel="stylesheet" href="css/ai-academic.css">
+    <link rel="stylesheet" href="css/ai.css?v=2.0">
+    <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
     <link rel="stylesheet" href="css/mobile-header-enhancement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -32,7 +33,9 @@
             </button>
             <div class="header-left">
                 <div class="logo logo-setup-container">
-                    <img src="TIONESETUP.png" alt="BAYYTI Logo" class="logo-setup-image">
+                    <a href="space.html">
+                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                    </a>
                 </div>
             </div>
             <div class="header-center">
@@ -48,7 +51,7 @@
                     <i class="fa-solid fa-triangle-exclamation"></i>
                     <span class="alert-counter" id="alertCounter">0</span>
                 </button>
-                <button class="header-icon-btn" id="notificationBtn" title="System Notifications">
+                <button class="header-icon-btn" id="notificationBtn" title="System Notifications" onclick="notificationSystem.togglePanel()">
                     <i class="fa-solid fa-bell"></i>
                     <span class="notification-badge" id="notificationBadge">0</span>
                 </button>
@@ -110,6 +113,15 @@
                 </button>
             </div>
             <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-item" title="Dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+                <button class="sidebar-item" id="updateBtnMobile" title="Check for system updates">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+                <a href="space.html" class="sidebar-item" title="Space Dashboard">
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
                 <a href="analytics.html" class="sidebar-item" title="Analytics">
                     <i class="fa-solid fa-chart-line"></i>
                 </a>
@@ -117,12 +129,12 @@
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
                 <a href="hardware.html" class="sidebar-item" title="Hardware Schema">
-                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain;">
+                    <i class="fa-solid fa-cpu"></i>
                 </a>
                 <a href="controls.html" class="sidebar-item" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
                 </a>
-                <a href="../PI_simulation/device_registration.html" class="sidebar-item" title="PI Data Simulation">
+                <a href="PI_simulation.html" class="sidebar-item" title="Pi Simulation - IoT Data Exchange">
                     <i class="fa-solid fa-microchip"></i>
                 </a>
                 <a href="ai.html" class="sidebar-item active" title="AI Model Testing">
@@ -134,8 +146,8 @@
                 <a href="faq.html" class="sidebar-item" title="FAQ">
                     <i class="fa-solid fa-book"></i>
                 </a>
-                <a href="#" class="sidebar-item" id="setup-link" title="Return to Setup">
-                    <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
+                <a href="#" class="sidebar-item" id="setup-link-mobile" title="Return to Setup">
+                    <i class="fa-solid fa-gear"></i>
                 </a>
                 <button class="sidebar-item" id="rebootBtnMobile" title="Reboot System">
                     <i class="fa-solid fa-power-off"></i>
@@ -432,5 +444,21 @@
         updateHeaderDateTime();
         setInterval(updateHeaderDateTime, 1000);
     </script>
+    
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+            <button class="close-panel" onclick="notificationSystem.togglePanel()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+    
+    <!-- Enhanced Notification System -->
+    <script src="js/enhanced-notifications.js?v=1.0"></script>
 </body>
 </html>

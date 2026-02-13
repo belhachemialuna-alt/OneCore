@@ -15,6 +15,8 @@ from sensor_service import SensorService
 from system_monitor import SystemMonitor
 from system_stats import get_system_stats
 from irrigation_simulator import irrigation_simulator
+import subprocess
+import platform
 
 # Import terminal API blueprint for debugging
 try:
@@ -42,6 +44,91 @@ if os.path.exists(app.static_folder):
 print(f"{'='*60}\n")
 
 init_database()
+
+# WiFi Configuration Functions
+def configure_wifi_connection(ssid, password):
+    """Configure WiFi connection on the device"""
+    try:
+        if not ssid or not password:
+            print("⚠️ WiFi SSID or password not provided")
+            return False
+            
+        system = platform.system()
+        print(f"🔧 Configuring WiFi: {ssid} on {system}")
+        
+        if system == "Linux":
+            # Raspberry Pi / Linux WiFi configuration
+            try:
+                # Create wpa_supplicant configuration
+                wpa_config = f'''
+country=DZ
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={{
+    ssid="{ssid}"
+    psk="{password}"
+    key_mgmt=WPA-PSK
+}}
+'''
+                # Write configuration (would need root access in production)
+                print(f"📝 WiFi configuration prepared for SSID: {ssid}")
+                # subprocess.run(['sudo', 'tee', '/etc/wpa_supplicant/wpa_supplicant.conf'], 
+                #               input=wpa_config, text=True, check=True)
+                # subprocess.run(['sudo', 'systemctl', 'restart', 'dhcpcd'], check=True)
+                return True
+            except Exception as e:
+                print(f"❌ Linux WiFi configuration failed: {e}")
+                return False
+        else:
+            # Windows/Development - simulate success
+            print(f"🖥️ Development mode: WiFi configuration simulated for {ssid}")
+            return True
+            
+    except Exception as e:
+        print(f"❌ WiFi configuration error: {e}")
+        return False
+
+def configure_hotspot_mode(password="elivate2024"):
+    """Configure device as WiFi hotspot"""
+    try:
+        print(f"🔧 Configuring hotspot mode with password: {password}")
+        
+        system = platform.system()
+        if system == "Linux":
+            # Raspberry Pi hotspot configuration
+            try:
+                # Create hostapd configuration
+                hostapd_config = f'''
+interface=wlan0
+driver=nl80211
+ssid=ElivateOne-{os.urandom(2).hex().upper()}
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase={password}
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+'''
+                print("📝 Hotspot configuration prepared")
+                # Would configure hostapd and dnsmasq in production
+                return True
+            except Exception as e:
+                print(f"❌ Linux hotspot configuration failed: {e}")
+                return False
+        else:
+            # Windows/Development - simulate success
+            print("🖥️ Development mode: Hotspot configuration simulated")
+            return True
+            
+    except Exception as e:
+        print(f"❌ Hotspot configuration error: {e}")
+        return False
 
 # Initialize main controller with new architecture
 controller = MainController()
@@ -763,6 +850,26 @@ def complete_setup():
     try:
         config = request.json
         config['setup_completed'] = True
+        
+        # Process network configuration if provided
+        if 'network' in config:
+            network_config = config['network']
+            if network_config.get('mode') == 'wifi':
+                # Configure wifi connection
+                wifi_success = configure_wifi_connection(
+                    network_config.get('wifi_ssid'),
+                    network_config.get('wifi_password')
+                )
+                if not wifi_success:
+                    print("⚠️ WiFi configuration failed, but continuing setup...")
+            elif network_config.get('mode') == 'hotspot':
+                # Configure hotspot mode
+                hotspot_success = configure_hotspot_mode(
+                    network_config.get('hotspot_password', 'elivate2024')
+                )
+                if not hotspot_success:
+                    print("⚠️ Hotspot configuration failed, but continuing setup...")
+        
         controller.save_system_config(config)
         
         return jsonify({

@@ -326,6 +326,48 @@ body {
         text-overflow: ellipsis;
         max-width: 100%;
     }
+    
+    /* Remove black background from logo on mobile - High specificity */
+    .top-header .header-left .logo-setup-container,
+    .header-container .header-left .logo-setup-container,
+    .logo-setup-container {
+        background: transparent !important;
+        padding: 0 1rem !important;
+        min-width: auto !important;
+    }
+    
+    /* Override desktop logo styles for mobile - High specificity */
+    .top-header .header-left .logo,
+    .header-container .header-left .logo,
+    .header-left .logo {
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Ensure logo image is properly sized on mobile - High specificity */
+    .top-header .logo-setup-image,
+    .header-container .logo-setup-image,
+    .logo-setup-image {
+        height: 36px !important;
+        max-height: 36px !important;
+        width: auto !important;
+        object-fit: contain !important;
+    }
+    
+    /* Force mobile header to show on mobile devices */
+    .mobile-menu-btn {
+        display: flex !important;
+    }
+    
+    /* Hide desktop header elements on mobile */
+    .header-right {
+        display: none !important;
+    }
+    
+    .header-center {
+        display: none !important;
+    }
 }
 
 @media (max-width: 480px) {

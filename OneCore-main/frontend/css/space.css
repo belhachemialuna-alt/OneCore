@@ -1166,7 +1166,7 @@ button, .btn, .header-icon-btn, .tasks-action-btn {
     margin: 0 auto;
     padding: 0 2rem;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -1182,6 +1182,55 @@ button, .btn, .header-icon-btn, .tasks-action-btn {
 .nav-title i {
     font-size: 1.2rem;
     color: #ffffff;
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 2px solid #333;
+    border-radius: 20px;
+    background: #222;
+    color: #ffffff;
+    font-size: 0.9rem;
+    width: 300px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #FF0000;
+    background: #333;
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-btn {
+    padding: 0.5rem 0.75rem;
+    background: #FF0000;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.search-btn:hover {
+    background: #CC0000;
+    transform: scale(1.05);
 }
 
 /* Section Titles */

@@ -18,18 +18,32 @@ DEVICE_FILE = os.path.join(os.path.dirname(__file__), "..", "device_identity.jso
 
 def generate_device_id():
     """
-    Generate a unique, stable device ID based on hardware characteristics.
-    
-    Uses:
-    - MAC address (uuid.getnode())
-    - System type (platform.system())
-    - Machine architecture (platform.machine())
-    - Raspberry Pi CPU Serial (if available)
-    - Linux machine-id (if available)
-    - Windows Product ID (if available)
+    Generate a unique, stable device ID based on enhanced hardware characteristics.
+    Uses comprehensive hardware fingerprinting to ensure uniqueness between devices.
     
     Returns:
         str: SHA256 hash of combined hardware identifiers
+    """
+    # Import enhanced fingerprinting
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+    
+    try:
+        from enhanced_hardware_fingerprint import get_enhanced_hardware_fingerprint
+        return get_enhanced_hardware_fingerprint()
+    except ImportError:
+        # Fallback to original method if enhanced module not available
+        print("⚠️ Enhanced fingerprinting not available, using fallback method")
+        return _generate_device_id_fallback()
+
+def _generate_device_id_fallback():
+    """
+    Fallback device ID generation method (original implementation).
+    Used only if enhanced fingerprinting module is not available.
+    
+    Returns:
+        str: SHA256 hash of basic hardware identifiers
     """
     identifiers = []
     
@@ -63,7 +77,7 @@ def generate_device_id():
         pass  # Not available on this system
     
     # 5. Windows Product ID (if on Windows)
-    if system == 'Windows':
+    if platform.system() == 'Windows':
         try:
             import winreg
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 

@@ -1,0 +1,199 @@
+/* Emergency Header Fix - Match Space Page Layout */
+
+/* Search functionality in secondary nav to match space page */
+.nav-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.search-container:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 15px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    width: 280px;
+    transition: width 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-btn {
+    background: #FF0000;
+    border: none;
+    padding: 8px 12px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover {
+    background: #cc0000;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 400px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.search-loading {
+    padding: 1rem;
+    text-align: center;
+    color: #666;
+}
+
+.search-loading i {
+    margin-right: 0.5rem;
+}
+
+.search-content {
+    padding: 0.5rem 0;
+}
+
+.search-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.search-item:hover {
+    background: #f8f9fa;
+}
+
+.search-item:last-child {
+    border-bottom: none;
+}
+
+.search-item-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.search-item-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.search-item-path {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.search-no-results {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+}
+
+/* Responsive design for search */
+@media (max-width: 768px) {
+    .nav-search {
+        display: none; /* Hide search on mobile for now */
+    }
+    
+    .nav-container {
+        justify-content: flex-start;
+        padding: 0 1rem;
+    }
+}
+
+/* Header icon positioning fix */
+.header-icon-btn {
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    height: 48px;
+    width: 48px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-decoration: none;
+}
+
+.header-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.header-icon-btn.active {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+/* Badge positioning */
+.notification-badge, .alert-counter, .update-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #FF0000;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #FF0000;
+}
+
+.notification-badge.active,
+.alert-counter.active {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

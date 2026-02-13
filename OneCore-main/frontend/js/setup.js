@@ -268,11 +268,23 @@ async function completeSetup() {
         loader.classList.add('active');
     }
     
+    // Capture network configuration
+    const activeNetworkCard = document.querySelector('.option-card.active');
+    const networkMode = activeNetworkCard?.onclick?.toString().includes('wifi') ? 'wifi' : 'hotspot';
+    
+    const networkConfig = {
+        mode: networkMode,
+        wifi_ssid: document.getElementById('wifi-ssid')?.value || '',
+        wifi_password: document.getElementById('wifi-password')?.value || '',
+        hotspot_password: 'elivate2024'
+    };
+    
     const config = {
         device_name: 'ElivateOne',
         setup_completed: true,
         wilaya: document.getElementById('wilaya-select').value,
         timezone: document.getElementById('timezone-select').value,
+        network: networkConfig,
         zones: [],
         schedules: []
     };
