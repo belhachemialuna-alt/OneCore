@@ -1,5 +1,74 @@
 /* Enhanced Clean Black Notification System */
 
+/* Irrigation-specific notification styles */
+.notification-item.irrigation {
+    border-left: 4px solid #007bff;
+}
+
+.notification-item.valve {
+    border-left: 4px solid #28a745;
+}
+
+.notification-item.sensor {
+    border-left: 4px solid #ffc107;
+}
+
+.notification-item.schedule {
+    border-left: 4px solid #6f42c1;
+}
+
+.notification-item.maintenance {
+    border-left: 4px solid #fd7e14;
+}
+
+.notification-item.emergency {
+    border-left: 4px solid #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+/* Context information styling */
+.notification-context {
+    margin: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.notification-zone,
+.notification-device,
+.notification-action {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #ccc;
+}
+
+.notification-zone {
+    background: rgba(0, 123, 255, 0.2);
+    color: #66b3ff;
+}
+
+.notification-device {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffdb4d;
+}
+
+.notification-action {
+    background: rgba(40, 167, 69, 0.2);
+    color: #66d9a6;
+}
+
+/* Priority indicators */
+.notification-item.priority-high {
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+}
+
+.notification-item.priority-medium {
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+}
+
 /* Notification Panel - Clean Black Design */
 .notification-panel {
     position: fixed;

@@ -113,7 +113,11 @@ class EnhancedNotificationSystem {
             title: options.title || this.getDefaultTitle(type),
             icon: options.icon || this.getDefaultIcon(type),
             persistent: options.persistent || false,
-            autoClose: options.autoClose !== false
+            autoClose: options.autoClose !== false,
+            category: options.category || 'general',
+            zone: options.zone || null,
+            deviceId: options.deviceId || null,
+            action: options.action || null
         };
 
         this.notifications.unshift(notification);
@@ -176,15 +180,29 @@ class EnhancedNotificationSystem {
     createNotificationHTML(notification) {
         const timeAgo = this.getTimeAgo(notification.timestamp);
         const priorityClass = notification.priority ? `priority-${notification.priority}` : '';
+        const categoryClass = notification.category ? `category-${notification.category}` : '';
+        
+        // Add zone and device info if available
+        let contextInfo = '';
+        if (notification.zone) {
+            contextInfo += `<span class="notification-zone">Zone ${notification.zone}</span>`;
+        }
+        if (notification.deviceId) {
+            contextInfo += `<span class="notification-device">Device: ${notification.deviceId}</span>`;
+        }
+        if (notification.action) {
+            contextInfo += `<span class="notification-action">${notification.action}</span>`;
+        }
         
         return `
-            <div class="notification-item ${notification.type} ${priorityClass}" data-id="${notification.id}">
+            <div class="notification-item ${notification.type} ${priorityClass} ${categoryClass}" data-id="${notification.id}">
                 <div class="notification-item-header">
                     <i class="${notification.icon}"></i>
                     <strong>${notification.title}</strong>
                     ${notification.priority !== 'low' ? `<span class="notification-priority">${notification.priority}</span>` : ''}
                 </div>
                 <p>${notification.message}</p>
+                ${contextInfo ? `<div class="notification-context">${contextInfo}</div>` : ''}
                 <div class="notification-item-footer">
                     <span class="notification-item-time">${timeAgo}</span>
                     <button class="notification-dismiss" onclick="notificationSystem.removeNotification(${notification.id})" title="Dismiss">
@@ -265,7 +283,13 @@ class EnhancedNotificationSystem {
             success: 'Success',
             error: 'Error',
             warning: 'Warning',
-            info: 'Information'
+            info: 'Information',
+            irrigation: 'Irrigation System',
+            valve: 'Valve Operation',
+            sensor: 'Sensor Update',
+            schedule: 'Schedule Event',
+            maintenance: 'Maintenance',
+            emergency: 'Emergency Alert'
         };
         return titles[type] || 'Notification';
     }
@@ -275,7 +299,13 @@ class EnhancedNotificationSystem {
             success: 'fa-solid fa-check-circle',
             error: 'fa-solid fa-exclamation-circle',
             warning: 'fa-solid fa-exclamation-triangle',
-            info: 'fa-solid fa-info-circle'
+            info: 'fa-solid fa-info-circle',
+            irrigation: 'fa-solid fa-droplet',
+            valve: 'fa-solid fa-faucet',
+            sensor: 'fa-solid fa-thermometer-half',
+            schedule: 'fa-solid fa-clock',
+            maintenance: 'fa-solid fa-wrench',
+            emergency: 'fa-solid fa-triangle-exclamation'
         };
         return icons[type] || 'fa-solid fa-bell';
     }
@@ -386,6 +416,74 @@ function showNotification(message, type = 'info', options = {}) {
 
 // Make functions globally available
 window.showNotification = showNotification;
+
+// Irrigation-specific notification helpers
+window.addIrrigationNotification = function(message, options = {}) {
+    if (notificationSystem) {
+        return notificationSystem.addNotification(message, 'irrigation', {
+            priority: 'high',
+            category: 'irrigation',
+            ...options
+        });
+    }
+};
+
+window.addValveNotification = function(message, zone, action, options = {}) {
+    if (notificationSystem) {
+        return notificationSystem.addNotification(message, 'valve', {
+            priority: 'medium',
+            category: 'valve',
+            zone: zone,
+            action: action,
+            ...options
+        });
+    }
+};
+
+window.addSensorNotification = function(message, deviceId, options = {}) {
+    if (notificationSystem) {
+        return notificationSystem.addNotification(message, 'sensor', {
+            priority: 'medium',
+            category: 'sensor',
+            deviceId: deviceId,
+            ...options
+        });
+    }
+};
+
+window.addScheduleNotification = function(message, zone, options = {}) {
+    if (notificationSystem) {
+        return notificationSystem.addNotification(message, 'schedule', {
+            priority: 'low',
+            category: 'schedule',
+            zone: zone,
+            ...options
+        });
+    }
+};
+
+window.addMaintenanceNotification = function(message, options = {}) {
+    if (notificationSystem) {
+        return notificationSystem.addNotification(message, 'maintenance', {
+            priority: 'high',
+            category: 'maintenance',
+            persistent: true,
+            ...options
+        });
+    }
+};
+
+window.addEmergencyNotification = function(message, options = {}) {
+    if (notificationSystem) {
+        return notificationSystem.addNotification(message, 'emergency', {
+            priority: 'high',
+            category: 'emergency',
+            persistent: true,
+            autoClose: false,
+            ...options
+        });
+    }
+};
 
 // Page transition enhancements
 function addPageTransitions() {

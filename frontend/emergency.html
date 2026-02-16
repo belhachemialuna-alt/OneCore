@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emergency Controls - BAYYTI-B1</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="apple-touch-icon" href="/Favicon2.png?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/emergency-header-fix.css?v=1.0">
     <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
     <link rel="stylesheet" href="css/mobile-header-enhancement.css?v=2.0">
-    <link rel="stylesheet" href="css/language-switch.css">
+    <link rel="stylesheet" href="css/card-depth-enhancement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 </head>
@@ -41,7 +41,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="Pulse Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -75,8 +75,8 @@
                 <a href="emergency.html" class="header-icon-btn" title="Emergency Controls" style="background: rgba(220, 53, 69, 0.2);">
                     <i class="fa-solid fa-fire-extinguisher"></i>
                 </a>
-                <a href="hardware.html" class="header-icon-btn" title="Hardware Schema">
-                    <i class="fa-solid fa-microchip"></i>
+                <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
+                    <img src="icons/simulation.png" alt="Simulation" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="controls.html" class="header-icon-btn" title="User & System Controls">
                     <i class="fa-solid fa-sliders"></i>
@@ -106,10 +106,18 @@
     <!-- Mobile Page Title Bar -->
     <div class="mobile-page-title emergency-page show" id="mobilePageTitle">
         <div class="mobile-page-title-content">
-            <div class="mobile-page-title-icon">
-                <i class="fa-solid fa-fire-extinguisher"></i>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="mobile-page-title-icon">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                </div>
+                <div class="mobile-page-title-text">Emergency Controls</div>
             </div>
-            <div class="mobile-page-title-text">Emergency Controls</div>
+            <div class="mobile-search-container">
+                <input type="text" class="mobile-search-bar" placeholder="Search..." id="mobileSearchBar">
+                <button type="button" class="mobile-search-btn" id="mobileSearchBtn">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -188,13 +196,6 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Page Title -->
-        <div class="page-title-section">
-            <div class="page-title-icon">
-                <i class="fa-solid fa-fire-extinguisher"></i>
-            </div>
-            <h1 class="page-title">Emergency Controls</h1>
-        </div>
 
         <!-- Emergency Quick Controls -->
         <section class="emergency-quick-controls">
@@ -238,20 +239,20 @@
                 <div class="emergency-control-card pressure-quick-monitor">
                     <div class="quick-monitor-header">
                         <i class="fa-solid fa-gauge-high"></i>
-                        <h4>Pressure Monitor</h4>
+                        <h4 data-i18n="pressure-monitor">Pressure Monitor</h4>
                     </div>
                     <div class="pressure-display-compact">
                         <div class="pressure-value-compact" id="pressureValueCompact">2.3</div>
                         <div class="pressure-unit-compact">bar</div>
                     </div>
-                    <div class="pressure-status-compact">Normal: 2.0 - 3.5 bar</div>
+                    <div class="pressure-status-compact" data-i18n="normal-pressure-range">Normal: 2.0 - 3.5 bar</div>
                 </div>
             </div>
         </section>
 
         <!-- Alerts & Warnings Section -->
         <section class="alerts-section">
-            <h2><i class="fa-solid fa-triangle-exclamation"></i> Active Alerts & Warnings</h2>
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="active-alerts-warnings">Active Alerts & Warnings</span></h2>
             <div class="alerts-grid" id="alertsGrid">
                 <!-- Alerts will be populated here -->
             </div>
@@ -259,7 +260,7 @@
 
         <!-- Emergency Valve Control -->
         <section class="control-section">
-            <h2><i class="fa-solid fa-valve"></i> Emergency Valve Control</h2>
+            <h2><i class="fa-solid fa-valve"></i> <span data-i18n="emergency-valve-control">Emergency Valve Control</span></h2>
             <div class="control-grid">
                 <div class="control-card valve-control">
                     <div class="valve-status" id="valveStatus">
@@ -267,48 +268,48 @@
                             <i class="fa-solid fa-valve"></i>
                         </div>
                         <div class="valve-info">
-                            <h3>Main Irrigation Valve</h3>
-                            <p class="valve-state" id="valveState">CLOSED</p>
-                            <p class="valve-time">Last action: <span id="lastAction">--</span></p>
+                            <h3 data-i18n="main-irrigation-valve">Main Irrigation Valve</h3>
+                            <p class="valve-state" id="valveState" data-i18n="closed">CLOSED</p>
+                            <p class="valve-time"><span data-i18n="last-action">Last action</span>: <span id="lastAction">--</span></p>
                         </div>
                     </div>
                     <div class="valve-actions">
                         <button class="emergency-btn open-valve" id="openValveBtn">
                             <i class="fa-solid fa-play"></i>
-                            OPEN VALVE
+                            <span data-i18n="open-valve">OPEN VALVE</span>
                         </button>
                         <button class="emergency-btn close-valve" id="closeValveBtn">
                             <i class="fa-solid fa-stop"></i>
-                            CLOSE VALVE
+                            <span data-i18n="close-valve">CLOSE VALVE</span>
                         </button>
                         <button class="emergency-btn emergency-stop" id="emergencyStopBtn">
                             <i class="fa-solid fa-hand"></i>
-                            EMERGENCY STOP
+                            <span data-i18n="emergency-stop">EMERGENCY STOP</span>
                         </button>
                     </div>
                 </div>
 
                 <div class="control-card pressure-monitor">
-                    <h3><i class="fa-solid fa-gauge-high"></i> Pressure Monitor</h3>
+                    <h3><i class="fa-solid fa-gauge-high"></i> <span data-i18n="pressure-monitor">Pressure Monitor</span></h3>
                     <div class="pressure-display">
                         <div class="pressure-value" id="pressureValue">0.0</div>
                         <div class="pressure-unit">bar</div>
                     </div>
                     <div class="pressure-range">
-                        <span class="range-label">Normal: 2.0 - 3.5 bar</span>
+                        <span class="range-label" data-i18n="normal-pressure-range">Normal: 2.0 - 3.5 bar</span>
                     </div>
                     <canvas id="pressureGauge"></canvas>
                 </div>
 
                 <div class="control-card flow-monitor">
-                    <h3><i class="fa-solid fa-droplet"></i> Flow Rate</h3>
+                    <h3><i class="fa-solid fa-droplet"></i> <span data-i18n="flow-rate">Flow Rate</span></h3>
                     <div class="flow-display">
                         <div class="flow-value" id="flowValue">0.0</div>
                         <div class="flow-unit">L/min</div>
                     </div>
                     <div class="flow-status" id="flowStatus">
                         <i class="fa-solid fa-circle"></i>
-                        <span>No Flow</span>
+                        <span data-i18n="no-flow">No Flow</span>
                     </div>
                 </div>
             </div>
@@ -429,10 +430,10 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+                <img src="logofooter.png" alt="Pulse Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>All content on this site. Copyright © 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+                <p>All content on this site. Copyright © 2024 Pulse Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>

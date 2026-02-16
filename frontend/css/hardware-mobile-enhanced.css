@@ -1,0 +1,272 @@
+/* Hardware Page - Enhanced Mobile Responsiveness & Card Depth */
+
+/* Enhanced Card Depth for All Hardware Cards */
+.device-id-compact,
+.component-status-compact,
+.performance-card,
+.chart-container,
+.legend-card,
+.schema-container,
+.info-item {
+    position: relative;
+    background: #ffffff;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.device-id-compact:hover,
+.component-status-compact:hover,
+.performance-card:hover,
+.chart-container:hover,
+.legend-card:hover,
+.info-item:hover {
+    box-shadow: 
+        0 2px 6px rgba(0, 0, 0, 0.08),
+        0 8px 20px rgba(0, 0, 0, 0.12),
+        0 16px 32px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+/* Performance Cards Enhanced Depth */
+.performance-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+    overflow: hidden;
+}
+
+.performance-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #000000 0%, #333333 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.performance-card:hover::after {
+    opacity: 1;
+}
+
+/* Chart Containers Enhanced */
+.chart-container {
+    background: #ffffff;
+    padding: 1.5rem;
+}
+
+.chart-container canvas {
+    border-radius: 8px;
+}
+
+/* Legend Card Enhanced */
+.legend-card {
+    background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+    padding: 1.5rem;
+}
+
+.legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.legend-item:hover {
+    background: rgba(0, 0, 0, 0.04);
+    transform: translateX(4px);
+}
+
+/* Schema Container Enhanced */
+.schema-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 0 2rem 2rem 2rem;
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.schema-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.schema-controls {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.schema-btn,
+.terminal-btn {
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.schema-btn:hover,
+.terminal-btn:hover {
+    background: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.terminal-btn {
+    background: #FF0000;
+}
+
+.terminal-btn:hover {
+    background: #cc0000;
+}
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 768px) {
+    /* Remove hover effects on mobile for better performance */
+    .device-id-compact:hover,
+    .component-status-compact:hover,
+    .performance-card:hover,
+    .chart-container:hover,
+    .legend-card:hover,
+    .info-item:hover {
+        transform: none;
+    }
+    
+    /* Adjust card spacing on mobile */
+    .device-id-compact,
+    .component-status-compact {
+        margin-bottom: 0.75rem;
+    }
+    
+    .performance-card {
+        border-radius: 10px;
+    }
+    
+    .chart-container {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+    
+    .legend-card {
+        border-radius: 10px;
+    }
+    
+    .legend-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .legend-item {
+        padding: 0.6rem 0.75rem;
+    }
+    
+    /* Schema container mobile adjustments */
+    .schema-container {
+        margin: 0 1rem 1rem 1rem;
+        padding: 1rem;
+        border-radius: 10px;
+    }
+    
+    .schema-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-bottom: 0.75rem;
+    }
+    
+    .schema-header h2 {
+        font-size: 1.1rem;
+    }
+    
+    .schema-controls {
+        width: 100%;
+        gap: 0.5rem;
+    }
+    
+    .schema-btn,
+    .terminal-btn {
+        flex: 1 1 calc(50% - 0.25rem);
+        padding: 0.65rem 0.75rem;
+        font-size: 0.85rem;
+        justify-content: center;
+    }
+    
+    .schema-btn i,
+    .terminal-btn i {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .schema-btn,
+    .terminal-btn {
+        flex: 1 1 100%;
+        font-size: 0.8rem;
+    }
+    
+    .performance-card,
+    .chart-container,
+    .legend-card {
+        box-shadow: 
+            0 1px 2px rgba(0, 0, 0, 0.06),
+            0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* Ensure smooth scrolling for schema on mobile */
+.schema-wrapper {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .schema-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    }
+    
+    .schema-wrapper::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .schema-wrapper::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    .schema-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+    }
+}

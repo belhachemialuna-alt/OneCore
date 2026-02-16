@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics Dashboard - BAYYTI-B1</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="apple-touch-icon" href="/Favicon2.png?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/analytics-enhanced.css">
     <link rel="stylesheet" href="css/mobile-header-enhancement.css">
     <link rel="stylesheet" href="css/mobile-header-fix.css">
+    <link rel="stylesheet" href="css/language-switch.css">
+    <link rel="stylesheet" href="css/card-depth-enhancement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -41,7 +43,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="Pulse Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -82,7 +84,7 @@
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
-                    <i class="fa-solid fa-microchip"></i>
+                    <img src="icons/simulation.png" alt="Simulation" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -93,6 +95,9 @@
                 <a href="faq.html" class="header-icon-btn" title="FAQ">
                     <i class="fa-solid fa-book"></i>
                 </a>
+                <button class="header-icon-btn" id="languageBtn" title="Switch Language">
+                    <img src="icons/language.png" alt="Language" style="width: 20px; height: 20px; object-fit: contain;">
+                </button>
                 <a href="#" class="header-icon-btn" id="setup-link" aria-label="Return to Setup" title="Return to Setup">
                     <img src="icons/SETUP.png" alt="Setup" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
@@ -129,12 +134,20 @@
     </nav>
 
     <!-- Mobile Page Title Bar -->
-    <div class="mobile-page-title analytics-page">
+    <div class="mobile-page-title analytics-page show" id="mobilePageTitle">
         <div class="mobile-page-title-content">
-            <div class="mobile-page-title-icon">
-                <i class="fa-solid fa-chart-line"></i>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="mobile-page-title-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="mobile-page-title-text">Analytics Dashboard</div>
             </div>
-            <div class="mobile-page-title-text">Performance Analytics</div>
+            <div class="mobile-search-container">
+                <input type="text" class="mobile-search-bar" placeholder="Search..." id="mobileSearchBar">
+                <button type="button" class="mobile-search-btn" id="mobileSearchBtn">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -235,14 +248,14 @@
                     <div class="calc-item">
                         <i class="fa-solid fa-brain"></i>
                         <div>
-                            <span class="calc-label">AI Confidence</span>
+                            <span class="calc-label" data-i18n="ai-confidence">AI Confidence</span>
                             <span class="calc-value" id="aiConfidence">87.5%</span>
                         </div>
                     </div>
                     <div class="calc-item">
                         <i class="fa-solid fa-database"></i>
                         <div>
-                            <span class="calc-label">Data Points</span>
+                            <span class="calc-label" data-i18n="data-points">Data Points</span>
                             <span class="calc-value" id="dataPoints">1,247</span>
                         </div>
                     </div>
@@ -254,17 +267,17 @@
                 <div class="chart-card-header">
                     <div>
                         <h3 data-i18n="area-of-doubt">Area of doubt</h3>
-                        <p class="chart-subtitle">Real-time monitoring & analysis</p>
+                        <p class="chart-subtitle" data-i18n="real-time-monitoring">Real-time monitoring & analysis</p>
                         <div class="chart-refresh-info">
                             <i class="fa-solid fa-rotate refresh-icon"></i>
-                            <span class="refresh-text">Auto-refresh: <strong id="doubtRefreshTimer">30s</strong></span>
+                            <span class="refresh-text"><span data-i18n="auto-refresh">Auto-refresh</span>: <strong id="doubtRefreshTimer">30s</strong></span>
                         </div>
                     </div>
                     <div class="chart-actions">
-                        <button class="zone-select-btn" onclick="openZoneSelector()" title="Select Zone for Analysis">
+                        <button class="zone-select-btn" onclick="openZoneSelector()" data-i18n-title="select-zone" title="Select Zone for Analysis">
                             <i class="fa-solid fa-map-location-dot"></i>
                         </button>
-                        <button class="export-btn" onclick="exportChartToPDF('areaDonutChart', 'Area_of_Doubt')" title="Export to PDF">
+                        <button class="export-btn" onclick="exportChartToPDF('areaDonutChart', 'Area_of_Doubt')" data-i18n-title="export-pdf" title="Export to PDF">
                             <i class="fa-solid fa-file-pdf"></i>
                         </button>
                     </div>
@@ -507,10 +520,10 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+                <img src="logofooter.png" alt="Pulse Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>All content on this site. Copyright 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+                <p>All content on this site. Copyright 2024 Pulse Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>
@@ -747,10 +760,10 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+                <img src="logofooter.png" alt="Pulse Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>All content on this site. Copyright 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+                <p>All content on this site. Copyright 2024 Pulse Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>
@@ -764,5 +777,8 @@
     
     <!-- Enhanced Notification System -->
     <script src="js/enhanced-notifications.js?v=1.0"></script>
+    
+    <!-- Language Switch System -->
+    <script src="js/language-switch.js"></script>
 </body>
 </html>

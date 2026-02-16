@@ -1,0 +1,298 @@
+/* Space Page Mobile Layout Enhancements */
+/* Optimized mobile view for reduced card layouts while preserving dashboard design */
+
+/* Mobile-first approach for space dashboard cards */
+@media screen and (max-width: 768px) {
+    /* Main content padding with small left/right padding for mobile */
+    .main-content {
+        padding: 10px 15px !important;
+    }
+    
+    .main-content-wrapper {
+        padding: 0 10px !important;
+    }
+    
+    .space-main-content {
+        padding: 0 12px !important;
+    }
+    
+    /* Page title section optimization */
+    .page-title-section {
+        margin-bottom: 15px !important;
+        padding: 15px !important;
+    }
+    
+    .page-title {
+        font-size: 1.8rem !important;
+        margin: 0 !important;
+    }
+    
+    .page-title-container {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+    
+    /* System Status Indicator */
+    .system-status-indicator {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 6px 12px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+        font-size: 0.85rem !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .status-icon {
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    .status-icon i {
+        font-size: 8px !important;
+        color: #22c55e !important; /* Green for online */
+        filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.5)) !important;
+    }
+    
+    .status-text {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-weight: 500 !important;
+    }
+    
+    .system-status-indicator.offline .status-icon i {
+        color: #ef4444 !important; /* Red for offline */
+        filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5)) !important;
+    }
+    
+    .system-status-indicator.warning .status-icon i {
+        color: #f59e0b !important; /* Yellow for warning */
+        filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5)) !important;
+    }
+    
+    /* Tasks calendar card mobile optimization */
+    .tasks-calendar-card {
+        margin-bottom: 15px !important;
+        padding: 15px !important;
+        border-radius: 12px !important;
+    }
+    
+    .tasks-calendar-header {
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .tasks-calendar-info h3 {
+        font-size: 1.2rem !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .tasks-calendar-datetime {
+        font-size: 0.9rem !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .tasks-calendar-stats {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    
+    .tasks-stat-item {
+        padding: 8px 12px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Weather and Control Cards Row Mobile Optimization */
+    .weather-control-row {
+        flex-direction: column !important;
+        gap: 15px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    /* Irrigation Control Card Mobile Enhancement */
+    .control-card-main {
+        padding: 15px !important;
+        border-radius: 12px !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .control-card-main .card-header {
+        margin-bottom: 15px !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+    
+    .control-card-main .card-header h3 {
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    .valve-badge-main {
+        padding: 4px 8px !important;
+        font-size: 0.8rem !important;
+        border-radius: 6px !important;
+    }
+    
+    /* Control buttons mobile optimization */
+    .control-buttons {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .control-buttons .btn {
+        padding: 10px 8px !important;
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        min-height: 44px !important;
+    }
+    
+    .control-buttons .btn img {
+        width: 16px !important;
+        height: 16px !important;
+        margin-right: 6px !important;
+    }
+    
+    /* Irrigation info section mobile */
+    .irrigation-info {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+    
+    .info-item {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 8px 12px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-radius: 8px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .info-label {
+        font-weight: 500 !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    .info-value {
+        font-weight: 600 !important;
+        color: #fff !important;
+    }
+    
+    /* Section titles mobile */
+    .section-title {
+        margin: 15px 0 10px 0 !important;
+        padding: 0 15px !important;
+    }
+    
+    .section-title h3 {
+        font-size: 1.2rem !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    /* Sensor grid mobile optimization */
+    .sensor-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        padding: 0 15px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .sensor-card {
+        padding: 12px !important;
+        border-radius: 10px !important;
+        min-height: auto !important;
+    }
+    
+    .sensor-icon {
+        width: 35px !important;
+        height: 35px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .sensor-icon i {
+        font-size: 16px !important;
+    }
+    
+    .sensor-label {
+        font-size: 0.8rem !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .sensor-value {
+        font-size: 1.4rem !important;
+        margin-bottom: 2px !important;
+    }
+    
+    .sensor-unit {
+        font-size: 0.8rem !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .sensor-status {
+        font-size: 0.7rem !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+    }
+    
+    /* Additional mobile refinements for very small screens */
+    @media screen and (max-width: 480px) {
+        .control-buttons {
+            grid-template-columns: 1fr !important;
+        }
+        
+        .sensor-grid {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+        }
+        
+        .tasks-calendar-header {
+            text-align: center !important;
+        }
+        
+        .control-card-main .card-header {
+            text-align: center !important;
+        }
+        
+        .control-card-main .card-header h3 {
+            justify-content: center !important;
+        }
+    }
+}
+
+/* Ensure existing desktop styles are preserved */
+@media screen and (min-width: 769px) {
+    /* Desktop styles remain unchanged */
+    .weather-control-row {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .control-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .sensor-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+}

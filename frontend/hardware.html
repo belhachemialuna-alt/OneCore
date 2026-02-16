@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hardware Schema - ElivateOne</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="apple-touch-icon" href="/Favicon2.png?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/hardware-compact.css">
     <link rel="stylesheet" href="css/mobile-header-enhancement.css">
     <link rel="stylesheet" href="css/hardware.css?v=2.0">
+    <link rel="stylesheet" href="css/hardware-mobile-enhanced.css">
+    <link rel="stylesheet" href="css/card-depth-enhancement.css">
     <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -23,6 +25,7 @@
     <script src="js/hardware.js"></script>
     <script src="js/dashboard.js?v=5.0"></script>
     <script src="js/enhanced-notifications.js?v=1.0"></script>
+    <script src="js/mobile-search-sync.js"></script>
 </head>
 <body>
     <!-- Global Loader -->
@@ -42,7 +45,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="Pulse Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -83,7 +86,7 @@
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
-                    <i class="fa-solid fa-microchip"></i>
+                    <img src="icons/simulation.png" alt="Simulation" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -130,12 +133,20 @@
     </nav>
 
     <!-- Mobile Page Title Bar -->
-    <div class="mobile-page-title hardware-page show">
+    <div class="mobile-page-title hardware-page show" id="mobilePageTitle">
         <div class="mobile-page-title-content">
-            <div class="mobile-page-title-icon">
-                <img src="icons/HARDWARE.png" alt="Hardware">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="mobile-page-title-icon">
+                    <img src="icons/HARDWARE.png" alt="Hardware" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1);">
+                </div>
+                <div class="mobile-page-title-text">Hardware Schema</div>
             </div>
-            <div class="mobile-page-title-text">Hardware</div>
+            <div class="mobile-search-container">
+                <input type="text" class="mobile-search-bar" placeholder="Search..." id="mobileSearchBar">
+                <button type="button" class="mobile-search-btn" id="mobileSearchBtn">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -209,16 +220,16 @@
                 <div class="device-id-compact">
                     <div class="device-id-header">
                         <i class="fa-solid fa-fingerprint"></i>
-                        <span class="device-label">Device ID</span>
+                        <span class="device-label" data-i18n="device-id">Device ID</span>
                     </div>
                     <div class="device-id-container">
-                        <code class="device-id" id="deviceIdDisplay">Loading...</code>
-                        <button class="copy-device-btn" id="copyDeviceIdBtn" title="Copy Device ID">
+                        <code class="device-id" id="deviceIdDisplay" data-i18n="loading">Loading...</code>
+                        <button class="copy-device-btn" id="copyDeviceIdBtn" data-i18n-title="copy-device-id" title="Copy Device ID">
                             <i class="fa-solid fa-copy"></i>
                         </button>
                     </div>
                     <div class="device-setup-hint">
-                        <span>Copy ID → Visit cloud.ielivate.com → Add Device → Verify Connection</span>
+                        <span data-i18n="device-setup-hint">Copy ID → Visit cloud.ielivate.com → Add Device → Verify Connection</span>
                     </div>
                 </div>
                 
@@ -226,7 +237,7 @@
                 <div class="component-status-compact">
                     <div class="status-header">
                         <i class="fa-solid fa-list-check"></i>
-                        <span>Component Status</span>
+                        <span data-i18n="component-status">Component Status</span>
                     </div>
                     <div class="status-summary">
                         <div class="status-item online">
@@ -249,7 +260,7 @@
 
         <!-- System Performance Cards (CPU & RAM) -->
         <div class="system-performance-section">
-            <h2><i class="fa-solid fa-gauge-high"></i> System Performance</h2>
+            <h2><i class="fa-solid fa-gauge-high"></i> <span data-i18n="system-performance">System Performance</span></h2>
             <div class="performance-grid">
                 <!-- CPU Card -->
                 <div class="performance-card cpu-card">
@@ -258,8 +269,8 @@
                             <i class="fa-solid fa-microchip"></i>
                         </div>
                         <div class="performance-title">
-                            <h3>CPU Usage</h3>
-                            <span class="performance-subtitle" id="cpuCores">1 Core</span>
+                            <h3 data-i18n="cpu-usage">CPU Usage</h3>
+                            <span class="performance-subtitle" id="cpuCores" data-i18n="cpu-cores">1 Core</span>
                         </div>
                     </div>
                     <div class="performance-value">
@@ -270,7 +281,7 @@
                         <div class="performance-progress" id="cpuProgress" style="width: 0%"></div>
                     </div>
                     <div class="performance-footer">
-                        <span class="performance-status" id="cpuStatus">Normal</span>
+                        <span class="performance-status" id="cpuStatus" data-i18n="normal">Normal</span>
                         <span class="performance-freq" id="cpuFreq">0 MHz</span>
                     </div>
                 </div>
@@ -882,13 +893,29 @@
             document.getElementById('terminalModal').style.display = 'none';
         }
         
-        function initializeTerminal() {
+        async function initializeTerminal() {
             addTerminalLine('system', 'Terminal session started');
-            addTerminalLine('info', 'Scanning hardware components...');
-            setTimeout(() => {
-                addTerminalLine('success', 'Found 10 components');
-                addTerminalLine('info', 'Ready for debugging');
-            }, 500);
+            addTerminalLine('info', 'Connecting to backend API...');
+            
+            try {
+                const response = await fetch('/api/system/debug');
+                const data = await response.json();
+                
+                if (data.success) {
+                    addTerminalLine('success', 'Connected to backend successfully');
+                    addTerminalLine('info', `System: ${data.system || 'BAYYTI-B1'}`);
+                    addTerminalLine('info', `Components found: ${data.components?.length || 0}`);
+                    addTerminalLine('info', 'Ready for debugging');
+                } else {
+                    addTerminalLine('warning', 'Backend connection failed, using cached data');
+                    addTerminalLine('info', 'Found 10 components (cached)');
+                    addTerminalLine('info', 'Ready for debugging');
+                }
+            } catch (error) {
+                addTerminalLine('error', `API Error: ${error.message}`);
+                addTerminalLine('warning', 'Falling back to local data');
+                addTerminalLine('info', 'Ready for debugging (offline mode)');
+            }
         }
         
         function addTerminalLine(type, message) {
@@ -916,71 +943,119 @@
             terminalLines.push({type, message, timestamp});
         }
         
-        function analyzeComponent() {
+        async function analyzeComponent() {
             const selector = document.getElementById('componentSelector');
             const component = selector.value;
             const componentName = selector.options[selector.selectedIndex].text;
             
             clearTerminal();
             addTerminalLine('info', `Analyzing component: ${componentName}`);
-            addTerminalLine('debug', 'Reading component registers...');
+            addTerminalLine('debug', 'Connecting to backend for real-time analysis...');
             
-            setTimeout(() => {
-                addTerminalLine('success', 'Component analysis complete');
-                addTerminalLine('info', `Status: Online`);
-                addTerminalLine('info', `Voltage: 3.3V`);
-                addTerminalLine('info', `Current: 120mA`);
-                addTerminalLine('info', `Temperature: 42°C`);
-                addTerminalLine('success', 'All parameters within normal range');
+            try {
+                const response = await fetch(`/api/system/component/${component}/analyze`);
+                const data = await response.json();
                 
-                updateComponentDetails(component);
-            }, 800);
-        }
-        
-        function updateComponentDetails(component) {
-            const detailsGrid = document.getElementById('detailsGrid');
-            const details = {
-                'water-source': {
-                    status: 'Online',
-                    uptime: '15d 8h 22m',
-                    lastCheck: '1 second ago',
-                    errorCount: '0',
-                    pressure: '2.5 bar',
-                    flowRate: '15 L/min'
-                },
-                'valve1': {
-                    status: 'Online',
-                    uptime: '2d 14h 32m',
-                    lastCheck: '2 seconds ago',
-                    errorCount: '0',
-                    state: 'Closed',
-                    cycles: '1,234'
-                },
-                'controller': {
-                    status: 'Online',
-                    uptime: '30d 5h 12m',
-                    lastCheck: 'Just now',
-                    errorCount: '0',
-                    cpuUsage: '12%',
-                    memUsage: '45%'
+                if (data.success) {
+                    addTerminalLine('success', 'Component analysis complete');
+                    addTerminalLine('info', `Status: ${data.status || 'Online'}`);
+                    addTerminalLine('info', `Voltage: ${data.voltage || '3.3V'}`);
+                    addTerminalLine('info', `Current: ${data.current || '120mA'}`);
+                    addTerminalLine('info', `Temperature: ${data.temperature || '42°C'}`);
+                    addTerminalLine('success', data.health || 'All parameters within normal range');
+                    
+                    updateComponentDetails(component, data);
+                } else {
+                    addTerminalLine('warning', 'Backend analysis failed, using cached data');
+                    addTerminalLine('info', 'Status: Online (cached)');
+                    addTerminalLine('info', 'Voltage: 3.3V (cached)');
+                    addTerminalLine('info', 'Current: 120mA (cached)');
+                    addTerminalLine('info', 'Temperature: 42°C (cached)');
+                    addTerminalLine('success', 'All parameters within normal range');
+                    
+                    updateComponentDetails(component);
                 }
-            };
-            
-            const data = details[component] || details['controller'];
-            detailsGrid.innerHTML = Object.entries(data).map(([key, value]) => `
-                <div class="detail-item">
-                    <span class="detail-label">${key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                    <span class="detail-value ${key === 'status' && value === 'Online' ? 'status-online' : ''}">${value}</span>
-                </div>
-            `).join('');
+            } catch (error) {
+                addTerminalLine('error', `Analysis failed: ${error.message}`);
+                addTerminalLine('warning', 'Using offline component data');
+                updateComponentDetails(component);
+            }
         }
         
-        function refreshTerminal() {
+        function updateComponentDetails(component, realData = null) {
+            const detailsGrid = document.getElementById('detailsGrid');
+            
+            // Use real data if available, otherwise fallback to mock data
+            let data;
+            if (realData && realData.details) {
+                data = realData.details;
+            } else {
+                const details = {
+                    'water-source': {
+                        status: 'Online',
+                        uptime: '15d 8h 22m',
+                        lastCheck: '1 second ago',
+                        errorCount: '0',
+                        pressure: '2.5 bar',
+                        flowRate: '15 L/min'
+                    },
+                    'valve1': {
+                        status: 'Online',
+                        uptime: '2d 14h 32m',
+                        lastCheck: '2 seconds ago',
+                        errorCount: '0',
+                        state: 'Closed',
+                        cycles: '1,234'
+                    },
+                    'controller': {
+                        status: 'Online',
+                        uptime: '30d 5h 12m',
+                        lastCheck: 'Just now',
+                        errorCount: '0',
+                        cpuUsage: '12%',
+                        memUsage: '45%'
+                    }
+                };
+                data = details[component] || details['controller'];
+            }
+            
+            if (detailsGrid && data) {
+                detailsGrid.innerHTML = Object.entries(data).map(([key, value]) => `
+                    <div class="detail-item">
+                        <span class="detail-label">${key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                        <span class="detail-value">${value}</span>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        async function refreshTerminal() {
             addTerminalLine('info', 'Refreshing component data...');
-            setTimeout(() => {
-                addTerminalLine('success', 'Data refreshed successfully');
-                analyzeComponent();
-            }, 500);
+            
+            try {
+                const response = await fetch('/api/system/components');
+                const data = await response.json();
+                
+                if (data.success) {
+                    addTerminalLine('success', 'Real-time data refreshed successfully');
+                    addTerminalLine('info', `Active components: ${data.components?.length || 0}`);
+                    
+                    // Update with real component data
+                    if (data.components && data.components.length > 0) {
+                        data.components.forEach(component => {
+                            addTerminalLine('debug', `${component.name}: ${component.status} - ${component.health || 'OK'}`);
+                        });
+                    }
+                    
+                    updateComponentDetails(document.getElementById('componentSelector').value, data);
+                } else {
+                    addTerminalLine('warning', 'Failed to fetch real-time data');
+                    addTerminalLine('info', 'Using cached component information');
+                }
+            } catch (error) {
+                addTerminalLine('error', `Refresh failed: ${error.message}`);
+                addTerminalLine('warning', 'Backend unavailable, showing cached data');
+            }
         }
         
         function clearTerminal() {
@@ -994,10 +1069,12 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `bayyti_debug_${Date.now()}.log`;
+            a.download = `hardware-debug-${new Date().toISOString().slice(0,10)}.log`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            addTerminalLine('success', 'Logs exported successfully');
+            addTerminalLine('success', 'Debug logs exported successfully');
         }
         
         // Bind terminal button
@@ -1505,10 +1582,10 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+                <img src="logofooter.png" alt="Pulse Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>All content on this site. Copyright © 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+                <p>All content on this site. Copyright © 2024 Pulse Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>

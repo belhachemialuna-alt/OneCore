@@ -114,19 +114,19 @@
         display: none !important;
     }
 
-    /* Secondary nav adjustments - hide on mobile when mobile page title exists */
+    /* Secondary nav adjustments - hide duplicate on mobile, use mobile-page-title instead */
     .secondary-nav {
         display: none !important;
     }
 
     /* Body padding adjustment */
     body {
-        padding-top: 96px !important; /* 48px main header + 48px mobile page title */
+        padding-top: 92px !important; /* 44px main header + 48px mobile page title */
     }
 
     /* Mobile page title adjustments */
     .mobile-page-title {
-        top: 48px !important;
+        top: 44px !important;
         height: 48px !important;
         min-height: 48px !important;
         display: flex !important;

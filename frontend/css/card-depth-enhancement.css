@@ -1,0 +1,334 @@
+/* Universal Card Depth Enhancement System */
+/* Preserves existing UI while adding sophisticated depth effects */
+
+/* Base Card Enhancement - Applied to all card types */
+.card,
+.sensor-card,
+.control-card,
+.chart-card,
+.status-card,
+.stat-card,
+.performance-card,
+.component-card,
+.info-card,
+.spec-card,
+.hardware-info-card,
+.component-status-card,
+.chart-container,
+.legend-card,
+.device-id-compact,
+.component-status-compact,
+.info-item,
+.feature-item,
+.faq-item,
+.schedule-setup-card,
+.option-card,
+.zone-card,
+.user-card,
+.settings-card,
+.summary-item {
+    /* Enhanced layered shadows for realistic depth */
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(0, 0, 0, 0.04) !important;
+    
+    /* Smooth transitions for all interactions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    
+    /* Subtle gradient background for depth perception */
+    background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%) !important;
+    
+    /* Enhanced border radius for modern look */
+    border-radius: 12px !important;
+    
+    /* Subtle border for definition */
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    
+    /* Relative positioning for pseudo-elements */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Enhanced hover effects with deeper shadows */
+.card:hover,
+.sensor-card:hover,
+.control-card:hover,
+.chart-card:hover,
+.status-card:hover,
+.stat-card:hover,
+.performance-card:hover,
+.component-card:hover,
+.info-card:hover,
+.spec-card:hover,
+.hardware-info-card:hover,
+.component-status-card:hover,
+.chart-container:hover,
+.legend-card:hover,
+.device-id-compact:hover,
+.component-status-compact:hover,
+.info-item:hover,
+.feature-item:hover,
+.option-card:hover,
+.zone-card:hover,
+.user-card:hover,
+.settings-card:hover {
+    /* Dramatic shadow lift on hover */
+    box-shadow: 
+        0 2px 6px rgba(0, 0, 0, 0.08),
+        0 8px 20px rgba(0, 0, 0, 0.12),
+        0 16px 32px rgba(0, 0, 0, 0.06) !important;
+    
+    /* Gentle lift animation */
+    transform: translateY(-2px) !important;
+    
+    /* Subtle border highlight */
+    border-color: rgba(33, 150, 243, 0.2) !important;
+}
+
+/* Top accent bars for visual hierarchy */
+.card::before,
+.sensor-card::before,
+.control-card::before,
+.chart-card::before,
+.status-card::before,
+.stat-card::before,
+.performance-card::before,
+.component-card::before,
+.info-card::before,
+.spec-card::before,
+.hardware-info-card::before,
+.component-status-card::before,
+.chart-container::before,
+.legend-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2196F3 0%, #42A5F5 50%, #64B5F6 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+/* Show accent bar on hover */
+.card:hover::before,
+.sensor-card:hover::before,
+.control-card:hover::before,
+.chart-card:hover::before,
+.status-card:hover::before,
+.stat-card:hover::before,
+.performance-card:hover::before,
+.component-card:hover::before,
+.info-card:hover::before,
+.spec-card:hover::before,
+.hardware-info-card:hover::before,
+.component-status-card:hover::before,
+.chart-container:hover::before,
+.legend-card:hover::before {
+    opacity: 1;
+}
+
+/* Special enhanced depth for specific card types */
+
+/* Status cards with colored accents */
+.status-card.online::before,
+.component-status-card.operational::before {
+    background: linear-gradient(90deg, #4CAF50 0%, #66BB6A 100%);
+    opacity: 1;
+}
+
+.status-card.offline::before,
+.component-status-card.error::before {
+    background: linear-gradient(90deg, #F44336 0%, #EF5350 100%);
+    opacity: 1;
+}
+
+.status-card.warning::before,
+.component-status-card.warning::before {
+    background: linear-gradient(90deg, #FF9800 0%, #FFB74D 100%);
+    opacity: 1;
+}
+
+/* Performance cards with enhanced gradient backgrounds */
+.performance-card,
+.chart-container {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+}
+
+.performance-card::after,
+.chart-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(145deg, 
+        rgba(255, 255, 255, 0.8) 0%, 
+        rgba(248, 250, 252, 0.4) 50%,
+        rgba(241, 245, 249, 0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.performance-card:hover::after,
+.chart-container:hover::after {
+    opacity: 1;
+}
+
+/* Sensor cards with data visualization enhancements */
+.sensor-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%) !important;
+}
+
+.sensor-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(33, 150, 243, 0.3) 20%,
+        rgba(33, 150, 243, 0.6) 50%,
+        rgba(33, 150, 243, 0.3) 80%,
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sensor-card:hover::after {
+    opacity: 1;
+}
+
+/* Control cards with action-oriented styling */
+.control-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%) !important;
+}
+
+/* FAQ items and interactive elements */
+.faq-item {
+    background: linear-gradient(145deg, #ffffff 0%, #fefefe 100%) !important;
+    border-left: 4px solid transparent !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.faq-item:hover {
+    border-left-color: #2196F3 !important;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+}
+
+/* Setup and configuration cards */
+.option-card,
+.zone-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%) !important;
+    border: 2px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.option-card.active,
+.zone-card.active {
+    border-color: #2196F3 !important;
+    background: linear-gradient(145deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    /* Reduce shadow intensity on mobile for better performance */
+    .card,
+    .sensor-card,
+    .control-card,
+    .chart-card,
+    .status-card,
+    .stat-card,
+    .performance-card,
+    .component-card,
+    .info-card,
+    .spec-card,
+    .hardware-info-card,
+    .component-status-card,
+    .chart-container,
+    .legend-card,
+    .device-id-compact,
+    .component-status-compact,
+    .info-item {
+        box-shadow: 
+            0 1px 3px rgba(0, 0, 0, 0.06),
+            0 4px 12px rgba(0, 0, 0, 0.06) !important;
+    }
+    
+    /* Subtle hover effects on mobile */
+    .card:hover,
+    .sensor-card:hover,
+    .control-card:hover,
+    .chart-card:hover,
+    .status-card:hover,
+    .stat-card:hover,
+    .performance-card:hover,
+    .component-card:hover,
+    .info-card:hover,
+    .spec-card:hover,
+    .hardware-info-card:hover,
+    .component-status-card:hover,
+    .chart-container:hover,
+    .legend-card:hover,
+    .device-id-compact:hover,
+    .component-status-compact:hover,
+    .info-item:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 
+            0 2px 6px rgba(0, 0, 0, 0.08),
+            0 8px 20px rgba(0, 0, 0, 0.08) !important;
+    }
+}
+
+/* Preserve existing specific styles while enhancing them */
+.space-main-content .sensor-card,
+.space-main-content .control-card,
+.space-main-content .chart-card,
+.space-main-content .status-card,
+.space-main-content .stat-card {
+    /* Keep existing space-specific enhancements but add our improvements */
+    border-width: 2px !important;
+}
+
+/* Hardware page specific enhancements */
+.hardware-page .performance-card,
+.hardware-page .component-card,
+.hardware-page .info-card {
+    /* Enhanced hardware-specific styling */
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%) !important;
+}
+
+/* Dashboard specific cards */
+.dashboard-page .stat-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%) !important;
+}
+
+/* Animation performance optimization */
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .sensor-card,
+    .control-card,
+    .chart-card,
+    .status-card,
+    .stat-card,
+    .performance-card,
+    .component-card,
+    .info-card,
+    .spec-card,
+    .hardware-info-card,
+    .component-status-card,
+    .chart-container,
+    .legend-card,
+    .device-id-compact,
+    .component-status-compact,
+    .info-item {
+        transition: none !important;
+    }
+}

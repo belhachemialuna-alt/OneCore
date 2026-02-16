@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User & System Controls - ElivateOne</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="apple-touch-icon" href="/Favicon2.png?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/controls.css?v=2.0">
     <link rel="stylesheet" href="css/enhanced-notifications.css?v=1.0">
     <link rel="stylesheet" href="css/language-switch.css">
+    <link rel="stylesheet" href="css/card-depth-enhancement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -37,7 +38,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="Pulse Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -78,7 +79,7 @@
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
-                    <i class="fa-solid fa-microchip"></i>
+                    <img src="icons/simulation.png" alt="Simulation" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -130,10 +131,18 @@
     <!-- Mobile Page Title Bar -->
     <div class="mobile-page-title controls-page show" id="mobilePageTitle">
         <div class="mobile-page-title-content">
-            <div class="mobile-page-title-icon">
-                <i class="fa-solid fa-sliders"></i>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="mobile-page-title-icon">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div class="mobile-page-title-text">User & System Controls</div>
             </div>
-            <div class="mobile-page-title-text">User & System Controls</div>
+            <div class="mobile-search-container">
+                <input type="text" class="mobile-search-bar" placeholder="Search..." id="mobileSearchBar">
+                <button type="button" class="mobile-search-btn" id="mobileSearchBtn">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -801,10 +810,10 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+                <img src="logofooter.png" alt="Pulse Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>&copy; 2024 TiOne Smart Irrigation System. All rights reserved.</p>
+                <p>&copy; 2024 Pulse Smart Irrigation System. All rights reserved.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>
@@ -820,5 +829,8 @@
     
     <!-- Language Switch System -->
     <script src="js/language-switch.js"></script>
+    
+    <!-- Irrigation Notification Manager -->
+    <script src="js/irrigation-notifications.js"></script>
 </body>
 </html>

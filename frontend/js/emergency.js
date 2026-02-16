@@ -24,12 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setupValveControls();
     initializeCharts();
     loadSystemData();
+    
+    // Initialize clock immediately and then update every second
     updateHeaderDateTime();
+    setInterval(updateHeaderDateTime, 1000);
     
     // Start real-time updates
     updateInterval = setInterval(loadSystemData, 5000);
     alertCheckInterval = setInterval(checkForAlerts, 3000);
-    setInterval(updateHeaderDateTime, 1000);
 });
 
 // Mobile Sidebar
@@ -1071,11 +1073,15 @@ function updateHeaderDateTime() {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         timeEl.textContent = `${hours}:${minutes}`;
+    } else {
+        console.warn('header-time element not found');
     }
     
     if (dateEl) {
         const options = { month: 'short', day: 'numeric', year: 'numeric' };
         dateEl.textContent = now.toLocaleDateString('en-US', options);
+    } else {
+        console.warn('header-date element not found');
     }
 }
 

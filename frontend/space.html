@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Dashboard - ElivateOne</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="apple-touch-icon" href="/Favicon2.png?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=News+Cycle:wght@400;700&display=swap" rel="stylesheet">
@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="css/pdf-export-styles.css?v=1.0">
     <link rel="stylesheet" href="css/professional-chat.css">
     <link rel="stylesheet" href="css/language-switch.css">
+    <link rel="stylesheet" href="css/card-depth-enhancement.css">
+    <link rel="stylesheet" href="css/space-mobile-enhanced.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -59,7 +61,7 @@
             <div class="header-left">
                 <div class="logo logo-setup-container">
                     <a href="space.html">
-                        <img src="TIONESETUP.png" alt="TiOne Logo" class="logo-setup-image">
+                        <img src="TIONESETUP.png" alt="Pulse Logo" class="logo-setup-image">
                     </a>
                 </div>
             </div>
@@ -100,7 +102,7 @@
                     <i class="fa-solid fa-sliders"></i>
                 </a>
                 <a href="../PI_simulation/device_registration.html" class="header-icon-btn" title="PI Data Simulation">
-                    <i class="fa-solid fa-microchip"></i>
+                    <img src="icons/simulation.png" alt="Simulation" style="width: 20px; height: 20px; object-fit: contain;">
                 </a>
                 <a href="ai.html" class="header-icon-btn" title="AI Model Testing">
                     <img src="icons/AI.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
@@ -127,10 +129,18 @@
     <!-- Mobile Page Title Bar -->
     <div class="mobile-page-title space-page show" id="mobilePageTitle">
         <div class="mobile-page-title-content">
-            <div class="mobile-page-title-icon">
-                <i class="fa-solid fa-rocket"></i>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="mobile-page-title-icon">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div class="mobile-page-title-text">Space Dashboard</div>
             </div>
-            <div class="mobile-page-title-text">Space Dashboard</div>
+            <div class="mobile-search-container">
+                <input type="text" class="mobile-search-bar" placeholder="Search..." id="mobileSearchBar">
+                <button type="button" class="mobile-search-btn" id="mobileSearchBtn">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -276,20 +286,25 @@
         <div class="space-main-content">
         <!-- Page Title -->
         <div class="page-title-section">
-            <div class="page-title-icon">
-                <i class="fa-solid fa-rocket"></i>
+            <div class="page-title-container">
+                <h1 class="page-title" data-i18n="nav-space">Space Dashboard</h1>
+                <div class="system-status-indicator" id="systemStatusIndicator">
+                    <div class="status-icon" id="statusIcon">
+                        <i class="fa-solid fa-circle"></i>
+                    </div>
+                    <span class="status-text" id="statusText">System Status</span>
+                </div>
             </div>
-            <h1 class="page-title" data-i18n="nav-space">Space Dashboard</h1>
         </div>
 
         <!-- Irrigation Tasks Card with Real-Time Calendar -->
         <div class="tasks-calendar-card">
             <div class="tasks-calendar-header">
                 <div class="tasks-calendar-icon" id="tasks-toggle-card">
-                    <i class="fa-solid fa-calendar-days"></i>
+                    <img src="Calendrie.png" alt="Calendar" style="width: 24px; height: 24px; object-fit: contain;">
                 </div>
                 <div class="tasks-calendar-info">
-                    <h3 data-i18n="irrigation-tasks-calendar">Irrigation Tasks Calendar</h3>
+                    <h3><img src="icons/Calendrie.png" alt="Calendar" style="width: 24px; height: 24px; margin-right: 8px;"> <span data-i18n="irrigation-tasks-calendar">Irrigation Tasks Calendar</span></h3>
                     <div class="tasks-calendar-datetime">
                         <i class="fa-solid fa-clock"></i>
                         <span id="tasks-current-time">--:--:--</span>
@@ -340,35 +355,35 @@
             <!-- Irrigation Control Card -->
             <div class="control-card-main">
                 <div class="card-header">
-                    <h3><i class="fa-solid fa-valve"></i> Irrigation Control</h3>
+                    <h3><img src="icons/irrigitationcontrol.png" alt="Irrigation Control" style="width: 24px; height: 24px; margin-right: 8px;"> <span data-i18n="irrigation-control">Irrigation Control</span></h3>
                     <span class="valve-badge-main" id="valve-badge-main">OFF</span>
                 </div>
                 <div class="card-body">
                     <div class="control-buttons">
                         <button class="btn btn-black" id="start-irrigation-main">
-                            <i class="fa-solid fa-play"></i> Start Irrigation
+                            <img src="icons/IconsDashboard/Start.png" alt="Start" style="width: 20px; height: 20px; margin-right: 8px;"> <span data-i18n="start-irrigation">Start Irrigation</span>
                         </button>
                         <button class="btn btn-black" id="stop-irrigation-main">
-                            <i class="fa-solid fa-stop"></i> Stop Irrigation
+                            <img src="icons/Stop.png" alt="Stop" style="width: 20px; height: 20px; margin-right: 8px;"> <span data-i18n="stop-irrigation">Stop Irrigation</span>
                         </button>
                         <button class="btn btn-black" id="emergency-stop-main">
-                            <i class="fa-solid fa-circle-exclamation"></i> Emergency Stop
+                            <img src="icons/IconsDashboard/Emergency.png" alt="Emergency" style="width: 20px; height: 20px; margin-right: 8px;"> <span data-i18n="emergency-stop">Emergency Stop</span>
                         </button>
                         <button class="btn btn-black" id="irrigation-chat-btn">
-                            <i class="fa-solid fa-comments"></i> Ask Assistant
+                            <img src="icons/IconsDashboard/Chat.png" alt="Chat" style="width: 20px; height: 20px; margin-right: 8px;"> <span data-i18n="ask-assistant">Ask Assistant</span>
                         </button>
                     </div>
                     <div class="irrigation-info">
                         <div class="info-item">
-                            <span class="info-label">Duration:</span>
+                            <span class="info-label" data-i18n="duration">Duration:</span>
                             <span class="info-value" id="irrigation-duration-main">--</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Water Used:</span>
+                            <span class="info-label" data-i18n="water-used">Water Used:</span>
                             <span class="info-value" id="water-used-main">--</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Last Irrigation:</span>
+                            <span class="info-label" data-i18n="last-irrigation">Last Irrigation:</span>
                             <span class="info-value" id="last-irrigation-main">--</span>
                         </div>
                     </div>
@@ -378,7 +393,7 @@
 
         <!-- Section Title: Sensor Data -->
         <div class="section-title">
-            <h3><i class="fa-solid fa-chart-line"></i> Real-Time Sensor Data</h3>
+            <h3><i class="fa-solid fa-chart-line"></i> <span data-i18n="real-time-sensor-data">Real-Time Sensor Data</span></h3>
         </div>
 
         <!-- Real-Time Sensor Data Grid -->
@@ -388,7 +403,7 @@
                     <i class="fa-solid fa-seedling"></i>
                 </div>
                 <div class="sensor-content">
-                    <div class="sensor-label">Soil Moisture</div>
+                    <div class="sensor-label" data-i18n="soil-moisture">Soil Moisture</div>
                     <div class="sensor-value" id="soil-moisture">--</div>
                     <div class="sensor-unit">%</div>
                     <div class="sensor-status" id="soil-status">Loading...</div>
@@ -400,7 +415,7 @@
                     <i class="fa-solid fa-temperature-half"></i>
                 </div>
                 <div class="sensor-content">
-                    <div class="sensor-label">Temperature</div>
+                    <div class="sensor-label" data-i18n="temperature">Temperature</div>
                     <div class="sensor-value" id="temperature">--</div>
                     <div class="sensor-unit">°C</div>
                     <div class="sensor-status" id="temp-status">Loading...</div>
@@ -412,7 +427,7 @@
                     <i class="fa-solid fa-droplet"></i>
                 </div>
                 <div class="sensor-content">
-                    <div class="sensor-label">Humidity</div>
+                    <div class="sensor-label" data-i18n="humidity">Humidity</div>
                     <div class="sensor-value" id="humidity">--</div>
                     <div class="sensor-unit">%</div>
                     <div class="sensor-status" id="humidity-status">Loading...</div>
@@ -424,7 +439,7 @@
                     <i class="fa-solid fa-battery-three-quarters"></i>
                 </div>
                 <div class="sensor-content">
-                    <div class="sensor-label">Battery Level</div>
+                    <div class="sensor-label" data-i18n="battery-level">Battery Level</div>
                     <div class="sensor-value" id="battery">--</div>
                     <div class="sensor-unit">%</div>
                     <div class="sensor-status" id="battery-status">Loading...</div>
@@ -732,10 +747,10 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="logofooter.png" alt="TiOne Logo" class="footer-logo-img">
+                <img src="logofooter.png" alt="Pulse Logo" class="footer-logo-img">
             </div>
             <div class="footer-text">
-                <p>All content on this site. Copyright © 2024 TiOne Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
+                <p>All content on this site. Copyright © 2024 Pulse Smart Irrigation System. All rights reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.</p>
             </div>
             <div class="footer-links">
                 <a href="index.html">Dashboard</a>
@@ -1110,7 +1125,7 @@
             <div class="chat-header">
                 <div class="chat-header-left">
                     <div class="chat-icon">
-                        <img src="TIONESETUP.png" alt="TiOne Logo" class="chat-logo">
+                        <img src="TIONESETUP.png" alt="Pulse Logo" class="chat-logo">
                     </div>
                     <div class="chat-title-section">
                         <h3 class="chat-title">Context-aware agricultural assistance with our logo</h3>
@@ -1263,7 +1278,9 @@
     </div>
 
     <script src="js/dashboard.js?v=4.0"></script>
-    <script src="js/space.js"></script>
+    <script src="js/language-switch.js"></script>
+    <script src="js/system-status.js"></script>
+    <script src="js/space.js?v=8.0"></script>
     <script src="js/valve-stats.js?v=1.0"></script>
     <script src="js/language.js?v=1.0"></script>
     
@@ -2057,7 +2074,7 @@ User Question: ${message}`;
                 headers: {
                     'Authorization': `Bearer ${getOpenRouterAPIKey()}`,
                     'Content-Type': 'application/json',
-                    'X-Title': 'TiOne Irrigation Assistant'
+                    'X-Title': 'Pulse Irrigation Assistant'
                 },
                 body: JSON.stringify({
                     model: currentModel,
@@ -2428,5 +2445,9 @@ User Question: ${message}`;
     
     <!-- Language Switch System -->
     <script src="js/language-switch.js"></script>
+    
+    <!-- Irrigation Notification Manager -->
+    <script src="js/irrigation-notifications.js"></script>
+    
 </body>
 </html>

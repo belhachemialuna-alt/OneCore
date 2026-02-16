@@ -2,24 +2,25 @@
 
 /* Enhance PDF export button with special styling */
 #export-pdf-btn {
-    background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
-    color: #ffffff;
-    border: 2px solid #FF0000;
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196F3;
+    border: 2px solid rgba(33, 150, 243, 0.2);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
 }
 
 #export-pdf-btn:hover {
-    background: linear-gradient(135deg, #cc0000 0%, #990000 100%);
-    border-color: #cc0000;
+    background: #2196F3;
+    border-color: #2196F3;
+    color: white;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
 }
 
 #export-pdf-btn:active {
     transform: translateY(0);
-    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
 }
 
 #export-pdf-btn i {

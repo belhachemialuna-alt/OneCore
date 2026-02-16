@@ -8,7 +8,7 @@
     padding: 0.75rem 1rem;
     border-bottom: 2px solid #FF0000;
     position: fixed;
-    top: 48px; /* Updated to match standardized header height */
+    top: 44px; /* Updated to match reduced header height */
     left: 0;
     right: 0;
     z-index: 998; /* Reduced to be below main header */
@@ -20,8 +20,68 @@
 .mobile-page-title-content {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.75rem;
     max-width: 100%;
+}
+
+/* Mobile Search Container - Match Desktop Style */
+.mobile-search-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-left: auto;
+    margin-right: 4px;
+}
+
+.mobile-search-container:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.mobile-search-bar {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 6px 12px;
+    color: #ffffff;
+    font-size: 0.875rem;
+    width: 180px;
+    transition: all 0.3s ease;
+}
+
+.mobile-search-bar:focus {
+    width: 200px;
+}
+
+.mobile-search-bar::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.mobile-search-btn {
+    background: #FF0000;
+    border: none;
+    padding: 6px 10px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.mobile-search-btn:hover {
+    background: #cc0000;
+}
+
+.mobile-search-btn i {
+    font-size: 0.85rem;
 }
 
 .mobile-page-title-icon {
@@ -62,7 +122,7 @@
     
     /* Adjust body padding to account for both headers */
     body {
-        padding-top: 96px !important; /* 48px red header + 48px black title bar */
+        padding-top: 92px !important; /* 44px red header + 48px black title bar */
     }
     
     /* Hide desktop page titles on mobile */
@@ -158,5 +218,60 @@
     .mobile-menu-btn {
         z-index: 1002;
         position: relative;
+    }
+    
+    /* Responsive mobile search container */
+    .mobile-search-container {
+        border-radius: 20px;
+        max-width: 260px;
+        margin-right: 2px;
+    }
+    
+    .mobile-search-bar {
+        width: 100%;
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+    
+    .mobile-search-bar:focus {
+        width: 100%;
+    }
+    
+    .mobile-search-btn {
+        padding: 6px 10px;
+    }
+    
+    .mobile-search-btn i {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-search-container {
+        border-radius: 18px;
+        max-width: 200px;
+        margin-right: 1px;
+    }
+    
+    .mobile-search-bar {
+        width: 100%;
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+    
+    .mobile-search-bar:focus {
+        width: 100%;
+    }
+    
+    .mobile-search-btn {
+        padding: 5px 8px;
+    }
+    
+    .mobile-search-btn i {
+        font-size: 0.8rem;
+    }
+    
+    .mobile-page-title-text {
+        font-size: 0.85rem;
     }
 }

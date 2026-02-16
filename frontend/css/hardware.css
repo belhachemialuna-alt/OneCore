@@ -1304,6 +1304,7 @@ h1, h2, h3, h4, h5, h6 {
 /* System Performance Section */
 .system-performance-section {
     margin-bottom: 1.5rem;
+    padding: 0 2rem;
 }
 
 .system-performance-section h2 {
@@ -2500,31 +2501,37 @@ h1, h2, h3, h4, h5, h6 {
     
     .header-center .header-datetime {
         display: flex !important;
-        font-size: 0.95rem;
+        font-size: 1rem;
         gap: 0.5rem;
         color: rgba(255, 255, 255, 0.95);
         font-weight: 500;
     }
     
     .header-clock-large {
-        font-size: 1.1rem !important;
-        gap: 0.5rem !important;
+        font-size: 1.35rem !important;
+        gap: 0.6rem !important;
     }
     
     .header-clock-large i {
-        font-size: 1rem !important;
+        font-size: 1.2rem !important;
     }
     
     .header-clock-large #header-time {
-        font-size: 1.1rem;
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
     }
     
     .header-clock-large #header-date {
-        font-size: 0.9rem;
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+    }
+    
+    .header-clock-large .datetime-separator {
+        font-size: 1rem !important;
     }
 
     .header-datetime i {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
 
     .header-right {
@@ -2674,5 +2681,146 @@ h1, h2, h3, h4, h5, h6 {
     
     .device-id-value {
         max-width: 200px;
+    }
+    
+    /* Hide secondary navigation on mobile - use mobile-page-title instead */
+    .secondary-nav {
+        display: none !important;
+    }
+    
+    /* Ensure proper body padding for mobile headers */
+    body {
+        padding-top: 92px !important; /* 44px red header + 48px mobile title bar */
+    }
+    
+    /* System Performance Section Mobile */
+    .system-performance-section {
+        padding: 0 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .system-performance-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .performance-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    .performance-card {
+        padding: 1.25rem !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .performance-header {
+        margin-bottom: 1rem !important;
+    }
+    
+    .performance-title h3 {
+        font-size: 1rem !important;
+    }
+    
+    .performance-subtitle {
+        font-size: 0.8rem !important;
+    }
+    
+    .performance-value {
+        font-size: 2rem !important;
+    }
+    
+    /* Charts Section Mobile */
+    .charts-section {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        padding: 0 !important;
+    }
+    
+    .chart-container {
+        padding: 1rem !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .chart-header h3 {
+        font-size: 0.95rem !important;
+    }
+    
+    .chart-timeframe {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Legend Card Mobile */
+    .legend-card {
+        padding: 1.25rem !important;
+        margin: 0 1rem 1rem 1rem !important;
+    }
+    
+    .legend-card h3 {
+        font-size: 1rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .legend-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+    }
+    
+    .legend-item {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Schema Container Mobile */
+    .schema-container {
+        padding: 0 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .schema-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .schema-header h2 {
+        font-size: 1.1rem !important;
+    }
+    
+    .schema-controls {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+    
+    .schema-btn,
+    .terminal-btn {
+        flex: 1 1 calc(50% - 0.25rem) !important;
+        font-size: 0.85rem !important;
+        padding: 0.6rem 0.75rem !important;
+    }
+    
+    .schema-btn span,
+    .terminal-btn span {
+        display: inline !important;
+    }
+    
+    /* Schema Wrapper Mobile */
+    .schema-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    #hardware-schema {
+        min-width: 600px !important;
+    }
+    
+    /* Main Content Wrapper Mobile */
+    .main-content-wrapper {
+        padding: 0 !important;
+    }
+    
+    .main-content {
+        padding: 1rem 0 !important;
     }
 }

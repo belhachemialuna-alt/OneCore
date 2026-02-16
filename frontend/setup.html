@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ElivateOne Setup Wizard</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.0">
-    <link rel="apple-touch-icon" href="/favicon.ico?v=1.0">
+    <link rel="icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Favicon2.png?v=1.0">
+    <link rel="apple-touch-icon" href="/Favicon2.png?v=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -18,32 +18,48 @@
     <div class="setup-container">
         <div class="setup-header">
             <div class="logo">
-                <img src="TIONESETUP.png" alt="ElivateOne Logo" class="logo-setup-image">
+                <img src="TIONESETUP.png" alt="Pulse Logo" class="logo-setup-image">
+            </div>
+            <!-- Language Switch -->
+            <div class="setup-language-switch" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
+                <button id="languageBtn" class="language-btn" title="Switch Language" style="
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 8px;
+                    padding: 8px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(10px);
+                " 
+                onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'"
+                onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
+                    <img src="icons/language.png" alt="Language" style="width: 24px; height: 24px; opacity: 0.9;">
+                </button>
             </div>
             <div class="progress-bar">
                 <div class="progress-step active" data-step="1">
                     <div class="step-circle">1</div>
-                    <div class="step-label">Welcome</div>
+                    <div class="step-label" data-i18n="welcome">Welcome</div>
                 </div>
                 <div class="progress-line"></div>
                 <div class="progress-step" data-step="2">
                     <div class="step-circle">2</div>
-                    <div class="step-label">Network</div>
+                    <div class="step-label" data-i18n="network">Network</div>
                 </div>
                 <div class="progress-line"></div>
                 <div class="progress-step" data-step="3">
                     <div class="step-circle">3</div>
-                    <div class="step-label">System</div>
+                    <div class="step-label" data-i18n="system">System</div>
                 </div>
                 <div class="progress-line"></div>
                 <div class="progress-step" data-step="4">
                     <div class="step-circle">4</div>
-                    <div class="step-label">Crop & Soil</div>
+                    <div class="step-label" data-i18n="crop-soil">Crop & Soil</div>
                 </div>
                 <div class="progress-line"></div>
                 <div class="progress-step" data-step="5">
                     <div class="step-circle">5</div>
-                    <div class="step-label">Schedule</div>
+                    <div class="step-label" data-i18n="schedule">Schedule</div>
                 </div>
             </div>
         </div>
@@ -52,37 +68,37 @@
             <!-- Step 1: Welcome -->
             <div class="setup-step active" id="step-1">
                 <div class="welcome-image-container">
-                    <img src="welcome.png" alt="Welcome to TiOne" class="welcome-image" style="max-width: 180px; height: auto;">
+                    <img src="welcome.png" alt="Welcome to Pulse" class="welcome-image" style="max-width: 180px; height: auto;">
                 </div>
-                <h1 style="font-size: 2.5rem; font-weight: 700;">Welcome to TiOne</h1>
-                <p class="subtitle" style="font-size: 1.1rem;">Smart Irrigation System with AI Decision Making</p>
+                <h1 style="font-size: 2.5rem; font-weight: 700;" data-i18n="welcome-to-pulse">Welcome to Pulse</h1>
+                <p class="subtitle" style="font-size: 1.1rem;" data-i18n="smart-irrigation-subtitle">Smart Irrigation System with AI Decision Making</p>
                 
                 <div class="feature-grid">
                     <div class="feature-item">
                         <img src="icons/wateroptimization.png" alt="Water Optimization" style="width: 48px; height: 48px; margin-bottom: 1rem;">
-                        <h3>Water Optimization</h3>
-                        <p>Save up to 40% water with intelligent irrigation</p>
+                        <h3 data-i18n="water-optimization">Water Optimization</h3>
+                        <p data-i18n="water-optimization-desc">Save up to 40% water with intelligent irrigation</p>
                     </div>
                     <div class="feature-item">
                         <img src="icons/solarpowerd.png" alt="Solar Powered" style="width: 48px; height: 48px; margin-bottom: 1rem;">
-                        <h3>Solar Powered</h3>
-                        <p>Eco-friendly operation with battery backup</p>
+                        <h3 data-i18n="solar-powered">Solar Powered</h3>
+                        <p data-i18n="solar-powered-desc">Eco-friendly operation with battery backup</p>
                     </div>
                     <div class="feature-item">
                         <img src="icons/Desicions.png" alt="Desicions" style="width: 48px; height: 48px; margin-bottom: 1rem;">
-                        <h3>Desicions</h3>
-                        <p>Smart irrigation based on crop and soil needs</p>
+                        <h3 data-i18n="decisions">Decisions</h3>
+                        <p data-i18n="decisions-desc">Smart irrigation based on crop and soil needs</p>
                     </div>
                     <div class="feature-item">
                         <img src="icons/Remoteaccess.png" alt="Remote Control" style="width: 48px; height: 48px; margin-bottom: 1rem;">
-                        <h3>Remote Control</h3>
-                        <p>Monitor and control from anywhere</p>
+                        <h3 data-i18n="remote-control">Remote Control</h3>
+                        <p data-i18n="remote-control-desc">Monitor and control from anywhere</p>
                     </div>
                 </div>
 
                 <div class="step-actions">
                     <button class="btn btn-primary btn-large" onclick="nextStep()">
-                        Start Setup
+                        <span data-i18n="start-setup">Start Setup</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -90,6 +106,9 @@
 
             <!-- Step 2: Network Setup -->
             <div class="setup-step" id="step-2">
+                <button class="step-back-btn" onclick="prevStep()" title="Previous Step">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <div class="step-icon">
                     <i class="fa-solid fa-wifi"></i>
                 </div>
@@ -157,6 +176,9 @@
 
             <!-- Step 3: System Basics -->
             <div class="setup-step" id="step-3">
+                <button class="step-back-btn" onclick="prevStep()" title="Previous Step">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <div class="step-icon">
                     <i class="fa-solid fa-sliders"></i>
                 </div>
@@ -237,6 +259,9 @@
 
             <!-- Step 4: Crop & Soil Setup -->
             <div class="setup-step" id="step-4">
+                <button class="step-back-btn" onclick="prevStep()" title="Previous Step">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <div class="step-icon">
                     <i class="fa-solid fa-seedling"></i>
                 </div>
@@ -280,6 +305,9 @@
 
             <!-- Step 5: Irrigation Schedule -->
             <div class="setup-step" id="step-5">
+                <button class="step-back-btn" onclick="prevStep()" title="Previous Step">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <div class="step-icon">
                     <i class="fa-solid fa-calendar-days"></i>
                 </div>
@@ -434,9 +462,10 @@
     <!-- Setup Loader (Hidden by default, only shown during save operations) -->
     <div class="setup-loader" id="setup-loader" style="display: none;">
         <div class="setup-loader-spinner"></div>
-        <div class="setup-loader-text">Loading...</div>
+        <div class="setup-loader-text" data-i18n="loading">Loading...</div>
     </div>
 
+    <script src="js/language-switch.js"></script>
     <script src="js/setup.js"></script>
 </body>
 </html>
